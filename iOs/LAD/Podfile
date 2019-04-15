@@ -1,0 +1,22 @@
+platform :ios, '9.0'
+
+target 'LAD' do
+  use_frameworks!
+  pod 'Floaty'
+  pod 'CryptoSwift'
+  pod 'SQLite.swift'
+  pod 'EllipticCurveKeyPair'
+
+  # Pods for LAD
+
+  target 'LADTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'LADUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

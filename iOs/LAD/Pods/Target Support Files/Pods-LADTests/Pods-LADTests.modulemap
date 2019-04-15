@@ -1,0 +1,6 @@
+framework module Pods_LADTests {
+  umbrella header "Pods-LADTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

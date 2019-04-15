@@ -1,0 +1,30 @@
+PODS:
+  - CryptoSwift (1.0.0)
+  - EllipticCurveKeyPair (1.0.2)
+  - Floaty (4.1.0)
+  - SQLite.swift (0.11.5):
+    - SQLite.swift/standard (= 0.11.5)
+  - SQLite.swift/standard (0.11.5)
+
+DEPENDENCIES:
+  - CryptoSwift
+  - EllipticCurveKeyPair
+  - Floaty
+  - SQLite.swift
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - CryptoSwift
+    - EllipticCurveKeyPair
+    - Floaty
+    - SQLite.swift
+
+SPEC CHECKSUMS:
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  EllipticCurveKeyPair: 80c2effda68925851c12562dcfc3fe94489b5eba
+  Floaty: 1a4e213f3512cf3045ef9cb0c1ff456226d1f66a
+  SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
+
+PODFILE CHECKSUM: 2992068e09edb8601b4c45b93b98ed2a00bf03a1
+
+COCOAPODS: 1.6.1

@@ -1,0 +1,6 @@
+framework module Pods_LAD {
+  umbrella header "Pods-LAD-umbrella.h"
+
+  export *
+  module * { export * }
+}
