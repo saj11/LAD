@@ -31,7 +31,7 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        this.setTitle("Cursos");
         bundle = getIntent().getExtras();
         Intent i = getIntent();
         mTextUsuario = (TextView) findViewById(R.id.MainMenuUsuario);

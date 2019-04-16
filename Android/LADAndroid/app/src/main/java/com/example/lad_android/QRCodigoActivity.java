@@ -23,7 +23,7 @@ public class QRCodigoActivity extends AppCompatActivity {
 
         try {
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-            BitMatrix bitMatrix = multiFormatWriter.encode("hla", BarcodeFormat.QR_CODE, 500, 500);
+            BitMatrix bitMatrix = multiFormatWriter.encode("hla", BarcodeFormat.QR_CODE, 1000, 1000);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
             mImageQR.setImageBitmap(bitmap);

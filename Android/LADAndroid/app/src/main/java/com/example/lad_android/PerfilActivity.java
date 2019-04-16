@@ -28,6 +28,7 @@ public class PerfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
+        this.setTitle("Perfil");
         mTextUsuario = (TextView)findViewById(R.id.PerfilUsuario);
         mTextCorreo = (TextView) findViewById(R.id.PerfilCorreoTV);
         mEditTiempoCod = (EditText)findViewById(R.id.PerfilTiempoCodigo);

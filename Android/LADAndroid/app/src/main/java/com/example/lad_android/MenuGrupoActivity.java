@@ -29,7 +29,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_grupo);
-
+        this.setTitle("Grupos");
         mTextCurso = (TextView)findViewById(R.id.MenuGrupoText);
         mListGrupos = (ListView) findViewById(R.id.MenuGrupoLista);
         mFloatBtn = (FloatingActionButton) findViewById(R.id.MenuGrupoBtn);
@@ -51,7 +51,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
         mFloatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuGrupoActivity.this,CrearGrupoActivity.class);
+                Intent intent = new Intent(MenuGrupoActivity.this,CrearCursoActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

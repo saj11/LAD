@@ -15,11 +15,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CrearGrupoActivity extends AppCompatActivity {
 
-
+    Spinner mSpinner;
     Button mBtnCrear, mBtnLunes, mBtnMartes, mBtnMiercoles, mBtnJueves, mBtnViernes, mBtnSabado;
     EditText mTextInicioHora1, mTextFinalHora1, mTextInicioHora2, mTextFinalHora2;
     TextView mViewDia1, mViewDia2;
@@ -31,6 +32,7 @@ public class CrearGrupoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_grupo);
+        mSpinner = (Spinner) findViewById(R.id.CrearGrupoSpinner);
         mBtnCrear = (Button) findViewById(R.id.CrearGrupoBtnCrear);
         mBtnLunes = (Button) findViewById(R.id.CrearGrupoBtnLunes);
         mBtnMartes = (Button) findViewById(R.id.CrearGrupoBtnMartes);
@@ -104,7 +106,13 @@ public class CrearGrupoActivity extends AppCompatActivity {
         List<String> listaNbr = databaseAccess.getListaCursosNombre();
         final List<String> listaCod = databaseAccess.getListaCursosCodigo();
         databaseAccess.close();
+        List<String> listaNbrCod = new ArrayList<String>();
+        for (int i=0; i<listaCod.size();i++){
+            listaNbrCod.add(listaCod.get(i)+" - "+listaNbr.get(i));
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,listaNbrCod);
 
+        mSpinner.setAdapter(dataAdapter);
 
         mBtnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,8 +120,8 @@ public class CrearGrupoActivity extends AppCompatActivity {
 
                 if(Dia1!="" & Dia2!=""){
                     if(!"".equals(mTextInicioHora1.getText().toString()) & !"".equals(mTextInicioHora2.getText().toString()) & !"".equals(mTextFinalHora1.getText().toString()) & !"".equals(mTextFinalHora2.getText().toString()) ){
-                        String CodigoCurso = bundle.getString("IDCurso");
-                        //String CodigoCurso = listaCod.get(mSpinner.getSelectedItemPosition());
+                        //String CodigoCurso = bundle.getString("IDCurso");
+                        String CodigoCurso = listaCod.get(mSpinner.getSelectedItemPosition());
 
                         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
                         databaseAccess.openWrite();

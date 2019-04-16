@@ -21,7 +21,7 @@ public class RegistroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
-
+        this.setTitle("Registro");
         mTextUsuario = (EditText) findViewById(R.id.registroUsuario);
         mTextApellido = (EditText) findViewById(R.id.registroApellido);
         mTextCorreo = (EditText) findViewById(R.id.registroCorreo);
