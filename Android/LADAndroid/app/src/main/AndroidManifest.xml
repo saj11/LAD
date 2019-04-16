@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MenuListaAsistenciaActivity"></activity>
+        <activity android:name=".QRCodigoActivity"></activity>
+        <activity android:name=".MenuListaAsistenciaActivity" />
         <activity android:name=".ListaAsistenciaGrupo" />
         <activity android:name=".PerfilActivity" />
         <activity android:name=".MenuGrupoActivity" />

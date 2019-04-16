@@ -12,6 +12,7 @@ public class MenuListaAsistenciaActivity extends AppCompatActivity {
     TextView mTextCurso;
     TextView mTextCodigo;
     Button mBtnListaAsis;
+    Button mBtnGenQR;
     Button mBtnHistorial;
     Button mBtnEstadistica;
     Bundle bundle;
@@ -23,15 +24,26 @@ public class MenuListaAsistenciaActivity extends AppCompatActivity {
         mTextCurso = (TextView)findViewById(R.id.MenuListaAsisCursoTV);
         mTextCodigo = (TextView)findViewById(R.id.MenuListaAsisCodigoTV);
         mBtnListaAsis = (Button) findViewById(R.id.MenuListaAsisAsistenciaBtn);
+        mBtnGenQR = (Button) findViewById(R.id.MenuListaAsisQRBtn);
         mBtnHistorial = (Button)findViewById(R.id.MenuListaAsisHistorialBtn);
         mBtnEstadistica = (Button)findViewById(R.id.MenuListaAsisEstadisticaBtn);
         bundle = getIntent().getExtras();
         mTextCurso.setText(bundle.getString("NombreCurso"));
         mTextCodigo.setText(bundle.getString("IDCurso"));
+
         mBtnListaAsis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuListaAsistenciaActivity.this, ListaAsistenciaGrupo.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        mBtnGenQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuListaAsistenciaActivity.this, QRCodigoActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

@@ -27,6 +27,12 @@
         android:text="Lista Asistencia" />
 
     <Button
+        android:id="@+id/MenuListaAsisQRBtn"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:text="Generar Codgio QR" />
+
+    <Button
         android:id="@+id/MenuListaAsisHistorialBtn"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
