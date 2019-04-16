@@ -196,7 +196,7 @@ public class DatabaseAccess {
     public int getListaAsistenciaID(String CodigoCurso, String NumeroGrupo){
 
         try{
-            String query = "Select * From ListaAsistencia Where IDCurso= '"+CodigoCurso+"' and IDGrupo='"+NumeroGrupo+ "')";
+            String query = "Select * From ListaAsistencia Where IDCurso= '"+CodigoCurso+"' and IDGrupo='"+NumeroGrupo+ "'";
             c = db.rawQuery(query, null);
             c.moveToFirst();
             int id = c.getInt(0);

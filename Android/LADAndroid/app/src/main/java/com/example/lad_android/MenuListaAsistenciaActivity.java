@@ -21,6 +21,7 @@ public class MenuListaAsistenciaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_lista_asistencia);
+        this.setTitle("");
         mTextCurso = (TextView)findViewById(R.id.MenuListaAsisCursoTV);
         mTextCodigo = (TextView)findViewById(R.id.MenuListaAsisCodigoTV);
         mBtnListaAsis = (Button) findViewById(R.id.MenuListaAsisAsistenciaBtn);

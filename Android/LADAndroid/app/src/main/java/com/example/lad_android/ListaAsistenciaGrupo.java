@@ -30,6 +30,7 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_asistencia_grupo);
+        this.setTitle("Lista de Asistencia");
         bundle = getIntent().getExtras();
         mTextCurso = (TextView) findViewById(R.id.ListaAsisGrupoCursoTV);
         mTextCodigo = (TextView) findViewById(R.id.ListaAsisGrupoCodigoTV);
@@ -48,7 +49,7 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
         }
         databaseAccess.close();
         mTextCodigo.setText(bundle.getString("IDCurso"));
-        mTextCurso.setText(nombreCurso);
+        //mTextCurso.setText(nombreCurso);
 
 
     }

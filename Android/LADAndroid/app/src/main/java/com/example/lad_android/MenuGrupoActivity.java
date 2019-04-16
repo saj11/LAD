@@ -37,7 +37,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
         Intent i = getIntent();
         String curso = i.getStringExtra("IDCurso");
         int idProfe = bundle.getInt("id");
-        Toast.makeText(this,"ID es: "+idProfe,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"ID es: "+idProfe,Toast.LENGTH_LONG).show();
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
         String nombreCurso = databaseAccess.getNombreCurso(curso);
@@ -100,7 +100,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
             ) {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,list.get(position),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,list.get(position),Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, MenuListaAsistenciaActivity.class);
                     intent.putExtra("Numero",list.get(position));
                     intent.putExtras(bundle);
@@ -124,7 +124,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
                                                    databaseAccess.deleteGrupo(curso, numero,idProfe);
                                                    //databaseAccess.deleteCurso(curso);
                                                    databaseAccess.close();
-                                                   Toast.makeText(v.getContext(),"Datos, ID: "+curso+" ,Numero: "+numero+ ", Profe;"+idProfe,Toast.LENGTH_LONG).show();
+                                                   //Toast.makeText(v.getContext(),"Datos, ID: "+curso+" ,Numero: "+numero+ ", Profe;"+idProfe,Toast.LENGTH_LONG).show();
                                                    //Toast.makeText(v.getContext(),"Se elimino Grupo "+numero+"del Curso"+curso+" correctamente",Toast.LENGTH_SHORT).show();
                                                    Intent intent = new Intent(v.getContext(),MainMenuActivity.class);
                                                    intent.putExtras(bundle);

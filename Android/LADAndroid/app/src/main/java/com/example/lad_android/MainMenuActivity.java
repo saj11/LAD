@@ -40,7 +40,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //String usuario = i.getStringExtra("usuario");
         String usuario = bundle.getString("usuario");
         int id = bundle.getInt("id");
-        Toast.makeText(MainMenuActivity.this, "this user is: "+id,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainMenuActivity.this, "this user is: "+id,Toast.LENGTH_SHORT).show();
         mTextUsuario.setText(usuario);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
@@ -122,7 +122,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     databaseAccess.openWrite();
                     String nombreCurso = databaseAccess.getNombreCurso(lista.get(position));
                     databaseAccess.close();
-                    Toast.makeText(context,lista.get(position),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,lista.get(position),Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, MenuGrupoActivity.class);
                     intent.putExtra("IDCurso",lista.get(position));
                     intent.putExtra("NombreCurso",nombreCurso);

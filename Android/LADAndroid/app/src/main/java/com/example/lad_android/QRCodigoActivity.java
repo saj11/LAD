@@ -18,7 +18,7 @@ public class QRCodigoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcodigo);
-
+        this.setTitle("Codigo QR");
         mImageQR = (ImageView) findViewById(R.id.QRImageView);
 
         try {
