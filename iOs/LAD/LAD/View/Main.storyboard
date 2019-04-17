@@ -1019,7 +1019,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo v1.0" translatesAutoresizingMaskIntoConstraints="NO" id="Sfm-FG-iZO">
-                                                <rect key="frame" x="95" y="50" width="185.00000000000011" height="225"/>
+                                                <rect key="frame" x="95" y="50" width="185" height="225"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="225" id="Z8D-fa-8Ov"/>
                                                 </constraints>
