@@ -86,19 +86,24 @@ class MasterController{
         }
     }
     
-    func validateUser(email: String, password: String)-> Bool{
+    func validateUser(typeUser: String, email: String, password: String)-> Bool{
         let nombre = Expression<String>("Nombre")
         let apellidos = Expression<String>("Apellidos")
         let contraseña = Expression<String>("Contrasena")
+        let correo = Expression<String>("Correo")
         let tiempoTardiaCodigo = Expression<Int>("TiempoTardiaCodigo")
         let tiempoVigenciaCodigo = Expression<Int>("TiempoVigenciaCodigo")
         
-        let result: Array<Row> = self.dbManager.validateUser(input: email)
+        let result: Array<Row> = self.dbManager.validateUser(typeUser: typeUser, input: email)
         do{
             let dbDecrypPass = self.encrypter.decrypt(message: result[0][contraseña])
 
             if(!result.isEmpty && password.elementsEqual(dbDecrypPass)){
-                self.profesor = Profesor(nombre: result[0][nombre],apellido: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
+                if typeUser.elementsEqual("Profesor"){
+                    self.profesor = Profesor(nombre: result[0][nombre],apellido: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
+                }else{
+                    self.estudiante = Estudiante(nombre: result[0][nombre], apellidos: result[0][apellidos], id: Int(email)!, correo: result[0][correo])
+                }
                 return true
             }else{
                 return false
@@ -124,6 +129,30 @@ class MasterController{
             return (listaCursos.count, listaCursos)
         }
 
+        return (listaCursos.count, listaCursos)
+    }
+    
+    func numberOfCourse() -> (Int, Array<(Curso, Int, String)>) {
+        let cursoT = Table("Curso")
+        let profesor = Table("Profesor")
+        let nombre = Expression<String>("Nombre")
+        let codigo = Expression<String>("IDCurso")
+        let grupo = Expression<Int>("IDGrupo")
+        let apellidos = Expression<String>("Apellidos")
+        
+        var listaCursos:Array<(Curso, Int, String)> = Array<(Curso, Int, String)>()
+        let courses = self.dbManager.numberOfCourse(idUser: self.estudiante.id)
+        
+        for curso in courses!{
+            //print(profesor)
+            listaCursos.append((Curso(codigo: curso[codigo], nombre: curso[cursoT[nombre]]), curso[grupo], String("\(curso[profesor[nombre]]) \(curso[apellidos])")))
+            print(listaCursos)
+        }
+        
+        if listaCursos.isEmpty {
+            return (listaCursos.count, listaCursos)
+        }
+        
         return (listaCursos.count, listaCursos)
     }
     

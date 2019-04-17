@@ -45,14 +45,30 @@ class Login: UIViewController{
         
         //let userN = "cbenavides@itcr.ac.cr"
         //let userN = "mestrada@itcr.ac.cr"
-        let userN = "p@gmail.com"
+        //let userN = "p@gmail.com"
+        //let pass = "123456789"
+        
+        let userN = "2015100516"
         let pass = "123456789"
         
-        //if(self.controller.validateUser(email: userN!, password: pass!)){
-        if(self.controller.validateUser(email: userN, password: pass)){
-            let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let cursoScreen = storyboard.instantiateViewController(withIdentifier: "NavController2") as! UINavigationController
-            self.present(cursoScreen, animated: true, completion: nil)
+        var typeUser: String
+        
+        if pass.isInt{
+            typeUser = "Estudiante"
+        }else{
+            typeUser = "Profesor"
+        }
+        
+        if(self.controller.validateUser(typeUser: typeUser, email: userN, password: pass)){
+            if typeUser.elementsEqual("Profesor"){
+                let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let cursoScreen = storyboard.instantiateViewController(withIdentifier: "NavController2") as! UINavigationController
+                self.present(cursoScreen, animated: true, completion: nil)
+            }else{
+                let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let cursoScreen = storyboard.instantiateViewController(withIdentifier: "StudentTabBarController") as! UITabBarController
+                self.present(cursoScreen, animated: true, completion: nil)
+            }
         }else{
             let alert = UIAlertController(title: "Lista de Asistencia Digital", message: "Error: No concide el usuario con la contraseña proporcionada", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default))

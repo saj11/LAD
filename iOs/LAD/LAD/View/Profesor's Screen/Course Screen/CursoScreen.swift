@@ -38,48 +38,46 @@ class CursoScreen: UITableViewController, FloatyDelegate {
         floaty.sticky = true
         self.tableView!.addSubview(floaty)
         
-        (self.number, self.listCourses) = self.controller.numberOfCourse()
+        (number, listCourses) = self.controller.numberOfCourse()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        print("1. N\(number)")
-        return self.number
+        return number
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("2")
         return 1
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        print("3")
         return 75
     }
     
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        print("4")
         let headerView = UIView()
         headerView.backgroundColor = UIColor.clear
         return headerView
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        print("5")
         return cellSpacingHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("6")
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseItem", for: indexPath)
         let curso: Curso = self.listCourses[indexPath.section]
         cell.textLabel?.text = curso.nombre
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.textAlignment = .center
         
-        cell.backgroundColor = UIColor.gray
+        cell.textLabel?.textColor = UIColor.white
+        cell.detailTextLabel?.textColor = UIColor.white
         
-        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.textLabel?.backgroundColor = .clear
+        cell.detailTextLabel?.backgroundColor = .clear
+        
+        cell.layer.borderColor = UIColor.white.cgColor
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 8
         
@@ -89,7 +87,6 @@ class CursoScreen: UITableViewController, FloatyDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        print("7")
         if !self.listCourses[indexPath.section].codigo.isEmpty{
             self.controller.setCurso(curso: self.listCourses[indexPath.section])
             let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -100,7 +97,6 @@ class CursoScreen: UITableViewController, FloatyDelegate {
     
     @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!)
     {
-        print("8")
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let perfilScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "PerfilScreen")
         self.navigationController!.pushViewController(perfilScreen, animated: true)

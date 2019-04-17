@@ -128,18 +128,31 @@ class SQLiteManager: DataBaseManager {
         }
     }
     
-    func validateUser(input: String)-> Array<Row>{
+    func validateUser(typeUser: String, input: String)-> Array<Row>{
         var result: Array<Row> = Array<Row>()
         do{
-            let profesor = Table("Profesor")
-            let nombre = Expression<String>("Nombre")
-            let apellidos = Expression<String>("Apellidos")
-            let contraseña = Expression<String>("Contrasena")
-            let tiempoTardiaCodigo = Expression<Int>("TiempoTardiaCodigo")
-            let tiempoVigenciaCodigo = Expression<Int>("TiempoVigenciaCodigo")
-            let correo = Expression<String>("Correo")
-            let query = profesor.select(nombre,apellidos, contraseña, tiempoTardiaCodigo, tiempoVigenciaCodigo)
-                                .filter(correo == input)
+            let table = Table(typeUser)
+            var query:Table
+            
+            if typeUser.elementsEqual("Profesor") {
+                let nombre = Expression<String>("Nombre")
+                let apellidos = Expression<String>("Apellidos")
+                let contraseña = Expression<String>("Contrasena")
+                let tiempoTardiaCodigo = Expression<Int>("TiempoTardiaCodigo")
+                let tiempoVigenciaCodigo = Expression<Int>("TiempoVigenciaCodigo")
+                let correo = Expression<String>("Correo")
+                query = table.select(nombre,apellidos, contraseña, tiempoTardiaCodigo, tiempoVigenciaCodigo)
+                    .filter(correo == input)
+            }else{
+                let carne = Expression<Int>("Carne")
+                let nombre = Expression<String>("Nombre")
+                let apellidos = Expression<String>("Apellidos")
+                let correo = Expression<String>("Correo")
+                let contraseña = Expression<String>("Contrasena")
+                query = table.select(nombre,apellidos, correo, contraseña)
+                    .filter(carne == Int(input)!)
+            }
+            
             result = Array((try self.connection?.prepare(query))!)
         }catch{
             print("select user failed: \(error)")
@@ -166,6 +179,48 @@ class SQLiteManager: DataBaseManager {
                 .filter(profesor[correo] == email)
 
             result = Array(try (self.connection?.prepare(query))!)
+            
+            return result
+        }catch{
+            print("select user failed: \(error)")
+        }
+        return result
+    }
+    
+    func numberOfCourse(idUser: Int)-> Array<Row>?{
+        var result: Array<Row>? = Array<Row>()
+        
+        do{
+            let estudiante = Table("Estudiante")
+            let asistenciaPorEstudiante = Table("AsistenciaPorEstudiante")
+            let listaAsistencia = Table("ListaAsistencia")
+            let curso = Table("Curso")
+            let grupo = Table("Grupo")
+            let profesor = Table("Profesor")
+            let nombre = Expression<String>("Nombre")
+            let apellidos = Expression<String>("Apellidos")
+            let idCurso = Expression<String>("IDCurso")
+            let idGrupo = Expression<Int>("IDGrupo")
+            let carne = Expression<Int>("Carne")
+            let iDListaAsist = Expression<Int>("IDListaAsist")
+            let id = Expression<Int>("ID")
+            let codigo = Expression<String>("Codigo")
+            let numero = Expression<Int>("Numero")
+            let idProfe = Expression<Int>("IDProfe")
+            
+            let query = estudiante.select(distinct: curso[nombre], listaAsistencia[idCurso], listaAsistencia[idGrupo], profesor[nombre] , profesor[apellidos])
+                .join(asistenciaPorEstudiante, on: estudiante[carne] == asistenciaPorEstudiante[carne])
+                .join(listaAsistencia, on: asistenciaPorEstudiante[iDListaAsist] == listaAsistencia[id])
+                .join(curso, on: curso[codigo] == listaAsistencia[idCurso])
+                .join(grupo, on: listaAsistencia[idGrupo] == grupo[numero])
+                .join(profesor, on: grupo[idProfe] == profesor[id])
+                .filter(estudiante[carne] == idUser)
+            
+            print(query.asSQL())
+            
+            result = Array(try (self.connection?.prepare(query))!)
+            
+            print("Result: \(result)")
             
             return result
         }catch{

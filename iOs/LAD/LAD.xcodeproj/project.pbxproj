@@ -13,6 +13,10 @@
 		BD2210172264364E00285420 /* CreatingStudent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2210162264364E00285420 /* CreatingStudent.swift */; };
 		BD3495692253EE33004CA78E /* lad.db in Resources */ = {isa = PBXBuildFile; fileRef = BD3495682253EE33004CA78E /* lad.db */; };
 		BD34956C2254276A004CA78E /* GrupoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD34956B2254276A004CA78E /* GrupoScreen.swift */; };
+		BD35B4A02266730E0011183B /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD35B49E2266730E0011183B /* CustomTableViewCell.swift */; };
+		BD35B4A12266730E0011183B /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD35B49F2266730E0011183B /* CustomTableViewCell.xib */; };
+		BD3AA28622650B740037959E /* StudentMainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3AA28522650B740037959E /* StudentMainScreen.swift */; };
+		BD3AA2882265353D0037959E /* ListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3AA2872265353D0037959E /* ListScreen.swift */; };
 		BD4702A02259CA0600FDA0DF /* AsistenciaScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD47029F2259CA0600FDA0DF /* AsistenciaScreen.swift */; };
 		BD4702A3225A76D500FDA0DF /* PerfilScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4702A2225A76D500FDA0DF /* PerfilScreen.swift */; };
 		BD5A2AFD2254720200A66167 /* PrincipalScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5A2AFC2254720200A66167 /* PrincipalScreen.swift */; };
@@ -27,10 +31,14 @@
 		BDA4A748223498390002EF36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDA4A746223498390002EF36 /* LaunchScreen.storyboard */; };
 		BDA4A753223498390002EF36 /* LADTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA4A752223498390002EF36 /* LADTests.swift */; };
 		BDA4A75E223498390002EF36 /* LADUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA4A75D223498390002EF36 /* LADUITests.swift */; };
-		BDA4A76F2234AEA60002EF36 /* Designable View.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA4A76E2234AEA60002EF36 /* Designable View.swift */; };
+		BDA4A76F2234AEA60002EF36 /* Designable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA4A76E2234AEA60002EF36 /* Designable.swift */; };
 		BDAD3ED822626844007EC8E0 /* NativeEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDAD3ED722626844007EC8E0 /* NativeEncryption.swift */; };
 		BDAFB66E22530A5E009E84F0 /* CursoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDAFB66D22530A5E009E84F0 /* CursoScreen.swift */; };
 		BDBE84B42259691200CEEB2B /* CodigoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE84B32259691200CEEB2B /* CodigoScreen.swift */; };
+		BDC598BB2266C86C008C2C06 /* CustomTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC598B92266C86C008C2C06 /* CustomTableViewCell2.swift */; };
+		BDC598BC2266C86C008C2C06 /* CustomTableViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDC598BA2266C86C008C2C06 /* CustomTableViewCell2.xib */; };
+		BDC598BE2266CF4F008C2C06 /* DetailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC598BD2266CF4F008C2C06 /* DetailList.swift */; };
+		BDC598C02266E0EC008C2C06 /* AttendanceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC598BF2266E0EC008C2C06 /* AttendanceList.swift */; };
 		BDCF730A2251419D005FFEDF /* MasterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCF73092251419D005FFEDF /* MasterController.swift */; };
 		BDCF730C225141BA005FFEDF /* Encryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCF730B225141BA005FFEDF /* Encryption.swift */; };
 		BDDB1E1822488B840023B66B /* CreatingProfesor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDB1E1722488B840023B66B /* CreatingProfesor.swift */; };
@@ -83,6 +91,10 @@
 		BD2210162264364E00285420 /* CreatingStudent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingStudent.swift; sourceTree = "<group>"; };
 		BD3495682253EE33004CA78E /* lad.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = lad.db; sourceTree = "<group>"; };
 		BD34956B2254276A004CA78E /* GrupoScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrupoScreen.swift; sourceTree = "<group>"; };
+		BD35B49E2266730E0011183B /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		BD35B49F2266730E0011183B /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
+		BD3AA28522650B740037959E /* StudentMainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentMainScreen.swift; sourceTree = "<group>"; };
+		BD3AA2872265353D0037959E /* ListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScreen.swift; sourceTree = "<group>"; };
 		BD47029F2259CA0600FDA0DF /* AsistenciaScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsistenciaScreen.swift; sourceTree = "<group>"; };
 		BD4702A2225A76D500FDA0DF /* PerfilScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilScreen.swift; sourceTree = "<group>"; };
 		BD5A2AFC2254720200A66167 /* PrincipalScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrincipalScreen.swift; sourceTree = "<group>"; };
@@ -103,10 +115,14 @@
 		BDA4A759223498390002EF36 /* LADUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LADUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDA4A75D223498390002EF36 /* LADUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LADUITests.swift; sourceTree = "<group>"; };
 		BDA4A75F223498390002EF36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BDA4A76E2234AEA60002EF36 /* Designable View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Designable View.swift"; sourceTree = "<group>"; };
+		BDA4A76E2234AEA60002EF36 /* Designable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Designable.swift; sourceTree = "<group>"; };
 		BDAD3ED722626844007EC8E0 /* NativeEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeEncryption.swift; sourceTree = "<group>"; };
 		BDAFB66D22530A5E009E84F0 /* CursoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursoScreen.swift; sourceTree = "<group>"; };
 		BDBE84B32259691200CEEB2B /* CodigoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodigoScreen.swift; sourceTree = "<group>"; };
+		BDC598B92266C86C008C2C06 /* CustomTableViewCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell2.swift; sourceTree = "<group>"; };
+		BDC598BA2266C86C008C2C06 /* CustomTableViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell2.xib; sourceTree = "<group>"; };
+		BDC598BD2266CF4F008C2C06 /* DetailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailList.swift; sourceTree = "<group>"; };
+		BDC598BF2266E0EC008C2C06 /* AttendanceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceList.swift; sourceTree = "<group>"; };
 		BDCF73092251419D005FFEDF /* MasterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterController.swift; sourceTree = "<group>"; };
 		BDCF730B225141BA005FFEDF /* Encryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryption.swift; sourceTree = "<group>"; };
 		BDDB1E1722488B840023B66B /* CreatingProfesor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingProfesor.swift; sourceTree = "<group>"; };
@@ -167,6 +183,42 @@
 			path = "Group Screen";
 			sourceTree = "<group>";
 		};
+		BD3AA28222650AEE0037959E /* Profesor's Screen */ = {
+			isa = PBXGroup;
+			children = (
+				BD4702A1225A769D00FDA0DF /* ProfileScreen */,
+				BD47029E2259C9C900FDA0DF /* AssistanceScreen */,
+				BD5A2AFF2259682D00A66167 /* Qr Screen */,
+				BD5A2AFB225471CB00A66167 /* Main Screen */,
+				BD34956A22542713004CA78E /* Group Screen */,
+				BDCF730D2251902C005FFEDF /* Course Screen */,
+			);
+			path = "Profesor's Screen";
+			sourceTree = "<group>";
+		};
+		BD3AA28322650B100037959E /* Student's Screen */ = {
+			isa = PBXGroup;
+			children = (
+				BD3AA28422650B1B0037959E /* Main Screen */,
+			);
+			path = "Student's Screen";
+			sourceTree = "<group>";
+		};
+		BD3AA28422650B1B0037959E /* Main Screen */ = {
+			isa = PBXGroup;
+			children = (
+				BD3AA28522650B740037959E /* StudentMainScreen.swift */,
+				BD3AA2872265353D0037959E /* ListScreen.swift */,
+				BD35B49E2266730E0011183B /* CustomTableViewCell.swift */,
+				BD35B49F2266730E0011183B /* CustomTableViewCell.xib */,
+				BDC598B92266C86C008C2C06 /* CustomTableViewCell2.swift */,
+				BDC598BA2266C86C008C2C06 /* CustomTableViewCell2.xib */,
+				BDC598BD2266CF4F008C2C06 /* DetailList.swift */,
+				BDC598BF2266E0EC008C2C06 /* AttendanceList.swift */,
+			);
+			path = "Main Screen";
+			sourceTree = "<group>";
+		};
 		BD47029E2259C9C900FDA0DF /* AssistanceScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,12 +241,13 @@
 				BD5A2AFC2254720200A66167 /* PrincipalScreen.swift */,
 			);
 			name = "Main Screen";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		BD5A2AFE2254736D00A66167 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				BDA4A76E2234AEA60002EF36 /* Designable View.swift */,
+				BDA4A76E2234AEA60002EF36 /* Designable.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -298,12 +351,8 @@
 		BDA4A76D2234AE690002EF36 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BD4702A1225A769D00FDA0DF /* ProfileScreen */,
-				BD47029E2259C9C900FDA0DF /* AssistanceScreen */,
-				BD5A2AFF2259682D00A66167 /* Qr Screen */,
-				BD5A2AFB225471CB00A66167 /* Main Screen */,
-				BD34956A22542713004CA78E /* Group Screen */,
-				BDCF730D2251902C005FFEDF /* Course Screen */,
+				BD3AA28322650B100037959E /* Student's Screen */,
+				BD3AA28222650AEE0037959E /* Profesor's Screen */,
 				BDDB1E14224889F90023B66B /* Creating User */,
 				BDDB1E1322487A440023B66B /* Login */,
 				BD5A2AFE2254736D00A66167 /* Other */,
@@ -458,8 +507,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDC598BC2266C86C008C2C06 /* CustomTableViewCell2.xib in Resources */,
 				BD78A061225FBB2200228A6B /* Podfile in Resources */,
 				BDF0BAFA22512E3300664E3D /* Main.storyboard in Resources */,
+				BD35B4A12266730E0011183B /* CustomTableViewCell.xib in Resources */,
 				BDA4A748223498390002EF36 /* LaunchScreen.storyboard in Resources */,
 				BDA4A745223498390002EF36 /* Assets.xcassets in Resources */,
 				BD3495692253EE33004CA78E /* lad.db in Resources */,
@@ -584,13 +635,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDC598BE2266CF4F008C2C06 /* DetailList.swift in Sources */,
 				BD2189CA22624312003397CE /* Encrypter.swift in Sources */,
-				BDA4A76F2234AEA60002EF36 /* Designable View.swift in Sources */,
+				BDA4A76F2234AEA60002EF36 /* Designable.swift in Sources */,
 				BD34956C2254276A004CA78E /* GrupoScreen.swift in Sources */,
 				BD63983A224859DB0001AECF /* Codigo.swift in Sources */,
 				BDDB1E1E224892190023B66B /* SQLite.swift in Sources */,
+				BDC598C02266E0EC008C2C06 /* AttendanceList.swift in Sources */,
 				BDCF730C225141BA005FFEDF /* Encryption.swift in Sources */,
+				BD35B4A02266730E0011183B /* CustomTableViewCell.swift in Sources */,
 				BD5A2AFD2254720200A66167 /* PrincipalScreen.swift in Sources */,
+				BD3AA2882265353D0037959E /* ListScreen.swift in Sources */,
 				BD2210172264364E00285420 /* CreatingStudent.swift in Sources */,
 				BDDB1E1C224891AB0023B66B /* DataBaseManager.swift in Sources */,
 				BD639838224848390001AECF /* Grupo.swift in Sources */,
@@ -602,6 +657,8 @@
 				BD4702A02259CA0600FDA0DF /* AsistenciaScreen.swift in Sources */,
 				BDCF730A2251419D005FFEDF /* MasterController.swift in Sources */,
 				BD4702A3225A76D500FDA0DF /* PerfilScreen.swift in Sources */,
+				BD3AA28622650B740037959E /* StudentMainScreen.swift in Sources */,
+				BDC598BB2266C86C008C2C06 /* CustomTableViewCell2.swift in Sources */,
 				BDDB1E1A22488B930023B66B /* Login.swift in Sources */,
 				BDAFB66E22530A5E009E84F0 /* CursoScreen.swift in Sources */,
 				BDBE84B42259691200CEEB2B /* CodigoScreen.swift in Sources */,

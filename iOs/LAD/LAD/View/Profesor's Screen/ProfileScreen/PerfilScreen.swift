@@ -193,9 +193,3 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
 }
-
-extension String{
-    var isInt: Bool{
-        return Int(self) != nil
-    }
-}

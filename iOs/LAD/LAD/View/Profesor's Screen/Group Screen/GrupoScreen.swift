@@ -72,9 +72,13 @@ class GrupoScreen: UITableViewController {
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.textAlignment = .center
         
-        cell.backgroundColor = UIColor.gray
+        cell.textLabel?.textColor = UIColor.white
+        cell.detailTextLabel?.textColor = UIColor.white
         
-        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.textLabel?.backgroundColor = .clear
+        cell.detailTextLabel?.backgroundColor = .clear
+        
+        cell.layer.borderColor = UIColor.white.cgColor
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 8
         
