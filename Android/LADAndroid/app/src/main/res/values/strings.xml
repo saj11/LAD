@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">LAD-Android</string>
+    <string name="Username">username</string>
+    <string name="Password">password</string>
+    <string name="Correo">Correo</string>
+</resources>
