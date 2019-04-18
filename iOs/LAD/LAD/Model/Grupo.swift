@@ -35,7 +35,8 @@ class Grupo{
     private var dayArray: [String]
     private let curso: Curso
     private let numero: Int
-    private let profesor: Profesor
+    private let profesor: Profesor?
+    private let estudiante: Estudiante?
     private var horario: Horario!
     private var codigo: Codigo?
     private var listaDias: [DiaSemana]
@@ -45,6 +46,7 @@ class Grupo{
         self.curso = curso
         self.numero = num
         self.profesor = profesor
+        self.estudiante = nil
         self.codigo = Codigo()
         
         self.listaDias = Array<DiaSemana>()
@@ -64,6 +66,7 @@ class Grupo{
         self.curso = curso
         self.numero = num
         self.profesor = profesor
+        self.estudiante = nil
         self.codigo = Codigo(code: code)
         
         self.listaDias = Array<DiaSemana>()
@@ -76,6 +79,15 @@ class Grupo{
         self.listaDias.append(DiaSemana.D)
         
         self.horario = Horario(dia1: self.decomposeSchedule(schedule: horario1), dia2: decomposeSchedule(schedule: horario2))
+    }
+    
+    init(curso: Curso, num: Int, estudiante: Estudiante) {
+        self.dayArray = ["D","L","K","M","J","V","S"]
+        self.curso = curso
+        self.numero = num
+        self.profesor = nil
+        self.estudiante = estudiante
+        self.listaDias = Array<DiaSemana>()
     }
     
     func decomposeSchedule(schedule: String)-> Dia{
@@ -152,6 +164,6 @@ class Grupo{
                                             Dia: %@
                                             Hora Inicio: %@
                                             Hora Final: %@
-                                    """, self.curso.codigo, self.curso.nombre, self.numero, self.profesor.nombre, self.profesor.correo, self.horario.dia1.diaSemana.rawValue, self.horario.dia1.horaInicio.description, self.horario.dia1.horaFinal.description,self.horario.dia2.diaSemana.rawValue, self.horario.dia2.horaInicio.description, self.horario.dia2.horaFinal.description))
+                                    """, self.curso.codigo, self.curso.nombre, self.numero, self.profesor!.nombre, self.profesor!.correo, self.horario.dia1.diaSemana.rawValue, self.horario.dia1.horaInicio.description, self.horario.dia1.horaFinal.description,self.horario.dia2.diaSemana.rawValue, self.horario.dia2.horaInicio.description, self.horario.dia2.horaFinal.description))
     }
 }

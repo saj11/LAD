@@ -33,7 +33,12 @@ class ListScreen: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavBar()
+        //setNavBar()
+        
+        let rightBarButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.myRightSideBarButtonItemTapped(_:)))
+        rightBarButton.image = UIImage(named: "user-icon")
+        rightBarButton.tintColor = #colorLiteral(red: 0.02945959382, green: 0.5178381801, blue: 0.9889006019, alpha: 1)
+        self.navigationItem.rightBarButtonItem = rightBarButton
         
         self.cellSpacingHeight = 0
         cellSpacingHeight = 10
@@ -99,27 +104,18 @@ class ListScreen: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        self.controller.setCurso(curso: self.listCourses[indexPath.section].0)
+        self.controller.setNumberGroup(number: self.listCourses[indexPath.section].1)
+        
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let detailList: UIViewController = storyboard.instantiateViewController(withIdentifier: "ListDetailScreen")
-        self.present(detailList, animated: true, completion: nil)
+        self.navigationController!.pushViewController(detailList, animated: true)
     }
     
-    func setNavBar(){
-        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 40, width: 375, height: 100))
-        navBar.barTintColor = UIColor.white
-        navBar.prefersLargeTitles = true
-        view.addSubview(navBar)
-        
-        let navItem = UINavigationItem(title: "Cursos")
-        
-        let doneItem = UIBarButtonItem(image: UIImage(named: "user-icon"), style: UIBarButtonItem.Style.done, target: nil, action: #selector(done))
-        navItem.rightBarButtonItem = doneItem
-        navItem.rightBarButtonItem?.tintColor = #colorLiteral(red: 0.02945959382, green: 0.5178381801, blue: 0.9889006019, alpha: 1)
-        
-        navBar.setItems([navItem], animated: false)
-    }
-    
-    @objc func done() { // remove @objc for Swift 3
-        
+    @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!)
+    {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let perfilScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "PerfilScreen")
+        self.navigationController!.pushViewController(perfilScreen, animated: true)
     }
 }

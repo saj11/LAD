@@ -10,4 +10,8 @@ import UIKit
 
 class CustomTableViewCell2: UITableViewCell {
     
+    @IBOutlet weak var dia1View: UILabel!
+    @IBOutlet weak var dia2View: UILabel!
+    @IBOutlet weak var title: UILabel!
+    
 }

@@ -38,7 +38,6 @@
 		BDC598BB2266C86C008C2C06 /* CustomTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC598B92266C86C008C2C06 /* CustomTableViewCell2.swift */; };
 		BDC598BC2266C86C008C2C06 /* CustomTableViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDC598BA2266C86C008C2C06 /* CustomTableViewCell2.xib */; };
 		BDC598BE2266CF4F008C2C06 /* DetailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC598BD2266CF4F008C2C06 /* DetailList.swift */; };
-		BDC598C02266E0EC008C2C06 /* AttendanceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC598BF2266E0EC008C2C06 /* AttendanceList.swift */; };
 		BDCF730A2251419D005FFEDF /* MasterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCF73092251419D005FFEDF /* MasterController.swift */; };
 		BDCF730C225141BA005FFEDF /* Encryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCF730B225141BA005FFEDF /* Encryption.swift */; };
 		BDDB1E1822488B840023B66B /* CreatingProfesor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDB1E1722488B840023B66B /* CreatingProfesor.swift */; };
@@ -122,7 +121,6 @@
 		BDC598B92266C86C008C2C06 /* CustomTableViewCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell2.swift; sourceTree = "<group>"; };
 		BDC598BA2266C86C008C2C06 /* CustomTableViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell2.xib; sourceTree = "<group>"; };
 		BDC598BD2266CF4F008C2C06 /* DetailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailList.swift; sourceTree = "<group>"; };
-		BDC598BF2266E0EC008C2C06 /* AttendanceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceList.swift; sourceTree = "<group>"; };
 		BDCF73092251419D005FFEDF /* MasterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterController.swift; sourceTree = "<group>"; };
 		BDCF730B225141BA005FFEDF /* Encryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryption.swift; sourceTree = "<group>"; };
 		BDDB1E1722488B840023B66B /* CreatingProfesor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingProfesor.swift; sourceTree = "<group>"; };
@@ -214,7 +212,6 @@
 				BDC598B92266C86C008C2C06 /* CustomTableViewCell2.swift */,
 				BDC598BA2266C86C008C2C06 /* CustomTableViewCell2.xib */,
 				BDC598BD2266CF4F008C2C06 /* DetailList.swift */,
-				BDC598BF2266E0EC008C2C06 /* AttendanceList.swift */,
 			);
 			path = "Main Screen";
 			sourceTree = "<group>";
@@ -641,7 +638,6 @@
 				BD34956C2254276A004CA78E /* GrupoScreen.swift in Sources */,
 				BD63983A224859DB0001AECF /* Codigo.swift in Sources */,
 				BDDB1E1E224892190023B66B /* SQLite.swift in Sources */,
-				BDC598C02266E0EC008C2C06 /* AttendanceList.swift in Sources */,
 				BDCF730C225141BA005FFEDF /* Encryption.swift in Sources */,
 				BD35B4A02266730E0011183B /* CustomTableViewCell.swift in Sources */,
 				BD5A2AFD2254720200A66167 /* PrincipalScreen.swift in Sources */,

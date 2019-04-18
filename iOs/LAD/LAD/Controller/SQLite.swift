@@ -353,5 +353,69 @@ class SQLiteManager: DataBaseManager {
             return false
         }
     }
+    
+    func getAttendanceList(idCourse: String, idUser: Int, numberGroup: Int)-> Array<Row>{
+        var result: Array<Row> = Array<Row>()
+        
+        let listaAsistencia = Table("ListaAsistencia")
+        let asistenciaPorEstudiante = Table("AsistenciaPorEstudiante")
+        
+        let fecha = Expression<String>("Fecha")
+        let estado = Expression<String>("Estado")
+        let id = Expression<Int>("ID")
+        let idListaAsist = Expression<Int>("IDListaAsist")
+        let idCurso = Expression<String>("IDCurso")
+        let idGrupo = Expression<Int>("IDGrupo")
+        let carne = Expression<Int>("Carne")
+        
+        let query = listaAsistencia.select(fecha, estado)
+                                   .join(asistenciaPorEstudiante, on: listaAsistencia[id] == asistenciaPorEstudiante[idListaAsist])
+                                    .where(listaAsistencia[idCurso] == idCourse && asistenciaPorEstudiante[carne] == idUser &&
+                                           listaAsistencia[idGrupo] == numberGroup)
+        print("##########")
+        print("getAttendanceList")
+        print(query.asSQL())
+        do{
+            result = Array((try self.connection?.prepare(query))!)
+            return result
+        }catch{
+            print(error)
+            return result
+        }
+    }
+    
+    func getDaysOfCourse(idCourse: String, idUser: Int, numberGroup: Int)-> Array<Row>{
+        var result: Array<Row> = Array<Row>()
+        
+        let listaAsistencia = Table("ListaAsistencia")
+        let asistenciaPorEstudiante = Table("AsistenciaPorEstudiante")
+        let grupo = Table("Grupo")
+        
+        let dia1 = Expression<String>("Dia1")
+        let dia2 = Expression<String>("Dia2")
+        let id = Expression<Int>("ID")
+        let idListaAsist = Expression<Int>("IDListaAsist")
+        let idCurso = Expression<String>("IDCurso")
+        let carne = Expression<Int>("Carne")
+        let idGrupo = Expression<Int>("IDGrupo")
+        let numero = Expression<Int>("Numero")
+        
+        let query = listaAsistencia.select(dia1, dia2)
+            .join(asistenciaPorEstudiante, on: listaAsistencia[id] == asistenciaPorEstudiante[idListaAsist])
+            .join(grupo, on: listaAsistencia[idCurso] == grupo[idCurso] && listaAsistencia[idGrupo] == grupo[numero])
+            .where(listaAsistencia[idCurso] == idCourse && asistenciaPorEstudiante[carne] == idUser && listaAsistencia[idGrupo] == numberGroup)
+            .limit(1)
+        
+        print("##########")
+        print("getDaysOfCourse")
+        print(query.asSQL())
+        do{
+            result = Array((try self.connection?.prepare(query))!)
+            return result
+        }catch{
+            print(error)
+            return result
+        }
+    }
 
 }

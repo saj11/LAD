@@ -27,9 +27,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="di3-g4-JT7">
-                        <rect key="frame" x="119" y="0.0" width="2" height="44"/>
+                        <rect key="frame" x="123" y="0.0" width="1" height="44"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.88945823909999999" green="0.88961595299999996" blue="0.89864420889999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BZT-jq-4me" userLabel="SecondDay">
                         <rect key="frame" x="233" y="0.0" width="110" height="44"/>
@@ -39,7 +39,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fG6-4c-YDq" userLabel="FirstDay">
-                        <rect key="frame" x="120" y="0.0" width="110" height="44"/>
+                        <rect key="frame" x="124" y="0.0" width="109" height="44"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
@@ -48,6 +48,11 @@
                 </subviews>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="dia1View" destination="fG6-4c-YDq" id="XD4-aA-8NF"/>
+                <outlet property="dia2View" destination="BZT-jq-4me" id="iyQ-f3-cXb"/>
+                <outlet property="title" destination="McQ-Mv-N9d" id="bmq-VY-1S1"/>
+            </connections>
             <point key="canvasLocation" x="64.492753623188406" y="116.51785714285714"/>
         </tableViewCell>
     </objects>
