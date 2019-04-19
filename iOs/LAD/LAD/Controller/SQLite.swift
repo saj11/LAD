@@ -179,7 +179,6 @@ class SQLiteManager: DataBaseManager {
                 .filter(profesor[correo] == email)
 
             result = Array(try (self.connection?.prepare(query))!)
-            
             return result
         }catch{
             print("select user failed: \(error)")
@@ -216,11 +215,7 @@ class SQLiteManager: DataBaseManager {
                 .join(profesor, on: grupo[idProfe] == profesor[id])
                 .filter(estudiante[carne] == idUser)
             
-            print(query.asSQL())
-            
             result = Array(try (self.connection?.prepare(query))!)
-            
-            print("Result: \(result)")
             
             return result
         }catch{
@@ -246,16 +241,16 @@ class SQLiteManager: DataBaseManager {
             let cod = Expression<String>("Codigo")
             let key = Expression<String>("Llave")
             
-            let query = grupo.select(grupo[numero], grupo[dia1], grupo[dia2], grupo[cod], grupo[key])
+            //let query = grupo.select(grupo[numero], grupo[dia1], grupo[dia2], grupo[cod], grupo[key])
+            let query = grupo.select(grupo[numero], grupo[dia1], grupo[dia2], grupo[cod])
                 .join(profesor, on: grupo[idProfe] == profesor[id])
                 .join(curso, on: grupo[idCurso] == curso[codigo])
                 .where(profesor[correo] == email && curso[codigo] == codCurso)
             result = Array((try self.connection?.prepare(query))!)
             
-            print(result)
             return result
         }catch{
-            print("select user failed: \(error)")
+            print("Select user failed: \(error)")
         }
         return result
     }
@@ -415,6 +410,22 @@ class SQLiteManager: DataBaseManager {
         }catch{
             print(error)
             return result
+        }
+    }
+    
+    func confirmPresence(numberList: Int, userID: Int, state:String)-> Bool{
+        let asistenciaPorEstudiante = Table("AsistenciaPorEstudiante")
+        let idListaAsist = Expression<Int>("IDListaAsist")
+        let carne = Expression<Int>("Carne")
+        let estado = Expression<String>("Estado")
+        
+        let insert = asistenciaPorEstudiante.insert(idListaAsist <- numberList, carne <- userID, estado <- state)
+        do{
+            try self.connection?.run(insert)
+            return true
+        }catch{
+            print(error)
+            return false
         }
     }
 

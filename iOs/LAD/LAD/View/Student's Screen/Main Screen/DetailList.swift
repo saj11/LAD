@@ -29,8 +29,10 @@ class DetailList: UIViewController, UITableViewDelegate, UITableViewDataSource{
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Lista de Asistencia"
-        
         self.navigationItem.leftBarButtonItem?.tintColor = #colorLiteral(red: 0.02945959382, green: 0.5178381801, blue: 0.9889006019, alpha: 1)
+        
+        ladTable.allowsSelection = false
+
         (number, ladDia1, ladDia2) = self.controller.getAttendanceList()
         
         self.numeroPresente.text = String(hasElement(element: "P", list: ladDia1) + hasElement(element: "P", list: ladDia2))
@@ -72,11 +74,11 @@ class DetailList: UIViewController, UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = Bundle.main.loadNibNamed("CustomTableViewCell2", owner: self, options: nil)?.first as! CustomTableViewCell2
         
-        print("%%%%%%%%%%%%")
-        print(ladDia1)
-        print(ladDia2)
-        cell.title.text = String("Semana \(indexPath.section)")
-        if !ladDia1.isEmpty{
+        // LadDia1.count<Empieza en 0, pero es el día 1> me da la cantidad de dias que han sido registrados
+        // indexPath.sectio me da la fila que va a insertar, por ende ocupo sumar uno para ir con la posicion real del dia
+        cell.title.text = String("Semana \(indexPath.section+1)")
+        
+        if !ladDia1.isEmpty && ladDia1.count >= indexPath.section+1{
             switch ladDia1[indexPath.section]{
             case "P":
                 cell.dia1View.backgroundColor = #colorLiteral(red: 0, green: 0.9769522548, blue: 0.1877456605, alpha: 1)
@@ -94,7 +96,8 @@ class DetailList: UIViewController, UITableViewDelegate, UITableViewDataSource{
             cell.dia1View.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         }
         
-        if !ladDia2.isEmpty{
+        print(ladDia2.count, indexPath.section)
+        if !ladDia2.isEmpty && ladDia2.count >= indexPath.section+1{
             switch ladDia2[indexPath.section]{
             case "P":
                 cell.dia2View.backgroundColor = #colorLiteral(red: 0, green: 0.9769522548, blue: 0.1877456605, alpha: 1)

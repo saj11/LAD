@@ -21,12 +21,16 @@ class NativeEncryption : Encrypter {
         static let manager: EllipticCurveKeyPair.Manager = {
             let publicAccessControl = EllipticCurveKeyPair.AccessControl(protection: kSecAttrAccessibleAlwaysThisDeviceOnly, flags: [])
             let privateAccessControl = EllipticCurveKeyPair.AccessControl(protection: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, flags: [.userPresence, .privateKeyUsage])
+            
             let config = EllipticCurveKeyPair.Config(
                 publicLabel: "payment.sign.public",
                 privateLabel: "payment.sign.private",
                 operationPrompt: "Generate de Encrypted Information",
                 publicKeyAccessControl: publicAccessControl,
-                privateKeyAccessControl: privateAccessControl)
+                privateKeyAccessControl: privateAccessControl,
+                fallbackToKeychainIfSecureEnclaveIsNotAvailable: true
+                )
+            
             return EllipticCurveKeyPair.Manager(config: config)
         }()
     }
@@ -71,5 +75,15 @@ class NativeEncryption : Encrypter {
             print(error)
         }
         return ""
+    }
+    
+    func signing(message: String){
+        do{
+            let digest = message.data(using: .utf8)!
+            let signature = try Shared.manager.sign(digest, authenticationContext: self.context)
+            print(signature)
+        }catch{
+            print(error)
+        }
     }
 }

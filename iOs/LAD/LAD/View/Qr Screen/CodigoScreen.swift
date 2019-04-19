@@ -84,8 +84,10 @@ class CodigoScreen: UIViewController{
             self.horario2Label.text = String(format: "%d:%d", hour2, minutes2)
         }
         
-        let info = String(format: "%@,%@,%@,%@,%@,%d:%d,%d:%d", String(format: "%d:%d", hour, minutes), String(format: "%d:%d", hour, minutes+15), self.controller.getProfesor().nombre, self.controller.getCurso().nombre, String(self.controller.getGrupo().getNumber()), hour1, minutes1, hour2, minutes2)
+        let info = String(format: "%@,%@,%@,%@,%@,%@,%@", String(format: "%d:%d", hour, minutes), String(format: "%d:%d", hour, minutes+15), String("\(self.controller.getProfesor().nombre) \(self.controller.getProfesor().apellido)"), self.controller.getCurso().nombre, String(self.controller.getGrupo().getNumber()), String("\(self.controller.getGrupo().getSchedule().dia1.diaSemana)"), String("\(self.controller.getGrupo().getSchedule().dia2.diaSemana)"))
         
+        print("!!!!!!!!!")
+        print(info)
         if((self.controller.getGrupo().getCode()?.getData().isEmpty)!){
             self.controller.crearCodigo(data: NativeEncryption.encrypt(message: info))
         }

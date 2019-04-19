@@ -46,6 +46,7 @@ class Login: UIViewController{
         //let userN = "cbenavides@itcr.ac.cr"
         //let userN = "mestrada@itcr.ac.cr"
         //let userN = "p@gmail.com"
+        //let pass = "hola1234"
         //let pass = "123456789"
         
         let userN = "2015100516"
@@ -53,7 +54,7 @@ class Login: UIViewController{
         
         var typeUser: String
         
-        if pass.isInt{
+        if userN.isInt{
             typeUser = "Estudiante"
         }else{
             typeUser = "Profesor"

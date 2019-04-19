@@ -39,6 +39,8 @@ class CursoScreen: UITableViewController, FloatyDelegate {
         self.tableView!.addSubview(floaty)
         
         (number, listCourses) = self.controller.numberOfCourse()
+        
+        print(number, listCourses)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -67,6 +69,11 @@ class CursoScreen: UITableViewController, FloatyDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseItem", for: indexPath)
         let curso: Curso = self.listCourses[indexPath.section]
+        let image = UIImage.gradientImageWithBounds(bounds: cell.bounds)
+        
+        cell.backgroundView = UIImageView(image: image)
+        cell.selectedBackgroundView = UIImageView(image: image)
+        
         cell.textLabel?.text = curso.nombre
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.textAlignment = .center

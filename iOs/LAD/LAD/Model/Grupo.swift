@@ -39,7 +39,7 @@ class Grupo{
     private let estudiante: Estudiante?
     private var horario: Horario!
     private var codigo: Codigo?
-    private var listaDias: [DiaSemana]
+    private var listaDias: [DiaSemana]!
     
     init(curso: Curso, num: Int, profesor: Profesor, horario1: String, horario2: String) {
         self.dayArray = ["D","L","K","M","J","V","S"]
@@ -49,14 +49,7 @@ class Grupo{
         self.estudiante = nil
         self.codigo = Codigo()
         
-        self.listaDias = Array<DiaSemana>()
-        self.listaDias.append(DiaSemana.L)
-        self.listaDias.append(DiaSemana.K)
-        self.listaDias.append(DiaSemana.M)
-        self.listaDias.append(DiaSemana.J)
-        self.listaDias.append(DiaSemana.V)
-        self.listaDias.append(DiaSemana.S)
-        self.listaDias.append(DiaSemana.D)
+        self.listaDias = initDayList()
         
         self.horario = Horario(dia1: self.decomposeSchedule(schedule: horario1), dia2: decomposeSchedule(schedule: horario2))
     }
@@ -69,14 +62,7 @@ class Grupo{
         self.estudiante = nil
         self.codigo = Codigo(code: code)
         
-        self.listaDias = Array<DiaSemana>()
-        self.listaDias.append(DiaSemana.L)
-        self.listaDias.append(DiaSemana.K)
-        self.listaDias.append(DiaSemana.M)
-        self.listaDias.append(DiaSemana.J)
-        self.listaDias.append(DiaSemana.V)
-        self.listaDias.append(DiaSemana.S)
-        self.listaDias.append(DiaSemana.D)
+        self.listaDias = initDayList()
         
         self.horario = Horario(dia1: self.decomposeSchedule(schedule: horario1), dia2: decomposeSchedule(schedule: horario2))
     }
@@ -87,7 +73,22 @@ class Grupo{
         self.numero = num
         self.profesor = nil
         self.estudiante = estudiante
-        self.listaDias = Array<DiaSemana>()
+        
+        self.listaDias = initDayList()
+    }
+    
+    func initDayList()-> Array<DiaSemana>{
+        listaDias = Array<DiaSemana>()
+        
+        listaDias.append(DiaSemana.L)
+        listaDias.append(DiaSemana.K)
+        listaDias.append(DiaSemana.M)
+        listaDias.append(DiaSemana.J)
+        listaDias.append(DiaSemana.V)
+        listaDias.append(DiaSemana.S)
+        listaDias.append(DiaSemana.D)
+        
+        return listaDias
     }
     
     func decomposeSchedule(schedule: String)-> Dia{
@@ -127,23 +128,48 @@ class Grupo{
     func validateSchedule()-> Bool{
         //Apple use GMT so it is GMT+6 in CR
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.weekday, .hour, .minute], from: Date())
+        let components = calendar.dateComponents([.weekdayOrdinal, .weekday, .day, .hour, .minute], from: Date())
         
         let scheduleMirror = Mirror(reflecting: self.horario!)
         for dayInSchedule in scheduleMirror.children {
             let day = dayInSchedule.value as! Dia
-            if(!day.diaSemana.rawValue.elementsEqual(self.dayArray[components.weekday!])){
-                return false
-            }else{
+            let numOfDay = components.weekday!
+            if(day.diaSemana.rawValue.elementsEqual(self.dayArray[numOfDay-1])){
                 //-3600seg*6hrs = para obtener en segundos las 6hrs que esta la hora
                 let now = Date().addingTimeInterval(-3600*6)
-                if(now >= day.horaInicio.addingTimeInterval(-3600*6) && now <= day.horaFinal.addingTimeInterval(-3600*6)){
+                let horaInicio = day.horaInicio.addingTimeInterval(-3600*6)
+                let horaFinal = day.horaFinal.addingTimeInterval(-3600*6)
+                if(now >= horaInicio && now <= horaFinal){
                     return true
                 }
-                return false
             }
         }
         return false
+    }
+    
+    func validateSchedule()-> String{
+        //Apple use GMT so it is GMT+6 in CR
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.weekday, .hour, .minute], from: Date())
+        
+        let scheduleMirror = Mirror(reflecting: self.horario!)
+        print("@@@@@@@@")
+        for dayInSchedule in scheduleMirror.children {
+            let day = dayInSchedule.value as! Dia
+            let numOfDay = components.weekday!
+            if day.diaSemana.rawValue.elementsEqual(self.dayArray[numOfDay-1]){
+                //-3600seg*6hrs = para obtener en segundos las 6hrs que esta la hora
+                let now = Date().addingTimeInterval(-3600*6)
+                let horaInicio = day.horaInicio.addingTimeInterval(-3600*6)
+                let horaFinal = day.horaFinal.addingTimeInterval(-3600*6)
+                
+                if now >= horaInicio && now <= horaFinal{
+                    if now <= horaInicio.addingTimeInterval(900){ return "P"}
+                    else {return "T"}
+                }
+            }
+        }
+        return "A"
     }
     
     func beutyPrint(){

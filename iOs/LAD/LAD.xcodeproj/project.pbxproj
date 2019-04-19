@@ -186,7 +186,6 @@
 			children = (
 				BD4702A1225A769D00FDA0DF /* ProfileScreen */,
 				BD47029E2259C9C900FDA0DF /* AssistanceScreen */,
-				BD5A2AFF2259682D00A66167 /* Qr Screen */,
 				BD5A2AFB225471CB00A66167 /* Main Screen */,
 				BD34956A22542713004CA78E /* Group Screen */,
 				BDCF730D2251902C005FFEDF /* Course Screen */,
@@ -235,6 +234,7 @@
 		BD5A2AFB225471CB00A66167 /* Main Screen */ = {
 			isa = PBXGroup;
 			children = (
+				BD5A2AFF2259682D00A66167 /* Qr Screen */,
 				BD5A2AFC2254720200A66167 /* PrincipalScreen.swift */,
 			);
 			name = "Main Screen";

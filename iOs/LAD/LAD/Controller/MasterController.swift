@@ -303,6 +303,46 @@ class MasterController{
         
         return (max(dia1List.count, dia2List.count), dia1List, dia2List)
     }
+    
+    func belongsToCourse(courseName: String)-> Bool{
+        var listCourses:Array<(Curso, Int, String)> = Array<(Curso, Int, String)>()
+        (_, listCourses) = self.numberOfCourse()
+        
+        for course in listCourses{
+            if course.0.nombre.elementsEqual(courseName){
+               return true
+            }
+        }
+        return false
+    }
+    
+    func confirmPresence(data:[String.SubSequence])-> Bool{
+        //15:39,15:54,Carlos,Benavides,Redes,1,K,J
+        let nombreCurso = String(data[4])
+        
+        if belongsToCourse(courseName: nombreCurso){
+            let curso = Curso(codigo: "", nombre: nombreCurso)
+            let profesor = Profesor(nombre: String(data[2]), apellido: String(data[3]), correo: "", tiempoTardiaCodigo: 0, tiempoVigenciaCodigo: 0)
+            let grupo = Grupo(
+                curso: curso,
+                num: Int(String(data[5]))!,
+                profesor: profesor,
+                horario1: String("\(String(data[6]))-\(String(data[0]))-\(String(data[1]))"),
+                horario2: String("\(String(data[7]))-\(String(data[0]))-\(String(data[1]))")
+            )
+            
+            if grupo.validateSchedule(){
+                var estado:String = grupo.validateSchedule()
+                var numberLAD = Int(String(data[8]))
+                if self.dbManager.confirmPresence(numberList: numberLAD!, userID: self.estudiante.id, state: estado){
+                    return true
+                }
+                return false
+            }
+            return false
+        }
+        return false
+    }
 }
 
 extension UIImage {

@@ -75,7 +75,7 @@ class ListScreen: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = Bundle.main.loadNibNamed("CustomTableViewCell", owner: self, options: nil)?.first as! CustomTableViewCell
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "CourseItem", for: indexPath)
+        
         let curso: Curso = self.listCourses[indexPath.section].0
         let image = UIImage.gradientImageWithBounds(bounds: cell.bounds)
         
@@ -92,7 +92,7 @@ class ListScreen: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         cell.numberGroup?.text = String("0\(self.listCourses[indexPath.section].1)")
         
-        //cell.groupLabel?.textAlignment = .center
+        cell.selectedBackgroundView = UIImageView(image: image)
         
         cell.layer.borderColor = UIColor.white.cgColor
         cell.layer.borderWidth = 1

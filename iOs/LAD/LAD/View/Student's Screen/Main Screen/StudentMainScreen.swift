@@ -13,6 +13,7 @@ class StudentMainScreen: UIViewController{
     //MARK: Properties
     @IBOutlet weak var camaraView: UIView!
     
+    private let controller: MasterController = MasterController.shared
     private var captureSession: AVCaptureSession!
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     private var supportedCodeTypes:[AVMetadataObject.ObjectType]!
@@ -103,20 +104,29 @@ class StudentMainScreen: UIViewController{
     
     // MARK: - Helper methods
     
-    func launchApp(decodedURL: String) {
+    func launchApp(confirmationMessage: String) {
         
         if presentedViewController != nil {
             return
         }
         
-        let alertPrompt = UIAlertController(title: "LAD - Estudiante", message: "Confirmar Asistencia a \(decodedURL)", preferredStyle: .alert)
+        var message = confirmationMessage.split(separator: ",")
+        
+        let alertPrompt = UIAlertController(title: "LAD - Estudiante", message: "Confirmar Asistencia en el Curso: \(message[4]) Grupo: \(message[5]) del Profesor: \(message[2]) \(message[3])", preferredStyle: .alert)
+        
         let confirmAction = UIAlertAction(title: "Confirm", style: .default, handler: { (action) -> Void in
             
-            if let url = URL(string: decodedURL) {
-                if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
+            let mensaje: String
+            
+            if self.controller.confirmPresence(data: message){
+                mensaje = "Su Asistencia se Registro Satisfactoriamente. Puede dirigirse inmediatamente a la zona de Asistencia."
+            }else{
+                mensaje = "Su Asistencia NO se Registro Satisfactoriamente."
             }
+            
+            let alert = UIAlertController(title: "Lista de Asistencia Digital", message: mensaje, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default))
+            self.present(alert, animated: true, completion: nil)
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -147,7 +157,7 @@ extension StudentMainScreen: AVCaptureMetadataOutputObjectsDelegate {
             camaraView?.frame = barCodeObject!.bounds
             
             if metadataObj.stringValue != nil {
-                launchApp(decodedURL: metadataObj.stringValue!)
+                launchApp(confirmationMessage: metadataObj.stringValue!)
                 //messageLabel.text = metadataObj.stringValue
             }
         }

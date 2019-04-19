@@ -76,11 +76,14 @@ class PrincipalScreen: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionItem", for: indexPath)
+        let image = UIImage.gradientImageWithBounds(bounds: cell.bounds)
+        
+        cell.backgroundView = UIImageView(image: image)
+        cell.selectedBackgroundView = UIImageView(image: image)
+        
         cell.textLabel?.text = self.listOptions[indexPath.section]
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.textAlignment = .center
-        
-        cell.backgroundColor = UIColor.gray
         
         cell.layer.borderColor = UIColor.gray.cgColor
         cell.layer.borderWidth = 1
