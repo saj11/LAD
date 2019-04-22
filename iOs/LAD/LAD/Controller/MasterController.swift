@@ -86,19 +86,24 @@ class MasterController{
         }
     }
     
-    func validateUser(email: String, password: String)-> Bool{
+    func validateUser(typeUser: String, email: String, password: String)-> Bool{
         let nombre = Expression<String>("Nombre")
         let apellidos = Expression<String>("Apellidos")
         let contraseña = Expression<String>("Contrasena")
+        let correo = Expression<String>("Correo")
         let tiempoTardiaCodigo = Expression<Int>("TiempoTardiaCodigo")
         let tiempoVigenciaCodigo = Expression<Int>("TiempoVigenciaCodigo")
         
-        let result: Array<Row> = self.dbManager.validateUser(input: email)
+        let result: Array<Row> = self.dbManager.validateUser(typeUser: typeUser, input: email)
         do{
             let dbDecrypPass = self.encrypter.decrypt(message: result[0][contraseña])
 
             if(!result.isEmpty && password.elementsEqual(dbDecrypPass)){
-                self.profesor = Profesor(nombre: result[0][nombre],apellido: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
+                if typeUser.elementsEqual("Profesor"){
+                    self.profesor = Profesor(nombre: result[0][nombre],apellido: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
+                }else{
+                    self.estudiante = Estudiante(nombre: result[0][nombre], apellidos: result[0][apellidos], id: Int(email)!, correo: result[0][correo])
+                }
                 return true
             }else{
                 return false
@@ -127,6 +132,28 @@ class MasterController{
         return (listaCursos.count, listaCursos)
     }
     
+    func numberOfCourse() -> (Int, Array<(Curso, Int, String)>) {
+        let cursoT = Table("Curso")
+        let profesor = Table("Profesor")
+        let nombre = Expression<String>("Nombre")
+        let codigo = Expression<String>("IDCurso")
+        let grupo = Expression<Int>("IDGrupo")
+        let apellidos = Expression<String>("Apellidos")
+        
+        var listaCursos:Array<(Curso, Int, String)> = Array<(Curso, Int, String)>()
+        let courses = self.dbManager.numberOfCourse(idUser: self.estudiante.id)
+        
+        for curso in courses!{
+            listaCursos.append((Curso(codigo: curso[codigo], nombre: curso[cursoT[nombre]]), curso[grupo], String("\(curso[profesor[nombre]]) \(curso[apellidos])")))
+        }
+        
+        if listaCursos.isEmpty {
+            return (listaCursos.count, listaCursos)
+        }
+        
+        return (listaCursos.count, listaCursos)
+    }
+    
     func groupsOf() -> (Int, Array<Grupo>) {
         let numero = Expression<Int>("Numero")
         let dia1 = Expression<String>("Dia1")
@@ -144,10 +171,8 @@ class MasterController{
                     listaGrupos.append(Grupo(curso: self.curso, num: grupo[numero], profesor: self.profesor, horario1: grupo[dia1], horario2: grupo[dia2]))
                 }else{
                     do{
-                        print(grupo[codigo], grupo[key])
                         listaGrupos.append(Grupo(curso: self.curso, num: grupo[numero], profesor: self.profesor, horario1: grupo[dia1], horario2: grupo[dia2], code: try self.encrypter.decrypt(message: grupo[codigo])))
                     }catch{
-                        print("###")
                         print(error)
                     }
             }
@@ -210,15 +235,113 @@ class MasterController{
     }
     
     func setNewPassword(password: String){
-        do{
-            if(self.dbManager.setNewPassword(email: self.profesor.correo, password: password)){
-                print("Change Succesfully")
-            }else{
-                print("Change Unsuccesfully")
-            }
-        }catch{
-            print(error)
+        if(self.dbManager.setNewPassword(email: self.profesor.correo, password: password)){
+            print("Change Succesfully")
+        }else{
+            print("Change Unsuccesfully")
         }
+    }
+    
+    func setNumberGroup(number: Int){
+        self.grupo = Grupo(curso: self.curso, num: number, estudiante: self.estudiante)
+    }
+    
+    private func getDaysOfCourse()-> Array<String> {
+        let dia1 = Expression<String>("Dia1")
+        let dia2 = Expression<String>("Dia2")
+        
+        var diaCurso:Array<String> = Array<String>()
+        let query = self.dbManager.getDaysOfCourse(idCourse: self.curso.codigo, idUser: self.estudiante.id, numberGroup: self.grupo.getNumber())
+        for item in query{
+            diaCurso.append(String(item[dia1].split(separator: "-")[0]))
+            if !item[dia2].isEmpty{
+                diaCurso.append(String(item[dia2].split(separator: "-")[0]))
+            }else{
+                diaCurso.append("")
+            }
+        }
+        
+        print("##########")
+        print("getDaysOfCourse")
+        print(diaCurso)
+        return diaCurso
+    }
+    
+    func getAttendanceList() -> (Int, Array<String>, Array<String>) {
+        let fecha = Expression<String>("Fecha")
+        let estado = Expression<String>("Estado")
+        
+        let lad = self.dbManager.getAttendanceList(idCourse: self.curso.codigo, idUser: self.estudiante.id, numberGroup: self.grupo.getNumber())
+        
+        var dia:String
+        var dia1List:Array<String> = Array<String>()
+        var dia2List:Array<String> = Array<String>()
+        
+        //Dias que dan clases de un grupo en un curso especifico(Curso y Grupo seleccionado por el usuario)
+        var dias = getDaysOfCourse()
+        print("##########")
+        print("getDaysOfCourse")
+        for item in lad{
+            print(item)
+            dia = (item[fecha]) //Ej:   D-H1-H2 -> L-9:30-11:30
+            dia = String(dia.split(separator: "-")[0])  // [L, 9:30, 11:30]
+            switch dia{
+            case dias[0]:
+                dia1List.append(item[estado])
+                break
+            case dias[1]:
+                dia2List.append(item[estado])
+                break
+            default:
+                dia1List.append(item[estado])
+            }
+        }
+        
+        if dia1List.isEmpty || dia1List.isEmpty{
+            return (0, dia1List, dia2List)
+        }
+        
+        return (max(dia1List.count, dia2List.count), dia1List, dia2List)
+    }
+    
+    func belongsToCourse(courseName: String)-> Bool{
+        var listCourses:Array<(Curso, Int, String)> = Array<(Curso, Int, String)>()
+        (_, listCourses) = self.numberOfCourse()
+        
+        for course in listCourses{
+            if course.0.nombre.elementsEqual(courseName){
+               return true
+            }
+        }
+        return false
+    }
+    
+    func confirmPresence(data:[String.SubSequence])-> Bool{
+        //15:39,15:54,Carlos,Benavides,Redes,1,K,J
+        let nombreCurso = String(data[4])
+        
+        if belongsToCourse(courseName: nombreCurso){
+            let curso = Curso(codigo: "", nombre: nombreCurso)
+            let profesor = Profesor(nombre: String(data[2]), apellido: String(data[3]), correo: "", tiempoTardiaCodigo: 0, tiempoVigenciaCodigo: 0)
+            let grupo = Grupo(
+                curso: curso,
+                num: Int(String(data[5]))!,
+                profesor: profesor,
+                horario1: String("\(String(data[6]))-\(String(data[0]))-\(String(data[1]))"),
+                horario2: String("\(String(data[7]))-\(String(data[0]))-\(String(data[1]))")
+            )
+            
+            if grupo.validateSchedule(){
+                var estado:String = grupo.validateSchedule()
+                var numberLAD = Int(String(data[8]))
+                if self.dbManager.confirmPresence(numberList: numberLAD!, userID: self.estudiante.id, state: estado){
+                    return true
+                }
+                return false
+            }
+            return false
+        }
+        return false
     }
 }
 

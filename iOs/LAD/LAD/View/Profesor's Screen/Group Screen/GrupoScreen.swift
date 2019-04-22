@@ -68,13 +68,22 @@ class GrupoScreen: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupItem", for: indexPath)
+        let image = UIImage.gradientImageWithBounds(bounds: cell.bounds)
+        
+        cell.backgroundView = UIImageView(image: image)
+        cell.selectedBackgroundView = UIImageView(image: image)
+        
         cell.textLabel?.text = String(format: "Grupo %d", indexPath.section+1)
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.textAlignment = .center
         
-        cell.backgroundColor = UIColor.gray
+        cell.textLabel?.textColor = UIColor.white
+        cell.detailTextLabel?.textColor = UIColor.white
         
-        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.textLabel?.backgroundColor = .clear
+        cell.detailTextLabel?.backgroundColor = .clear
+        
+        cell.layer.borderColor = UIColor.white.cgColor
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 8
         

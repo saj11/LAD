@@ -37,10 +37,10 @@ class CreatingStudent: UIViewController {
          let password = passwordTF.text
          let confirmPass = passwordRepTF.text*/
         
-        let userName = "prueba"
-        let lastName = "prueba"
-        let id = 2015234543
-        let email = "pe@gmail.com"
+        let userName = "joseph"
+        let lastName = "salazar"
+        let id = 2015100516
+        let email = "jossalazar@ic-itcr.ac.cr"
         let password = "123456789"
         let confirmPass = "123456789"
         
@@ -51,7 +51,7 @@ class CreatingStudent: UIViewController {
             if(self.controller.validateNewUser(typeUser: "S", input: email)){
                 if(self.controller.addNewUser(typeUser: "S", data: userData)){
                     let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                    let cursoScreen = storyboard.instantiateViewController(withIdentifier: "NavController2") as! UINavigationController
+                    let cursoScreen = storyboard.instantiateViewController(withIdentifier: "StudentTabBarController") as! UITabBarController
                     self.present(cursoScreen, animated: true, completion: nil)
                 }
                 else{
