@@ -74,8 +74,9 @@ public class DatabaseAccess {
         }
     }
 
+    //profe
     public Usuario buscarUsuario(String correo){
-        String email = "icerdas@itcr.ac.cr";
+
         String query = "Select * From Profesor where Correo = '"+correo+"'";
 
         String nombre="";
@@ -92,6 +93,23 @@ public class DatabaseAccess {
 
 
         return usuario;
+    }
+    //estudiante
+    public Usuario buscarUsuarioEstudiante(String correo){
+        String query = "Select * From Estudiante where Correo = '"+correo+"'";
+        Usuario usuario = new Usuario();
+        try {
+            c = db.rawQuery(query, null);
+            c.moveToFirst();
+            usuario.setID(c.getInt(0));
+            usuario.setUsuario(c.getString(1));
+            usuario.setCorreo(c.getString(2));
+            usuario.setCotrasena(c.getString(3));
+            return usuario;
+        }
+        catch (Exception e){
+            return usuario;
+        }
     }
 
     public boolean checkCorreo(String email, String contra){
@@ -155,6 +173,7 @@ public class DatabaseAccess {
             return false;
         }
     }
+    //contraseña de profe
     public boolean checkContra(String correo, String contra){
         try{
             String query = "Select * From Profesor where Correo ='"+correo+"'";
@@ -169,6 +188,22 @@ public class DatabaseAccess {
             }
         }
         catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean checkContraEstudiante(String correo, String contra){
+        try{
+            String query = "Select * From Estudiante where Correo ='"+correo+"'";
+            c=db.rawQuery(query,null);
+            c.moveToFirst();
+            String correoRes = c.getString(3);
+            if(correoRes.equals(contra)){
+                return true;
+            }
+            return false;
+
+        } catch (Exception e){
             return false;
         }
     }

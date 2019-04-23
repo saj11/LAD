@@ -32,7 +32,7 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.setTitle("LAD-Estudiante");
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
 

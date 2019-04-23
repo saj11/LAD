@@ -56,13 +56,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!mTextUsuario.getText().toString().trim().equals("")){
-                    boolean existeCorreo;
+                    boolean existeCorreoProfe=false;
+                    boolean existeCorreoEstudiante=false;
                     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
                     databaseAccess.openWrite();
-                    existeCorreo=databaseAccess.checkCorreo(mTextUsuario.getText().toString());
+                    existeCorreoProfe=databaseAccess.checkCorreo(mTextUsuario.getText().toString());
+                    existeCorreoEstudiante = databaseAccess.checkCorreoEstudiante(mTextUsuario.getText().toString());
                     //Toast.makeText(MainActivity.this, usuario.getInfo(), Toast.LENGTH_SHORT).show();
                     databaseAccess.close();
-                    if(existeCorreo){
+                    if(existeCorreoProfe){
                         boolean contraIgual=false;
                         databaseAccess.openWrite();
                         contraIgual = databaseAccess.checkContra(mTextUsuario.getText().toString().trim(),mTextPass.getText().toString());
@@ -93,7 +95,34 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     else{
-                        Toast.makeText(MainActivity.this,"El usuario no existe",Toast.LENGTH_LONG).show();
+
+                        if(existeCorreoEstudiante){
+                            boolean contraIgual = false;
+                            databaseAccess.openWrite();
+                            contraIgual = databaseAccess.checkContraEstudiante(mTextUsuario.getText().toString(),mTextPass.getText().toString());
+                            databaseAccess.close();
+                            if(contraIgual){
+                                databaseAccess.openWrite();
+                                Usuario estudiante = databaseAccess.buscarUsuarioEstudiante(mTextUsuario.getText().toString().toLowerCase().trim());
+                                databaseAccess.close();
+
+                                Intent intent = new Intent(MainActivity.this,MainMenuEstudianteActivity.class);
+                                intent.putExtra("usuario", estudiante.getUsuario());
+                                intent.putExtra("carne",estudiante.getID());
+                                intent.putExtra("correo", estudiante.getCorreo());
+                                intent.putExtra("contra",estudiante.getCotrasena());
+
+                                startActivity(intent);
+
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this,"La contraseña no coincide",Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "El usuario no existe", Toast.LENGTH_LONG).show();
+                        }
                     }
 
 
