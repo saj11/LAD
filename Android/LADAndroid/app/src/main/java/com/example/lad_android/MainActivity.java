@@ -44,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                /* Intent SignupIntent = new Intent(MainActivity.this, RegistroActivity.class);
-                startActivity(SignupIntent);*/
+                startActivity(SignupIntent);
                Intent intent = new Intent(MainActivity.this, MainMenuEstudianteActivity.class);
+               startActivity(intent);*/
+               Intent intent = new Intent(MainActivity.this, RegistroSeleccionActivity.class);
                startActivity(intent);
             }
         });

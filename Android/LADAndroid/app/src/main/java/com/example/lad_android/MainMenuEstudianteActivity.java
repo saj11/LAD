@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -121,6 +122,10 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
                 scannerView.resumeCameraPreview(MainMenuEstudianteActivity.this);
             }
         });
+
+        builder.setMessage(scanResult);
+        AlertDialog alert = builder.create();
+        alert.show();
         //aqui va el codigo
     }
 
@@ -177,6 +182,8 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
 
     private void onSwipeLeft() {
         Toast.makeText(MainMenuEstudianteActivity.this,"Izquireda",Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(MainMenuEstudianteActivity.this, MainMenuEstudianteCursoActivity.class);
+        startActivity(intent);
     }
 
 

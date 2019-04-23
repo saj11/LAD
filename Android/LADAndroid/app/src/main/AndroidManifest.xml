@@ -9,10 +9,9 @@
         android:xlargeScreens="true" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
-
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -24,7 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainMenuEstudianteActivity"></activity>
+        <activity android:name=".RegistroSeleccionActivity"></activity>
+        <activity android:name=".RegistroEstudianteActivity" />
+        <activity android:name=".MainMenuEstudianteCursoActivity" />
+        <activity android:name=".MainMenuEstudianteActivity" />
         <activity android:name=".QRCodigoActivity" />
         <activity android:name=".MenuListaAsistenciaActivity" />
         <activity android:name=".ListaAsistenciaGrupo" />

@@ -50,7 +50,7 @@ public class DatabaseAccess {
             return true;
         }
     }
-
+    //Registro usuario profesor
     public String registrarUsuario(String nombre, String apellido, String correo, String contra){
         String query = "INSERT INTO Profesor (Nombre, Apellidos, Correo, Contrasena) VALUES ('"+nombre+"', '"+apellido+"', '"+correo+"', '"+contra+"')";
         try {
@@ -59,6 +59,17 @@ public class DatabaseAccess {
             return "Se ha registrado el usuario: "+correo+" exitosamente";
         }
         catch(Exception e){
+            return "el usuario ya existe";
+        }
+    }
+
+    //registro usuario estudiante
+    public String registrarUsuarioEstudiante(String nombre, String carne, String correo, String contra){
+        String query = "INSERT INTO Estudiante (Carne, Nombre, Correo, Contrasena) VALUES ('"+carne+"', '"+nombre+"', '"+correo+"', '"+contra+"')";
+        try{
+            db.execSQL(query);
+            return "Se ha registrado el usuario: "+correo+" exitosamente";
+        }catch (Exception e){
             return "el usuario ya existe";
         }
     }
@@ -108,6 +119,23 @@ public class DatabaseAccess {
             return false;
         }
 
+    }
+
+    public boolean checkCorreoEstudiante(String correo){
+        try{
+            String query = "Select * From Estudiante where Correo ='"+correo+"'";
+            c = db.rawQuery(query,null);
+            c.moveToFirst();
+            String correoRes = c.getString(2);
+            if(correoRes.toLowerCase().trim().equals(correo)){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public boolean checkCorreo(String correo){
