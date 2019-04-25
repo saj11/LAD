@@ -308,6 +308,21 @@ public class DatabaseAccess {
 
     }
 
+    public String getHorario1(String idCurso, String numGrupo, String idProfe){
+        String query = "Select * From Grupo where IDCurso='"+idCurso+"' and Numero='"+numGrupo+"' and IDProfe='"+idProfe+"'";
+        c = db.rawQuery(query,null);
+        c.moveToFirst();
+        String dia = c.getString(3);
+        return dia;
+    }
+    public String getHorario2(String idCurso, String numGrupo, String idProfe){
+        String query = "Select * From Grupo where IDCurso='"+idCurso+"' and Numero='"+numGrupo+"' and IDProfe='"+idProfe+"'";
+        c = db.rawQuery(query,null);
+        c.moveToFirst();
+        String dia = c.getString(4);
+        return dia;
+    }
+
 
     public List<String> getListaCursosNombre(){
         List<String> List = new ArrayList<String>();

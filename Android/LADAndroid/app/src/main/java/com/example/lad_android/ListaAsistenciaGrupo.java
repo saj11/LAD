@@ -14,7 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ListaAsistenciaGrupo extends AppCompatActivity {
@@ -48,7 +51,12 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
             listaAsistenciaEstudianteEstado = databaseAccess.getListaAsitenciaEstudianteEstado(IDListaAsistencia);
         }
         databaseAccess.close();
+        mTextCurso.setText(bundle.getString("NombreCurso"));
         mTextCodigo.setText(bundle.getString("IDCurso"));
+        mTextNumero.setText("Grupo: "+bundle.getString("Numero"));
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+        String date = df.format(Calendar.getInstance().getTime());
+        mTextFecha.setText(date);
         //mTextCurso.setText(nombreCurso);
 
 

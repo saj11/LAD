@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Miercoles"
-            android:layout_marginRight="35dp"
+            android:layout_marginRight="37dp"
             android:background="@android:color/holo_green_dark"
             />
         <EditText
@@ -127,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Viernes"
-            android:layout_marginRight="35dp"
+            android:layout_marginRight="37dp"
             android:background="@android:color/holo_green_dark"
             />
         <EditText
@@ -164,8 +164,9 @@
 
     <Button
         android:id="@+id/CrearCursoBtnCrear"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/border_profe"
         android:text="Crear Grupo"
         android:layout_marginTop="30dp"/>
 
