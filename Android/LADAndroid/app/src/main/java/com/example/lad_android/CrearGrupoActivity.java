@@ -53,9 +53,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextInicioHora1.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextInicioHora1.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextInicioHora1.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });
@@ -66,9 +71,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextFinalHora1.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextFinalHora1.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextFinalHora1.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });
@@ -79,9 +89,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextInicioHora2.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextInicioHora2.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextInicioHora2.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });
@@ -92,9 +107,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextFinalHora2.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextFinalHora2.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextFinalHora2.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });

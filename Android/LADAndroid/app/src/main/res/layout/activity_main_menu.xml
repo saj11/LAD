@@ -11,20 +11,28 @@
 
     <TextView
         android:id="@+id/MainMenuUsuario"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icono_usuario"
         android:text="Profesor"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="150dp"
+        android:layout_marginLeft="100dp"
         />
 
     <LinearLayout
+        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="500dp">
         <ListView
             android:id="@+id/MainMenuLista"
             android:layout_width="match_parent"
-            android:layout_height="500dp" />
+            android:layout_height="500dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            />
 
     </LinearLayout>
 
@@ -33,7 +41,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="103dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="0dp"
         android:clickable="true"
         />
 

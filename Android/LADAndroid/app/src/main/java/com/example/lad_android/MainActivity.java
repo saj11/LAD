@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     boolean existeCorreoEstudiante=false;
                     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
                     databaseAccess.openWrite();
-                    existeCorreoProfe=databaseAccess.checkCorreo(mTextUsuario.getText().toString());
+                    existeCorreoProfe=databaseAccess.checkCorreo(mTextUsuario.getText().toString().trim());
                     existeCorreoEstudiante = databaseAccess.checkCorreoEstudiante(mTextUsuario.getText().toString());
                     //Toast.makeText(MainActivity.this, usuario.getInfo(), Toast.LENGTH_SHORT).show();
                     databaseAccess.close();

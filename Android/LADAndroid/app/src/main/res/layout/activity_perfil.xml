@@ -9,7 +9,11 @@
     android:gravity="center_horizontal">
 
 
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
         android:id="@+id/PerfilUsuario"
@@ -40,7 +44,9 @@
 
     <TextView
         android:id="@+id/PerfilCambiarNombre"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="Cambiar Nombre"
@@ -48,6 +54,7 @@
         android:textSize="18sp" />
 
     <TextView
+
         android:id="@+id/PerfilCambiarContra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

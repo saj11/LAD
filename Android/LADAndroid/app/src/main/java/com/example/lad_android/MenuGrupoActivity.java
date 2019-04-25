@@ -92,6 +92,8 @@ public class MenuGrupoActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.list_item, null);
             }
 
+            view.setBackgroundResource(R.drawable.border);
+
             TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
             listItemText.setText(list.get(position));
 
@@ -109,7 +111,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
             });
 
             Button dltBtn = (Button) view.findViewById(R.id.delete_btn);
-
+            dltBtn.setBackgroundResource(R.drawable.border_delete);
             dltBtn.setOnClickListener( new View.OnClickListener(){
                                            @Override
                                            public void onClick(View v) {

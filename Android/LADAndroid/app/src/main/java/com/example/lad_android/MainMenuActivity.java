@@ -2,6 +2,8 @@ package com.example.lad_android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -109,11 +111,35 @@ public class MainMenuActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.list_item, null);
             }
 
+            view.setBackgroundResource(R.drawable.border);
+
+            GradientDrawable gd = new GradientDrawable();
+
+            // Specify the shape of drawable
+            gd.setShape(GradientDrawable.RECTANGLE);
+
+            // Set the fill color of drawable
+            gd.setColor(Color.TRANSPARENT); // make the background transparent
+
+            // Create a 2 pixels width red colored border for drawable
+            gd.setStroke(4, Color.BLUE); // border width and color
+
+            // Make the border rounded
+            gd.setCornerRadius(30.0f);
+
             TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
             listItemText.setText(list.get(position));
+            //listItemText.setBackground(gd);
+            //listItemText.setWidth(200);
+            //listItemText.setMinHeight(50);
+            //listItemText.setBackgroundResource(R.drawable.border);
+            //listItemText.setTextColor(Color.parseColor("#FF3E80F1"));
+            //listItemText.setPadding(0,10,0,0);
+            //listItemText.setBackgroundColor(Color.parseColor("#FF3E80F1"));
 
+            //view.setBackgroundColor(Color.parseColor("#FF3E80F1"));
             listItemText.setOnClickListener(new View.OnClickListener(
-
+            //sdk version min 16
             ) {
                 @Override
                 public void onClick(View v) {
@@ -132,7 +158,7 @@ public class MainMenuActivity extends AppCompatActivity {
             });
 
             Button dltBtn = (Button) view.findViewById(R.id.delete_btn);
-
+            dltBtn.setBackgroundResource(R.drawable.border_delete);
             dltBtn.setOnClickListener( new View.OnClickListener(){
                                            @Override
                                            public void onClick(View v) {
