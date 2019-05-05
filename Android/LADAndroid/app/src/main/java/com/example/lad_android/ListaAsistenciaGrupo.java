@@ -56,11 +56,17 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
         mTextCurso.setText(bundle.getString("NombreCurso"));
         mTextCodigo.setText(bundle.getString("IDCurso"));
         mTextNumero.setText("Grupo: "+bundle.getString("Numero"));
-        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
-        String date = df.format(Calendar.getInstance().getTime());
-        mTextFecha.setText(date);
+        mTextFecha.setText(bundle.getString("Horario1")+"    "+bundle.getString("Horario2"));
         //mTextCurso.setText(nombreCurso);
 
+        DateFormat day = new SimpleDateFormat("yyyy-mm-dd");
+        String hoy = day.format(Calendar.getInstance().getTime());
+        databaseAccess.openWrite();
+        //String res= databaseAccess.crearListaAsistencia(bundle.getString("IDCurso"),bundle.getString("Numero"));
+       // String res = databaseAccess.fetchListaAsistencia(bundle.getString("IDCurso"),bundle.getString("Numero"), hoy);
+        String res = databaseAccess.fetchListaTest(bundle.getString("IDCurso"), bundle.getString("Numero"));
+        databaseAccess.close();
+        mTextCurso.setText(res);
 
     }
 
@@ -112,40 +118,6 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
-            //btn delete no es necesario
-            Button dltBtn = (Button) view.findViewById(R.id.delete_btn);
-
-            dltBtn.setOnClickListener( new View.OnClickListener(){
-                                           @Override
-                                           public void onClick(View v) {
-                                               int numero = Integer.parseInt(list.get(position));
-                                               String curso = getIntent().getExtras().getString("IDCurso");
-                                               int idProfe = getIntent().getExtras().getInt("id");
-                                               list.remove(position);
-                                               //delete in db
-                                               try{
-                                                   DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
-                                                   databaseAccess.openWrite();
-                                                   databaseAccess.deleteGrupo(curso, numero,idProfe);
-                                                   //databaseAccess.deleteCurso(curso);
-                                                   databaseAccess.close();
-                                                   Toast.makeText(v.getContext(),"Datos, ID: "+curso+" ,Numero: "+numero+ ", Profe;"+idProfe,Toast.LENGTH_LONG).show();
-                                                   //Toast.makeText(v.getContext(),"Se elimino Grupo "+numero+"del Curso"+curso+" correctamente",Toast.LENGTH_SHORT).show();
-                                                   Intent intent = new Intent(v.getContext(),MainMenuActivity.class);
-                                                   intent.putExtras(bundle);
-                                                   startActivity(intent);
-                                               }
-                                               catch (Exception e){
-                                                   Toast.makeText(v.getContext(),"Hubo un error, ID: "+curso+" ,Numero: "+numero+ ", Profe;"+idProfe,Toast.LENGTH_LONG).show();
-                                               }
-
-                                               notifyDataSetChanged();
-                                           }
-                                       }
-            );
-
-
 
             return view;
         }

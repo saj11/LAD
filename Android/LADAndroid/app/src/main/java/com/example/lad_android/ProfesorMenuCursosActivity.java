@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
     FloatingActionButton mButtonCrear;
     Bundle bundle = new Bundle();
     List<DatosUsuario> listaCursos;
+    ImageView mImgViewQR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,17 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
         mTextUsuario = (TextView)findViewById(R.id.ProfesorMenuCursosUsuario);
         mListLista = (ListView)findViewById(R.id.ProfesorMenuCursosListView);
         mButtonCrear = (FloatingActionButton)findViewById(R.id.ProfesorMenuCursosFloatingBtn);
+        mImgViewQR = (ImageView)findViewById(R.id.ProfesorMenuCursoImageViewQR);
         bundle = getIntent().getExtras();
+
+        mImgViewQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ProfesorMenuCursosActivity.this, ProfesorMainMenuActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
 
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
@@ -113,7 +125,7 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
             ) {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MenuListaAsistenciaActivity.class);
+                    Intent intent = new Intent(context, ProfesorMenuListaAsistenciaActivity.class);
                     intent.putExtra("IDCurso",list.get(position).getCodigoCurso());
                     intent.putExtra("NombreCurso",list.get(position).getNombreCurso());
                     intent.putExtra("Numero",list.get(position).getNumeroGrupo());

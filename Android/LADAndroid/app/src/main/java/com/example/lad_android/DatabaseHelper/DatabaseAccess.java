@@ -10,7 +10,10 @@ import android.util.Log;
 import com.example.lad_android.models.DatosUsuario;
 import com.example.lad_android.models.Usuario;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class DatabaseAccess {
@@ -42,15 +45,7 @@ public class DatabaseAccess {
         }
     }
 
-    public boolean registrarUsuario2(ContentValues contentValues){
-        long result = db.insert("Profesor",null,contentValues);
-        if(result == -1){
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
+
     //Registro usuario profesor
     public String registrarUsuario(String nombre, String apellido, String correo, String contra){
         String query = "INSERT INTO Profesor (Nombre, Apellidos, Correo, Contrasena) VALUES ('"+nombre+"', '"+apellido+"', '"+correo+"', '"+contra+"')";
@@ -464,5 +459,107 @@ public class DatabaseAccess {
         return List;
     }
 
+    public String crearListaAsistencia(String idCurso, String idGrupo){
+        String query = "Insert into ListaAsistencia (ID, IDCurso, IDGrupo, Fecha) Values ('1','"+idCurso+"','"+idGrupo+"',datetime('now'))";
+        try {
+            Date date = Calendar.getInstance().getTime();
+            String dia = (String) android.text.format.DateFormat.format("EEEE",date);
+            if(checkDiaCurso(idCurso,idGrupo,dia)) {
+                db.execSQL(query);
+                return "Exitoso";
+            }
+            else{
+                return "La lista de asistencia no esta disponible";
+            }
+        }
+        catch (Exception e){
+            return "Hubo un error";
+        }
+    }
+    //INSERT into ListaAsistencia (IDCurso, IDGrupo, Fecha) Values ('IC8842','1',datetime('now'))
+
+    public String fetchListaAsistencia(String idCurso, String idGrupo, String fecha){
+        String query = "Select * from ListaAsistencia where IDCurso='"+idCurso+"' and IDGrupo='"+idGrupo+"'";
+        c = db.rawQuery(query,null);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date d=new Date();
+
+        while(c.moveToNext()){
+            try{
+                String diaListaAsistencia = c.getString(3);
+                String[] fechaLista=diaListaAsistencia.split(" ");
+                String hoy = dateFormat.format(d);
+                if (hoy.equals(fechaLista[0])){
+                    return Integer.toString(c.getInt(0));
+                }
+
+            } catch (Exception e){
+                return "Error";
+            }
+        }
+        return "NotExist";
+
+    }
+
+    public String fetchListaTest(String idCurso, String idGrupo){
+        String query = "Select * from ListaAsistencia where IDCurso='"+idCurso+"' and IDGrupo='"+idGrupo+"'";
+        c = db.rawQuery(query,null);
+        c.moveToFirst();
+
+        Date date = new Date();
+        String dia = (String) android.text.format.DateFormat.format("EEEE",date);
+
+        return dia;
+
+    }
+    //Entrada: Dia de la semana
+    //Salida: True si el dia de la semana concuerda con el dia de la lista de asistencia
+    public boolean checkDiaListaAsistencia(String idListaAsistencia, String dia){
+        String query = "Select * from ListaAsistencia where ID='"+idListaAsistencia+"'";
+        c = db.rawQuery(query,null);
+        String dia1,dia2;
+        return  true;
+    }
+
+    public boolean checkDiaCurso(String idCurso, String idGrupo, String dia){
+        String query = "Select * from Grupo where IDCurso='"+idCurso+"', and Numero='"+idGrupo+"'";
+        c = db.rawQuery(query,null);
+        c.moveToFirst();
+        String dia1,dia2;
+        dia1 = c.getString(3);
+        dia2 = c.getString(4);
+        String[]letra1=dia1.split("-");
+        String[]letra2=dia2.split("-");
+        String currentDay;
+        if(dia=="Monday"){
+            currentDay="m";
+        }
+        else if(dia.equals("Tuesday")){
+            currentDay="k";
+        }
+        else if(dia.equals("Wednesday")){
+            currentDay="m";
+        }
+        else if(dia.equals("Thursday")){
+            currentDay="j";
+        }
+        else if(dia.equals("Friday")){
+            currentDay="v";
+        }
+        else{
+            currentDay="s";
+        }
+
+        if(letra1[0].toLowerCase().equals(currentDay) | letra2[0].toLowerCase().equals(currentDay)){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+
+
+
+    }
 
 }

@@ -33,7 +33,7 @@
         android:dividerHeight="8dp"
         android:divider="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@+id/ProfesorMenuCursosUsuario"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ProfesorMenuGursoGuideline"
         app:layout_constraintStart_toStartOf="parent"></ListView>
 
     <android.support.design.widget.FloatingActionButton
@@ -42,9 +42,42 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/ProfesorMenuGursoGuideline"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.85"/>
+
+    <LinearLayout
+        android:id="@+id/ProfesorMenuCursoFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/ProfesorMenuCursoImageViewQR"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/icono_usuario" />
+
+        <ImageView
+            android:id="@+id/ProfesorMenuCursoImageCursos"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/border_profe" />
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>
