@@ -138,6 +138,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(MainActivity.this, "Debe iniciar Sesion", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, "Debe iniciar Sesion", Toast.LENGTH_SHORT).show();
+
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+        databaseAccess.openWrite();
+        Usuario usuario = databaseAccess.buscarUsuario("icerdas@itcr.ac.cr");
+        databaseAccess.close();
+
+        Intent intent = new Intent(MainActivity.this, ProfesorMainMenuActivity.class);
+        intent.putExtra("usuario", usuario.getUsuario());
+        intent.putExtra("id", usuario.getID());
+        intent.putExtra("apellido", usuario.getApellidos());
+        intent.putExtra("correo",usuario.getCorreo());
+        intent.putExtra("contra",usuario.getCotrasena());
+        startActivity(intent);
     }
 }

@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.security.spec.ECField;
+import com.example.lad_android.models.DatosUsuario;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -396,6 +396,43 @@ public class DatabaseAccess {
     public void deleteGrupo(String idCurso, int numero, int idProfe){
         String query = "Delete from Grupo Where (IDCurso='"+idCurso+"' And Numero='"+numero+"' And IDProfe='"+idProfe+"')";
         db.execSQL(query);
+    }
+
+    public DatosUsuario getDatosUsuario(String idCurso, String numGrupo, String idProf){
+        DatosUsuario datosUsuario = new DatosUsuario();
+        String query = "Select * from Grupo where IDCurso='"+idCurso+"' and Numero='"+numGrupo+"' and IDProfe='"+idProf+"'";
+        c=db.rawQuery(query,null);
+        c.moveToFirst();
+        String curso = c.getString(0);
+        String grupo = Integer.toString(c.getInt(1));
+        String dia1 = c.getString(3);
+        String dia2 = c.getString(4);
+
+        datosUsuario.setCodigoCurso(curso);
+        datosUsuario.setNumeroGrupo(grupo);
+        datosUsuario.setDia1(dia1);
+        datosUsuario.setDia2(dia2);
+        datosUsuario.setNombreCurso("Not available");
+
+        return datosUsuario;
+    }
+
+    public List<DatosUsuario> getCursosProfe(int ID){
+        List<DatosUsuario> List = new ArrayList<DatosUsuario>();
+        //String query = "Select * From Grupo Join Profesor on grupo.IDProfe = Profesor.ID Where Profeor.ID=2";
+        String query = "Select * from Grupo where IDProfe ='"+ID+"'";
+        c = db.rawQuery(query, null);
+
+        while(c.moveToNext()){
+            DatosUsuario datosCurso = new DatosUsuario();
+            datosCurso.setCodigoCurso(c.getString(0));
+            datosCurso.setNumeroGrupo(Integer.toString(c.getInt(1)));
+            datosCurso.setDia1(c.getString(3));
+            datosCurso.setDia2(c.getString(4));
+            List.add(datosCurso);
+        }
+
+        return List;
     }
 
 

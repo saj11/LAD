@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegistroSeleccionActivity"></activity>
+        <activity android:name=".ProfesorMainMenuActivity"></activity>
+        <activity android:name=".RegistroSeleccionActivity" />
         <activity android:name=".RegistroEstudianteActivity" />
         <activity android:name=".MainMenuEstudianteCursoActivity" />
         <activity android:name=".MainMenuEstudianteActivity" />
