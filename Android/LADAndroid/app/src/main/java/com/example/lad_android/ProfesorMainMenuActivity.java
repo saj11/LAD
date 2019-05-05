@@ -3,9 +3,6 @@ package com.example.lad_android;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
@@ -15,16 +12,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
 import com.example.lad_android.models.DatosUsuario;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -32,15 +27,14 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class ProfesorMainMenuActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     LinearLayout sliderDotspanel;
     ListView mListV;
+    ImageView mImgViewQR, mImgViewCurso;
     private int dotscount;
     private ImageView[] dots;
     private int[] layouts = {R.layout.slides_first_slide, R.layout.slides_second_slide, R.layout.slides_third_slide};
@@ -53,12 +47,25 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_main_menu);
+        //Image view
+        mImgViewQR = (ImageView) findViewById(R.id.ProfesorMainImageViewQR);
+        mImgViewCurso = (ImageView)findViewById(R.id.ProfesorMainImageCursos);
+
+        mImgViewCurso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfesorMainMenuActivity.this, ProfesorMenuCursosActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         //list view
         mListV = (ListView)findViewById(R.id.ProfesorMainFirsListView);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
         List<String> list = databaseAccess.getAllGrupo(Integer.toString(bundle.getInt("id")));
         listaCursos = databaseAccess.getAllDatoGrupo(Integer.toString(bundle.getInt("id")));
+        databaseAccess.close();
         /*ArrayAdapter<String> itemsAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         mListV.setAdapter(itemsAdapter);*/

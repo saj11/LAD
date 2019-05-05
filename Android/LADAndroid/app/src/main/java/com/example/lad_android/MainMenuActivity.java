@@ -10,13 +10,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.Profesor.CrearGrupoActivity;
+import com.example.lad_android.Profesor.MenuGrupoActivity;
+import com.example.lad_android.Profesor.PerfilActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +122,7 @@ public class MainMenuActivity extends AppCompatActivity {
             // Set the fill color of drawable
             gd.setColor(Color.TRANSPARENT); // make the background transparent
             // Create a 2 pixels width red colored border for drawable
-            gd.setStroke(4, Color.BLUE); // border width and color
+            gd.setStroke(4, Color.RED); // border width and color
             // Make the border rounded
             gd.setCornerRadius(30.0f);
 

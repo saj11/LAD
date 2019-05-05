@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.DatabaseHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.lad_android.models.DatosUsuario;
+import com.example.lad_android.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

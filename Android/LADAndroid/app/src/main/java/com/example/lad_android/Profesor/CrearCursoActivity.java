@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -6,13 +6,15 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.MainMenuActivity;
+import com.example.lad_android.R;
 
 import java.util.ArrayList;
 import java.util.List;

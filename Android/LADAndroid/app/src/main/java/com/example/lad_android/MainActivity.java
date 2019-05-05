@@ -5,14 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.DatabaseHelper.DatabaseHelper;
+import com.example.lad_android.models.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 

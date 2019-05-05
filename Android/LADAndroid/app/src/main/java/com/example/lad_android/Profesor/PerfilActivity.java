@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.MainActivity;
+import com.example.lad_android.R;
 
 public class PerfilActivity extends AppCompatActivity {
 

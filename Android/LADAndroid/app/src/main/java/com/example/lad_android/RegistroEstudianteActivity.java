@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+
 public class RegistroEstudianteActivity extends AppCompatActivity {
 
     private EditText mTextUsuario;

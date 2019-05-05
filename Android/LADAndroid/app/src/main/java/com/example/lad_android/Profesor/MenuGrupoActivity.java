@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.MainMenuActivity;
+import com.example.lad_android.R;
 
 import java.util.List;
 
@@ -128,7 +131,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
                                                    databaseAccess.close();
                                                    //Toast.makeText(v.getContext(),"Datos, ID: "+curso+" ,Numero: "+numero+ ", Profe;"+idProfe,Toast.LENGTH_LONG).show();
                                                    //Toast.makeText(v.getContext(),"Se elimino Grupo "+numero+"del Curso"+curso+" correctamente",Toast.LENGTH_SHORT).show();
-                                                   Intent intent = new Intent(v.getContext(),MainMenuActivity.class);
+                                                   Intent intent = new Intent(v.getContext(), MainMenuActivity.class);
                                                    intent.putExtras(bundle);
                                                    startActivity(intent);
                                                }
