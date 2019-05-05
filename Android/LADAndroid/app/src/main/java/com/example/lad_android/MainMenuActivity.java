@@ -112,18 +112,13 @@ public class MainMenuActivity extends AppCompatActivity {
             }
 
             view.setBackgroundResource(R.drawable.border);
-
             GradientDrawable gd = new GradientDrawable();
-
             // Specify the shape of drawable
             gd.setShape(GradientDrawable.RECTANGLE);
-
             // Set the fill color of drawable
             gd.setColor(Color.TRANSPARENT); // make the background transparent
-
             // Create a 2 pixels width red colored border for drawable
             gd.setStroke(4, Color.BLUE); // border width and color
-
             // Make the border rounded
             gd.setCornerRadius(30.0f);
 

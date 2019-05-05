@@ -240,6 +240,34 @@ public class DatabaseAccess {
 
     }
 
+    public List<String> getAllGrupo(String profe){
+        List<String> lista = new ArrayList<String>();
+        String query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='"+profe+"'";
+        c = db.rawQuery(query,null);
+        while (c.moveToNext()){
+            lista.add(c.getString(0)+", Grupo: "+Integer.toString(c.getInt(1))+" - "+c.getString(7));
+        }
+        return lista;
+    }
+
+    public List<DatosUsuario> getAllDatoGrupo(String profe){
+        List<DatosUsuario> lista = new ArrayList<DatosUsuario>();
+        String query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='"+profe+"'";
+        c = db.rawQuery(query,null);
+        while (c.moveToNext()){
+            DatosUsuario datos = new DatosUsuario();
+            datos.setCodigoCurso(c.getString(0));
+            datos.setNombreCurso(c.getString(7));
+            datos.setNumeroGrupo(Integer.toString(c.getInt(1)));
+            datos.setDia1(c.getString(3));
+            datos.setDia2(c.getString(4));
+
+            lista.add(datos);
+
+        }
+        return lista;
+    }
+
     //Entrada: ID Curso
     //Salid: Nombre del curso
     public String getNombreCurso(String codigoCurso){
