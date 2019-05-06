@@ -3,6 +3,7 @@ package com.example.lad_android;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -32,6 +34,7 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ProfesorMainMenuActivity extends AppCompatActivity {
 
@@ -39,13 +42,16 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
     LinearLayout sliderDotspanel;
     ListView mListV;
     ImageView mImgViewQR, mImgViewCurso;
-    TextView mTextPerfil;
+    TextView mTextPerfil, thirdPanelTV;
     private int dotscount;
     private ImageView[] dots;
     private int[] layouts = {R.layout.slides_first_slide, R.layout.slides_second_slide, R.layout.slides_third_slide};
     private MpagerAdapter mpagerAdapter;
+    private CountDownTimer countDownTimer;
+    private long mTimeLeftinMillis = START_TIME_MILLIS;
     Bundle bundle;
     List<DatosUsuario> listaCursos;
+    private static final long START_TIME_MILLIS = 600000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,10 +224,42 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
 
         public View getThirdPanel(LayoutInflater inflater){
             View returnView = inflater.inflate(R.layout.slides_third_slide,null);
-            TextView tv = (TextView) returnView.findViewById(R.id.ProfesorMainThirSlideCodCurso);
-            tv.setText("hola");
+            thirdPanelTV = (TextView) returnView.findViewById(R.id.ProfesorMainThirSlideTimer);
+            Button mBtnStart = (Button) returnView.findViewById(R.id.ProfesorMainThirdSlideBtnStart);
+
+            mBtnStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startTimer();
+                }
+            });
+
             return returnView;
+
+
         }
+
+        private void startTimer(){
+            countDownTimer = new CountDownTimer(mTimeLeftinMillis, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    mTimeLeftinMillis = millisUntilFinished;
+                    int minutes =(int) (mTimeLeftinMillis/1000) /60;
+                    int seconds =(int) (mTimeLeftinMillis/1000) %60;
+                    String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds);
+                    thirdPanelTV.setText(timeLeftFormatted);
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
+
+
+        }
+
+
     }
 
     public class MyCustomAdapter extends BaseAdapter implements ListAdapter {

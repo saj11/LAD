@@ -47,5 +47,14 @@ public class ProfesorMenuListaAsistenciaActivity extends AppCompatActivity {
             }
         });
 
+        mBtnEstadistica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfesorMenuListaAsistenciaActivity.this, ProfesorEstadisticaCursoActivity.class );
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
     }
 }

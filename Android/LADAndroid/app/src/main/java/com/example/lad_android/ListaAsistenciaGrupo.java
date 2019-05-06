@@ -66,9 +66,6 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
         DateFormat day = new SimpleDateFormat("yyyy-mm-dd");
         String hoy = day.format(Calendar.getInstance().getTime());
         databaseAccess.openWrite();
-        //String res= databaseAccess.crearListaAsistencia(bundle.getString("IDCurso"),bundle.getString("Numero"));
-        // String res = databaseAccess.fetchListaAsistencia(bundle.getString("IDCurso"),bundle.getString("Numero"), hoy);
-        String res = databaseAccess.fetchListaTest(bundle.getString("IDCurso"), bundle.getString("Numero"));
         databaseAccess.close();
        // mTextCurso.setText(res);
 
