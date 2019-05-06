@@ -208,6 +208,7 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
     private void onSwipeLeft() {
         Toast.makeText(MainMenuEstudianteActivity.this,"Izquireda",Toast.LENGTH_LONG).show();
         Intent intent = new Intent(MainMenuEstudianteActivity.this, MainMenuEstudianteCursoActivity.class);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

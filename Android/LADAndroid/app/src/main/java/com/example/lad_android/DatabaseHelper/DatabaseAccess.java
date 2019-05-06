@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.lad_android.models.DatosCursoEstudiante;
 import com.example.lad_android.models.DatosListaAsistenciaEstudiante;
 import com.example.lad_android.models.DatosUsuario;
 import com.example.lad_android.models.Usuario;
@@ -404,8 +405,18 @@ public class DatabaseAccess {
         db.execSQL(query);
     }
 
+    public void cambiarNombreEstudiante(String usuario, int carne){
+        String query = "Update Estudiante set Nombre='"+usuario+"' Where Carne='"+Integer.toString(carne)+"'";
+        db.execSQL(query);
+    }
+
     public void cambiarContrasena(String nuevaContraseña, String IDProfe){
         String query = "Update Profesor set Contrasena='"+nuevaContraseña+"' Where ID='"+IDProfe+"'";
+        db.execSQL(query);
+    }
+
+    public void cambiarContrasenaEstudiante(String nuevaContra, int carne){
+        String query = "Update Estudiante set Contrasena='"+nuevaContra+"' Where Carne='"+Integer.toString(carne)+"'";
         db.execSQL(query);
     }
 
@@ -422,6 +433,15 @@ public class DatabaseAccess {
         }
         catch (Exception e) {
             Log.e("errorDeleteUser","Error en borrar");
+        }
+    }
+
+    public void deleteEstudiante(String carne){
+        try{
+            String query = "Delete From Estudiante Where Carne='"+carne+"'";
+            db.execSQL(query);
+        }catch (Exception e){
+            Log.e("errorDeleteEstudiante","Error en borrar base");
         }
     }
 
@@ -632,5 +652,23 @@ public class DatabaseAccess {
             return "esta vacio";
         }
     }
+
+    //entrada: carne
+    //salida: lista de cursos y grupos
+    public List<DatosCursoEstudiante> getCursosEstudiante(int carne){
+        String query = "select * from AsistenciaPorEstudiante inner join ListaAsistencia on AsistenciaPorEstudiante.IDListaAsist = ListaAsistencia.ID inner join Curso on ListaAsistencia.IDCurso = Curso.Codigo where Carne = '"+Integer.toString(carne)+"'";
+        c = db.rawQuery(query,null);
+        List<DatosCursoEstudiante> lista = new ArrayList<DatosCursoEstudiante>();
+        while(c.moveToNext()){
+            DatosCursoEstudiante datos = new DatosCursoEstudiante();
+            datos.setIDCurso(c.getString(4));
+            datos.setIDGrupo(Integer.toString(c.getInt(5)));
+            datos.setNombreCurso(c.getString(8));
+            lista.add(datos);
+        }
+        return lista;
+
+    }
+
 
 }
