@@ -52,7 +52,7 @@ public class RegistroEstudianteActivity extends AppCompatActivity {
                     if(mTextContra.getText().toString().equals(mTextRepitaContra.getText().toString())){
                         databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
                         databaseAccess.openWrite();
-                        String res = databaseAccess.registrarUsuarioEstudiante(mTextCarne.getText().toString(), mTextUsuario.getText().toString(),  mTextCorreo.getText().toString().toLowerCase().trim(), mTextContra.getText().toString());
+                        String res = databaseAccess.registrarUsuarioEstudiante(mTextUsuario.getText().toString(),Integer.parseInt(mTextCarne.getText().toString()),  mTextCorreo.getText().toString().toLowerCase().trim(), mTextContra.getText().toString());
                         Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
                         databaseAccess.close();
                         Intent intent = new Intent(this, MainActivity.class);

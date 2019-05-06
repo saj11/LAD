@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.Profesor.CrearGrupoActivity;
 import com.example.lad_android.Profesor.MenuGrupoActivity;
 import com.example.lad_android.Profesor.MenuListaAsistenciaActivity;
 import com.example.lad_android.models.DatosUsuario;
@@ -39,7 +40,17 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
 
         mTextUsuario = (TextView)findViewById(R.id.ProfesorMenuCursosUsuario);
         mListLista = (ListView)findViewById(R.id.ProfesorMenuCursosListView);
+        //crear Cursos
         mButtonCrear = (FloatingActionButton)findViewById(R.id.ProfesorMenuCursosFloatingBtn);
+        mButtonCrear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfesorMenuCursosActivity.this, CrearGrupoActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
         mImgViewQR = (ImageView)findViewById(R.id.ProfesorMenuCursoImageViewQR);
         bundle = getIntent().getExtras();
 

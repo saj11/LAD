@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,8 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.Profesor.CrearGrupoActivity;
+import com.example.lad_android.Profesor.PerfilActivity;
 import com.example.lad_android.models.DatosUsuario;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -35,6 +39,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
     LinearLayout sliderDotspanel;
     ListView mListV;
     ImageView mImgViewQR, mImgViewCurso;
+    TextView mTextPerfil;
     private int dotscount;
     private ImageView[] dots;
     private int[] layouts = {R.layout.slides_first_slide, R.layout.slides_second_slide, R.layout.slides_third_slide};
@@ -47,6 +52,18 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_main_menu);
+        //Text view
+        mTextPerfil = (TextView)findViewById(R.id.ProfesorMainPerfil);
+        mTextPerfil.setText(bundle.getString("usuario")+" "+bundle.getString("apellido"));
+        mTextPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfesorMainMenuActivity.this, PerfilActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
         //Image view
         mImgViewQR = (ImageView) findViewById(R.id.ProfesorMainImageViewQR);
         mImgViewCurso = (ImageView)findViewById(R.id.ProfesorMainImageCursos);
@@ -65,19 +82,19 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         databaseAccess.openWrite();
         List<String> list = databaseAccess.getAllGrupo(Integer.toString(bundle.getInt("id")));
         listaCursos = databaseAccess.getAllDatoGrupo(Integer.toString(bundle.getInt("id")));
-        databaseAccess.close();
         /*ArrayAdapter<String> itemsAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         mListV.setAdapter(itemsAdapter);*/
         MyCustomAdapter myCustomAdapter = new MyCustomAdapter(listaCursos,ProfesorMainMenuActivity.this);
         mListV.setAdapter(myCustomAdapter);
 
-
-
         //dots view
         sliderDotspanel = (LinearLayout)findViewById(R.id.ProfesorMainLinearLayout);
 
         viewPager = (ViewPager)findViewById(R.id.ProfesorMainViewPager);
+
+        //Entrada: Paso un objeto de DatosUsuario especifico
+
         mpagerAdapter = new MpagerAdapter(layouts,this,listaCursos.get(0));
         viewPager.setAdapter(mpagerAdapter);
 
@@ -134,6 +151,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
             this.datos = datos;
         }
 
+
         @Override
         public int getCount() {
             return layouts.length;
@@ -167,7 +185,8 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         public View getFirstPanel(LayoutInflater inflater){
             View returnView = inflater.inflate(R.layout.slides_first_slide,null);
             ImageView codigoQr = (ImageView) returnView.findViewById(R.id.ProfesorMainFirstSlideImage);
-            String contenido = "hola";
+            //formato de lectura del qr = codigo.nombre.grupo.dia1.dia2
+            String contenido = datos.getCodigoCurso()+"!"+datos.getNombreCurso()+"!"+datos.getNumeroGrupo()+"!"+datos.getProfesor()+"!"+datos.getDia1()+"!"+datos.getDia2();
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             BitMatrix bitMatrix = null;
             try {
@@ -210,10 +229,12 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         private List<DatosUsuario> list;
         private Context context;
 
+
         public MyCustomAdapter(List<DatosUsuario> list, Context context) {
             this.list = list;
             this.context = context;
         }
+
 
         @Override
         public int getCount() {
@@ -248,9 +269,10 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
             gd.setStroke(4, Color.BLUE); // border width and color
             // Make the border rounded
             gd.setCornerRadius(30.0f);
-*/
-            TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
-            listItemText.setText(list.get(position).getCodigoCurso()+" Grupo; "+list.get(position).getNumeroGrupo()+" - "+list.get(position).getNombreCurso());
+*/          TextView listItemRightText = (TextView) view.findViewById(R.id.list_item_string_right);
+            final TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
+            listItemText.setText(list.get(position).getCodigoCurso( )+" - "+list.get(position).getNombreCurso());
+            listItemRightText.setText("Grupo: "+list.get(position).getNumeroGrupo());
             //listItemText.setBackground(gd);
             //listItemText.setWidth(200);
             //listItemText.setMinHeight(50);
@@ -269,6 +291,16 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
                     mpagerAdapter = new MpagerAdapter(layouts,ProfesorMainMenuActivity.this,list.get(position));
                     viewPager.setAdapter(mpagerAdapter);
                     dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.active_dot));
+
+                    try{
+                        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+                        databaseAccess.openWrite();
+                        String res = databaseAccess.crearListaAsistencia(list.get(position).getCodigoCurso(),list.get(position).getNumeroGrupo());
+                        databaseAccess.close();
+                        Toast.makeText(context,"Resultado: "+res,Toast.LENGTH_LONG).show();
+                    }catch (Exception e){
+                        Toast.makeText(context,"Erro en catch",Toast.LENGTH_LONG).show();
+                    }
 
                 }
             });

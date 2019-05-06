@@ -4,17 +4,27 @@ public class DatosUsuario {
     private String codigoCurso;
     private String nombreCurso;
     private String numeroGrupo;
+    private String profesor;
     private String dia1;
     private String dia2;
 
     public DatosUsuario(){}
 
-    public DatosUsuario(String codigoCurso, String nombreCurso, String numeroGrupo, String dia1, String dia2) {
+    public DatosUsuario(String codigoCurso, String nombreCurso, String numeroGrupo, String profesor, String dia1, String dia2) {
         this.codigoCurso = codigoCurso;
         this.nombreCurso = nombreCurso;
         this.numeroGrupo = numeroGrupo;
+        this.profesor = profesor;
         this.dia1 = dia1;
         this.dia2 = dia2;
+    }
+
+    public String getProfesor() {
+        return profesor;
+    }
+
+    public void setProfesor(String profesor) {
+        this.profesor = profesor;
     }
 
     public String getCodigoCurso() {

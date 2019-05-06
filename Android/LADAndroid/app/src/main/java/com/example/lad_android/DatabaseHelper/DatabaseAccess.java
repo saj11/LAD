@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.lad_android.models.DatosListaAsistenciaEstudiante;
 import com.example.lad_android.models.DatosUsuario;
 import com.example.lad_android.models.Usuario;
 
@@ -60,7 +61,7 @@ public class DatabaseAccess {
     }
 
     //registro usuario estudiante
-    public String registrarUsuarioEstudiante(String nombre, String carne, String correo, String contra){
+    public String registrarUsuarioEstudiante(String nombre, int carne, String correo, String contra){
         String query = "INSERT INTO Estudiante (Carne, Nombre, Correo, Contrasena) VALUES ('"+carne+"', '"+nombre+"', '"+correo+"', '"+contra+"')";
         try{
             db.execSQL(query);
@@ -247,20 +248,32 @@ public class DatabaseAccess {
     }
 
     public List<DatosUsuario> getAllDatoGrupo(String profe){
+        String query = "Select * From Profesor where ID='" + profe + "'";
+        String nbrProfe="" ;
+        try {
+            c = db.rawQuery(query, null);
+            c.moveToFirst();
+            nbrProfe = c.getString(1)+" "+c.getString(2);
+        }catch (Exception e){
+            nbrProfe = "hubo un error";
+        }
+
         List<DatosUsuario> lista = new ArrayList<DatosUsuario>();
-        String query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='"+profe+"'";
+        query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='"+profe+"'";
         c = db.rawQuery(query,null);
+
         while (c.moveToNext()){
             DatosUsuario datos = new DatosUsuario();
             datos.setCodigoCurso(c.getString(0));
             datos.setNombreCurso(c.getString(7));
             datos.setNumeroGrupo(Integer.toString(c.getInt(1)));
+            datos.setProfesor(nbrProfe);
             datos.setDia1(c.getString(3));
             datos.setDia2(c.getString(4));
-
             lista.add(datos);
-
         }
+
+
         return lista;
     }
 
@@ -283,14 +296,14 @@ public class DatabaseAccess {
     public int getListaAsistenciaID(String CodigoCurso, String NumeroGrupo){
 
         try{
-            String query = "Select * From ListaAsistencia Where IDCurso= '"+CodigoCurso+"' and IDGrupo='"+NumeroGrupo+ "'";
+            String query = "Select * From ListaAsistencia Where IDCurso= '"+CodigoCurso+"' and IDGrupo='"+NumeroGrupo+"'";
             c = db.rawQuery(query, null);
             c.moveToFirst();
             int id = c.getInt(0);
             return id;
         }
         catch (Exception e){
-            return -1;
+            return -2;
         }
     }
 
@@ -460,12 +473,14 @@ public class DatabaseAccess {
     }
 
     public String crearListaAsistencia(String idCurso, String idGrupo){
-        String query = "Insert into ListaAsistencia (ID, IDCurso, IDGrupo, Fecha) Values ('1','"+idCurso+"','"+idGrupo+"',datetime('now'))";
+        String query = "Insert into ListaAsistencia (IDCurso, IDGrupo, Fecha) Values ('"+idCurso+"','"+idGrupo+"',datetime('now'))";
+        int i = 1;
         try {
             Date date = Calendar.getInstance().getTime();
             String dia = (String) android.text.format.DateFormat.format("EEEE",date);
-            if(checkDiaCurso(idCurso,idGrupo,dia)) {
-                db.execSQL(query);
+            //if(checkDiaCurso(idCurso,idGrupo,dia)) {
+             if(true){
+                 db.execSQL(query);
                 return "Exitoso";
             }
             else{
@@ -556,10 +571,66 @@ public class DatabaseAccess {
         else{
             return false;
         }
+    }
+
+    public String registrarAsistenciaEstudiante(int idListaAsistencia, int carneEstudiante, String estado) {
+        String query = "Insert into AsistenciaPorEstudiante VALUES ('"+Integer.toString(idListaAsistencia)+"','"+Integer.toString(carneEstudiante)+"','"+estado+"')";
+        try {
+            db.execSQL(query);
+            return "Se agrego correctamente";
+        }
+        catch (Exception e){
+            return "Ya estas registrado. Datos: "+Integer.toString(idListaAsistencia)+" carne: "+Integer.toString(carneEstudiante);
+        }
+
+    }
 
 
+    public List<DatosListaAsistenciaEstudiante> getListaAsistenciaPorEstudiante(int idListaAsistencia){
+        List<DatosListaAsistenciaEstudiante> lista = new ArrayList<DatosListaAsistenciaEstudiante>();
+        String query = "Select * from AsistenciaPorEstudiante inner join Estudiante on AsistenciaPorEstudiante.Carne = Estudiante.Carne where IDListaAsist ='"+idListaAsistencia+"'";
+        c = db.rawQuery(query,null);
+        while (c.moveToNext()){
+            DatosListaAsistenciaEstudiante datos = new DatosListaAsistenciaEstudiante();
+            datos.setCarne(c.getInt(1));
+            datos.setEstado(c.getString(2));
+            datos.setNombre(c.getString(4));
+            datos.setCorreo(c.getString(5));
+            lista.add(datos);
+        }
 
+        return lista;
+    }
 
+    public String getCountTable(){
+        String query = "delete from ListaAsistencia";
+        try {
+            //db.execSQL(query);
+            return "Exiuto";
+        }catch (Exception e){
+            return "error";
+        }
+
+    }
+
+    public int getRowCount(){
+        String query = "Select count(*) from AsistenciaPorEstudiante";
+        c = db.rawQuery(query,null);
+        c.moveToFirst();
+        return c.getInt(0);
+    }
+
+    public String getTest(){
+        String query = "Select * from ListaAsistencia";
+
+        try {
+            c = db.rawQuery(query, null);
+            c.moveToFirst();
+            String res = c.getString(1);
+            return res;
+        }catch (Exception e){
+            return "esta vacio";
+        }
     }
 
 }

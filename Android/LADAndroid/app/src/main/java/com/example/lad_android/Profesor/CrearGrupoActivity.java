@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
 import com.example.lad_android.MainMenuActivity;
+import com.example.lad_android.ProfesorMainMenuActivity;
 import com.example.lad_android.R;
 
 import java.util.ArrayList;
@@ -161,7 +162,7 @@ public class CrearGrupoActivity extends AppCompatActivity {
                         databaseAccess.close();
 
                         //Toast.makeText(CrearGrupoActivity.this,"Hora: "+horario1 +" -"+horario2+"usuario: "+usuario+"numero de grypo: "+NumeroDeGrupo,Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(CrearGrupoActivity.this, MainMenuActivity.class);
+                        Intent intent = new Intent(CrearGrupoActivity.this, ProfesorMainMenuActivity.class);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }

@@ -15,6 +15,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
 import com.google.zxing.Result;
 
 import java.util.Scanner;
@@ -28,6 +29,7 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
     private GestureDetector gestureDetector;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
         this.setTitle("LAD-Estudiante");
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
-
+        bundle = getIntent().getExtras();
         gestureDetector = new GestureDetector(this);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -115,15 +117,38 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
     public void handleResult(Result result) {
         String scanResult = result.getText();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan result");
+        builder.setTitle("Curso");
+        final String[] split = scanResult.split("!");
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+                databaseAccess.openWrite();
+                int id = databaseAccess.getListaAsistenciaID(split[0],split[2]);
+                if(id>0){
+                    String res = databaseAccess.registrarAsistenciaEstudiante(id, bundle.getInt("carne"),"Presente");
+                    Toast.makeText(MainMenuEstudianteActivity.this,res,Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(MainMenuEstudianteActivity.this,"La lista de asistencia no se encuentra disponible, id:"+Integer.toString(id)+"splite "+split[0]+","+split[2]
+                            ,Toast.LENGTH_LONG).show();
+                }
+                databaseAccess.close();
+                scannerView.resumeCameraPreview(MainMenuEstudianteActivity.this);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 scannerView.resumeCameraPreview(MainMenuEstudianteActivity.this);
             }
         });
 
-        builder.setMessage(scanResult);
+
+        //String res = split[0]+"/n"+split[1]+"/n"+split[2]+"/n"+split[3]+"/n"+split[4];
+
+        builder.setMessage(split[3]+"\n"+split[0]+"\n"+split[1]+"\n"+split[2]+"\n"+split[4]+"\n"+split[5]);
         AlertDialog alert = builder.create();
         alert.show();
         //aqui va el codigo
@@ -188,7 +213,8 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
 
 
     private void onSwipeRight() {
-        Toast.makeText(MainMenuEstudianteActivity.this,"derecha",Toast.LENGTH_LONG).show();
+        int res = bundle.getInt("carne");
+        Toast.makeText(MainMenuEstudianteActivity.this,"Resultado"+Integer.toString(res),Toast.LENGTH_LONG).show();
     }
 
     @Override

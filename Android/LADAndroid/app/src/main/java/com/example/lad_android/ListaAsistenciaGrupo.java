@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.models.DatosListaAsistenciaEstudiante;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,13 +47,15 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
         int IDListaAsistencia = databaseAccess.getListaAsistenciaID(bundle.getString("IDCurso"),bundle.getString("Numero"));
-        List<String> listaAsistenciaEstudiante = new ArrayList<String>();
-        List<String> listaAsistenciaEstudianteEstado = new ArrayList<String>();
+        List<DatosListaAsistenciaEstudiante> lista = new ArrayList<DatosListaAsistenciaEstudiante>();
         String nombreCurso = databaseAccess.getNombreCurso(bundle.getString("IDCurso"));
+
         if(IDListaAsistencia>=0){
-            listaAsistenciaEstudiante= databaseAccess.getListaAsitenciaEstudiante(IDListaAsistencia);
-            listaAsistenciaEstudianteEstado = databaseAccess.getListaAsitenciaEstudianteEstado(IDListaAsistencia);
+            lista = databaseAccess.getListaAsistenciaPorEstudiante(IDListaAsistencia);
         }
+        MyCustomAdapterGrupo myCustomAdapterGrupo = new MyCustomAdapterGrupo(lista,ListaAsistenciaGrupo.this);
+        mListListaEstudiante.setAdapter(myCustomAdapterGrupo);
+
         databaseAccess.close();
         mTextCurso.setText(bundle.getString("NombreCurso"));
         mTextCodigo.setText(bundle.getString("IDCurso"));
@@ -63,19 +67,19 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
         String hoy = day.format(Calendar.getInstance().getTime());
         databaseAccess.openWrite();
         //String res= databaseAccess.crearListaAsistencia(bundle.getString("IDCurso"),bundle.getString("Numero"));
-       // String res = databaseAccess.fetchListaAsistencia(bundle.getString("IDCurso"),bundle.getString("Numero"), hoy);
+        // String res = databaseAccess.fetchListaAsistencia(bundle.getString("IDCurso"),bundle.getString("Numero"), hoy);
         String res = databaseAccess.fetchListaTest(bundle.getString("IDCurso"), bundle.getString("Numero"));
         databaseAccess.close();
-        mTextCurso.setText(res);
+       // mTextCurso.setText(res);
 
     }
 
     public class MyCustomAdapterGrupo extends BaseAdapter implements ListAdapter {
 
-        private List<String> list;
+        private List<DatosListaAsistenciaEstudiante> list;
         private Context context;
 
-        public MyCustomAdapterGrupo(List<String> list, Context context) {
+        public MyCustomAdapterGrupo(List<DatosListaAsistenciaEstudiante> list, Context context) {
             this.list = list;
             this.context = context;
         }
@@ -100,22 +104,24 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
             View view = convertView;
             if(view == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.list_item, null);
+                view = inflater.inflate(R.layout.list_item_asistencia, null);
             }
 
-            TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
-            listItemText.setText(list.get(position));
+            TextView listItemEstudiante = (TextView) view.findViewById(R.id.list_item_asis_estudiante);
+            TextView listItemEstado = (TextView) view.findViewById(R.id.list_item_asis_estado);
+            //listItemText.setText(list.get(position));
+            view.setBackgroundResource(R.drawable.border);
 
-            listItemText.setOnClickListener(new View.OnClickListener(
+            listItemEstudiante.setText(list.get(position).getNombre()+" - "+list.get(position).getCarne());
+            listItemEstado.setText(list.get(position).getEstado());
+
+            listItemEstudiante.setOnClickListener(new View.OnClickListener(
 
             ) {
                 @Override
                 public void onClick(View v) {
                     //cambiar estado estudiante con carne
-                    Toast.makeText(context,list.get(position),Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, ListaAsistenciaGrupo.class);
-                    intent.putExtra("Numero",list.get(position));
-                    startActivity(intent);
+
                 }
             });
 
