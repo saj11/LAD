@@ -89,26 +89,46 @@
     <LinearLayout
         android:id="@+id/ProfesorMainFrame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/ProfesorMainImageViewQR"
+        <LinearLayout
+            android:id="@+id/ProfesorMainLinearLayoutQR"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/icono_usuario" />
+            >
+            <ImageView
+                android:id="@+id/ProfesorMainImageViewQR"
+                android:background="@drawable/icono_qr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/ProfesorMainImageCursos"
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ProfesorMainLinearLayoutCursos"
             android:layout_width="0dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/border_profe" />
+            >
+
+            <ImageView
+                android:id="@+id/ProfesorMainImageCursos"
+                android:background="@drawable/icono_lista"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

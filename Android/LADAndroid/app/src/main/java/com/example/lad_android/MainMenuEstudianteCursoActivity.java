@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ public class MainMenuEstudianteCursoActivity extends AppCompatActivity {
     Bundle bundle;
     TextView mTextPerfil;
     ListView mListViewCurso;
+    ImageView mImageViewCamara;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class MainMenuEstudianteCursoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         mTextPerfil = (TextView)findViewById(R.id.EstudianteMenuCursoPerfilTV);
         mListViewCurso = (ListView)findViewById(R.id.EstudianteMenuCursoListView);
+        mImageViewCamara = (ImageView) findViewById(R.id.EstudianteMainMenuCamara);
         int carne = bundle.getInt("carne");
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
@@ -48,6 +51,15 @@ public class MainMenuEstudianteCursoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainMenuEstudianteCursoActivity.this, EstudiantePerfilActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        mImageViewCamara.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainMenuEstudianteCursoActivity.this, MainMenuEstudianteActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
