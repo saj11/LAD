@@ -136,6 +136,7 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
             ) {
                 @Override
                 public void onClick(View v) {
+                    //gurda en el intent - todos son string
                     Intent intent = new Intent(context, ProfesorMenuListaAsistenciaActivity.class);
                     intent.putExtra("IDCurso",list.get(position).getCodigoCurso());
                     intent.putExtra("NombreCurso",list.get(position).getNombreCurso());

@@ -314,7 +314,7 @@ public class DatabaseAccess {
             String query = "Select * From AsistenciaPorEstudiante Where IDListaAsis ='"+IDListaAsistencia+"'";
             c = db.rawQuery(query,null);
             while(c.moveToNext()){
-                List.add(Integer.toBinaryString(c.getInt(1)));
+                List.add(Integer.toString(c.getInt(1)));
             }
             return List;
         }
@@ -621,6 +621,22 @@ public class DatabaseAccess {
 
         return lista;
     }
+
+    public List<String> getListaAsisntenciaProfesorCurso(String codCurso, String numGrupo){
+        List<String> lista = new ArrayList<String>();
+        String query = "Select * from ListaAsistencia Where IDCurso ='"+codCurso+"' and IDGrupo='"+numGrupo+"'";
+        c = db.rawQuery(query,null);
+        while(c.moveToNext()){
+            String id = Integer.toString(c.getInt(0));
+            String curso = c.getString(1);
+            String grupo = Integer.toString(2);
+            String fecha = c.getString(3);
+            lista.add(id+" - "+curso+" - "+grupo+" - "+fecha);
+        }
+        return lista;
+
+    }
+
 
     public String getCountTable(){
         String query = "delete from ListaAsistencia";

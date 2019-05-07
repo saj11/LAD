@@ -118,16 +118,6 @@ public class MainMenuEstudianteCursoActivity extends AppCompatActivity {
             listItemText.setText(list.get(position).getIDCurso()+" - "+list.get(position).getNombreCurso());
             listItemright.setText("Grupo:"+list.get(position).getIDGrupo());
 
-            //listItemright.setText("Grupo: "+list.get(position).getNumeroGrupo());
-            //listItemText.setText(list.get(position).getCodigoCurso()+" - "+list.get(position).getNombreCurso());
-            //listItemText.setBackground(gd);
-            //listItemText.setWidth(200);
-            //listItemText.setMinHeight(50);
-            //listItemText.setBackgroundResource(R.drawable.border);
-            //listItemText.setTextColor(Color.parseColor("#FF3E80F1"));
-            //listItemText.setPadding(0,10,0,0);
-            //listItemText.setBackgroundColor(Color.parseColor("#FF3E80F1"));
-
             //view.setBackgroundColor(Color.parseColor("#FF3E80F1"));
             listItemText.setOnClickListener(new View.OnClickListener(
                     //sdk version min 16

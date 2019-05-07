@@ -178,7 +178,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
             View three = getThirdPanel(layoutInflater);
             View viewarr[]={one,two,three};
             container.addView(viewarr[position]);
-
+            updateCountDownText();
             return viewarr[position];
         }
 
@@ -216,8 +216,10 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
             TextView tvDia2 = (TextView)returnView.findViewById(R.id.ProfesorMainSecondslideHorario2);
             tv.setText(datos.getNombreCurso());
             tvGrupo.setText(datos.getNumeroGrupo());
-            tvDia1.setText(datos.getDia1());
-            tvDia2.setText(datos.getDia2());
+            String[] horario1 = datos.getDia1().split("-");
+            String[] horario2 = datos.getDia2().split("-");
+            tvDia1.setText("       "+horario1[0]+"\n"+horario1[1]+"-"+horario1[2]);
+            tvDia2.setText("       "+horario2[0]+"\n"+horario2[1]+"-"+horario2[2]);
 
             return returnView;
         }
@@ -244,10 +246,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     mTimeLeftinMillis = millisUntilFinished;
-                    int minutes =(int) (mTimeLeftinMillis/1000) /60;
-                    int seconds =(int) (mTimeLeftinMillis/1000) %60;
-                    String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds);
-                    thirdPanelTV.setText(timeLeftFormatted);
+                    updateCountDownText();
                 }
 
                 @Override
@@ -255,8 +254,12 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
 
                 }
             }.start();
-
-
+        }
+        public void updateCountDownText(){
+            int minutes =(int) (mTimeLeftinMillis/1000) /60;
+            int seconds =(int) (mTimeLeftinMillis/1000) %60;
+            String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds);
+            thirdPanelTV.setText(timeLeftFormatted);
         }
 
 
@@ -311,15 +314,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
             final TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
             listItemText.setText(list.get(position).getCodigoCurso( )+" - "+list.get(position).getNombreCurso());
             listItemRightText.setText("Grupo: "+list.get(position).getNumeroGrupo());
-            //listItemText.setBackground(gd);
-            //listItemText.setWidth(200);
-            //listItemText.setMinHeight(50);
-            //listItemText.setBackgroundResource(R.drawable.border);
-            //listItemText.setTextColor(Color.parseColor("#FF3E80F1"));
-            //listItemText.setPadding(0,10,0,0);
-            //listItemText.setBackgroundColor(Color.parseColor("#FF3E80F1"));
 
-            //view.setBackgroundColor(Color.parseColor("#FF3E80F1"));
             listItemText.setOnClickListener(new View.OnClickListener(
                     //sdk version min 16
             ) {
@@ -329,7 +324,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
                     mpagerAdapter = new MpagerAdapter(layouts,ProfesorMainMenuActivity.this,list.get(position));
                     viewPager.setAdapter(mpagerAdapter);
                     dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.active_dot));
-
+                    /*
                     try{
                         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
                         databaseAccess.openWrite();
@@ -338,7 +333,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
                         Toast.makeText(context,"Resultado: "+res,Toast.LENGTH_LONG).show();
                     }catch (Exception e){
                         Toast.makeText(context,"Erro en catch",Toast.LENGTH_LONG).show();
-                    }
+                    }*/
 
                 }
             });

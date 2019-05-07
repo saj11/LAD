@@ -56,5 +56,14 @@ public class ProfesorMenuListaAsistenciaActivity extends AppCompatActivity {
             }
         });
 
+        mBtnHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfesorMenuListaAsistenciaActivity.this, ProfesorHistorialCursoActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
     }
 }
