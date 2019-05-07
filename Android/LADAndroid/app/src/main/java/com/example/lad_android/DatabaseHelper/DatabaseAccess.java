@@ -12,6 +12,7 @@ import com.example.lad_android.models.DatosListaAsistenciaEstudiante;
 import com.example.lad_android.models.DatosUsuario;
 import com.example.lad_android.models.Usuario;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,76 +26,76 @@ public class DatabaseAccess {
     Cursor c = null;
 
     //constructor
-    private DatabaseAccess(Context context){
+    private DatabaseAccess(Context context) {
         this.openHelper = new DatabaseOpenHelper(context);
     }
 
-    public static DatabaseAccess getInstance(Context context){
-        if (instance==null){
+    public static DatabaseAccess getInstance(Context context) {
+        if (instance == null) {
             instance = new DatabaseAccess(context);
         }
         return instance;
     }
 
     //escribir
-    public void openWrite(){
-        this.db=openHelper.getWritableDatabase();
+    public void openWrite() {
+        this.db = openHelper.getWritableDatabase();
     }
 
-    public void close(){
-        if (db!=null){
+    public void close() {
+        if (db != null) {
             this.db.close();
         }
     }
 
 
     //Registro usuario profesor
-    public String registrarUsuario(String nombre, String apellido, String correo, String contra){
-        String query = "INSERT INTO Profesor (Nombre, Apellidos, Correo, Contrasena) VALUES ('"+nombre+"', '"+apellido+"', '"+correo+"', '"+contra+"')";
+    public String registrarUsuario(String nombre, String apellido, String correo, String contra) {
+        String query = "INSERT INTO Profesor (Nombre, Apellidos, Correo, Contrasena) VALUES ('" + nombre + "', '" + apellido + "', '" + correo + "', '" + contra + "')";
         try {
             db.execSQL(query);
             //db.rawQuery(query,null);
-            return "Se ha registrado el usuario: "+correo+" exitosamente";
-        }
-        catch(Exception e){
+            return "Se ha registrado el usuario: " + correo + " exitosamente";
+        } catch (Exception e) {
             return "el usuario ya existe";
         }
     }
 
     //registro usuario estudiante
-    public String registrarUsuarioEstudiante(String nombre, int carne, String correo, String contra){
-        String query = "INSERT INTO Estudiante (Carne, Nombre, Correo, Contrasena) VALUES ('"+carne+"', '"+nombre+"', '"+correo+"', '"+contra+"')";
-        try{
+    public String registrarUsuarioEstudiante(String nombre, int carne, String correo, String contra) {
+        String query = "INSERT INTO Estudiante (Carne, Nombre, Correo, Contrasena) VALUES ('" + carne + "', '" + nombre + "', '" + correo + "', '" + contra + "')";
+        try {
             db.execSQL(query);
-            return "Se ha registrado el usuario: "+correo+" exitosamente";
-        }catch (Exception e){
+            return "Se ha registrado el usuario: " + correo + " exitosamente";
+        } catch (Exception e) {
             return "el usuario ya existe";
         }
     }
 
     //profe
-    public Usuario buscarUsuario(String correo){
+    public Usuario buscarUsuario(String correo) {
 
-        String query = "Select * From Profesor where Correo = '"+correo+"'";
+        String query = "Select * From Profesor where Correo = '" + correo + "'";
 
-        String nombre="";
+        String nombre = "";
         c = db.rawQuery(query, null);
         StringBuffer buffer = new StringBuffer();
         Usuario usuario = new Usuario();
         c.moveToFirst();
 
-            usuario.setID(c.getInt(0));
-            usuario.setUsuario(c.getString(1));
-            usuario.setApellidos(c.getString(2));
-            usuario.setCorreo(c.getString(3));
-            usuario.setCotrasena(c.getString(4));
+        usuario.setID(c.getInt(0));
+        usuario.setUsuario(c.getString(1));
+        usuario.setApellidos(c.getString(2));
+        usuario.setCorreo(c.getString(3));
+        usuario.setCotrasena(c.getString(4));
 
 
         return usuario;
     }
+
     //estudiante
-    public Usuario buscarUsuarioEstudiante(String correo){
-        String query = "Select * From Estudiante where Correo = '"+correo+"'";
+    public Usuario buscarUsuarioEstudiante(String correo) {
+        String query = "Select * From Estudiante where Correo = '" + correo + "'";
         Usuario usuario = new Usuario();
         try {
             c = db.rawQuery(query, null);
@@ -104,117 +105,109 @@ public class DatabaseAccess {
             usuario.setCorreo(c.getString(2));
             usuario.setCotrasena(c.getString(3));
             return usuario;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return usuario;
         }
     }
 
-    public boolean checkCorreo(String email, String contra){
+    public boolean checkCorreo(String email, String contra) {
 
-        try{
+        try {
             String correo = email.toLowerCase().trim();
-            String query = "Select * From Profesor where Correo ='"+correo+"'";
-            c = db.rawQuery(query,null);
+            String query = "Select * From Profesor where Correo ='" + correo + "'";
+            c = db.rawQuery(query, null);
             c.moveToFirst();
             String correoResultado = c.getString(3);
             String contraResultado = c.getString(4);
-            if(correoResultado==null | correoResultado.equals("")){
+            if (correoResultado == null | correoResultado.equals("")) {
                 return false;
-            }
-            else{
-                if (correoResultado.toLowerCase().equals(correo) & contraResultado.toLowerCase().equals(contra) ) {
+            } else {
+                if (correoResultado.toLowerCase().equals(correo) & contraResultado.toLowerCase().equals(contra)) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
 
     }
 
-    public boolean checkCorreoEstudiante(String correo){
-        try{
-            String query = "Select * From Estudiante where Correo ='"+correo+"'";
-            c = db.rawQuery(query,null);
+    public boolean checkCorreoEstudiante(String correo) {
+        try {
+            String query = "Select * From Estudiante where Correo ='" + correo + "'";
+            c = db.rawQuery(query, null);
             c.moveToFirst();
             String correoRes = c.getString(2);
-            if(correoRes.toLowerCase().trim().equals(correo)){
+            if (correoRes.toLowerCase().trim().equals(correo)) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean checkCorreo(String correo){
-        try{
-            String query = "Select * From Profesor where Correo ='"+correo+"'";
-            c=db.rawQuery(query,null);
+    public boolean checkCorreo(String correo) {
+        try {
+            String query = "Select * From Profesor where Correo ='" + correo + "'";
+            c = db.rawQuery(query, null);
             c.moveToFirst();
             String correoRes = c.getString(3);
-            if (correoRes.toLowerCase().trim().equals(correo)){
+            if (correoRes.toLowerCase().trim().equals(correo)) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
+
     //contraseña de profe
-    public boolean checkContra(String correo, String contra){
-        try{
-            String query = "Select * From Profesor where Correo ='"+correo+"'";
-            c=db.rawQuery(query,null);
+    public boolean checkContra(String correo, String contra) {
+        try {
+            String query = "Select * From Profesor where Correo ='" + correo + "'";
+            c = db.rawQuery(query, null);
             c.moveToFirst();
             String correoRes = c.getString(4);
-            if (correoRes.equals(contra)){
+            if (correoRes.equals(contra)) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean checkContraEstudiante(String correo, String contra){
-        try{
-            String query = "Select * From Estudiante where Correo ='"+correo+"'";
-            c=db.rawQuery(query,null);
+    public boolean checkContraEstudiante(String correo, String contra) {
+        try {
+            String query = "Select * From Estudiante where Correo ='" + correo + "'";
+            c = db.rawQuery(query, null);
             c.moveToFirst();
             String correoRes = c.getString(3);
-            if(correoRes.equals(contra)){
+            if (correoRes.equals(contra)) {
                 return true;
             }
             return false;
 
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     //Entrada : ID del Profesor
     //Salida: ID Del Curso
-    public List<String> getCursos(int ID){
+    public List<String> getCursos(int ID) {
         List<String> List = new ArrayList<String>();
         //String query = "Select * From Grupo Join Profesor on grupo.IDProfe = Profesor.ID Where Profeor.ID=2";
-        String query = "Select DISTINCT IDCurso from Grupo where IDProfe ='"+ID+"'";
+        String query = "Select DISTINCT IDCurso from Grupo where IDProfe ='" + ID + "'";
         c = db.rawQuery(query, null);
 
-        while(c.moveToNext()){
+        while (c.moveToNext()) {
             List.add(c.getString(0));
         }
 
@@ -223,47 +216,47 @@ public class DatabaseAccess {
 
     //Entrada: ID del Curso, ID profe
     //Saldia:
-    public List<String> getGrupo (String curso, String profe){
+    public List<String> getGrupo(String curso, String profe) {
         List<String> List = new ArrayList<String>();
 
 
-            String query = "Select * From Grupo where IDCurso = '"+curso+"' and IDProfe = '"+profe+"'";
-            c = db.rawQuery(query, null);
+        String query = "Select * From Grupo where IDCurso = '" + curso + "' and IDProfe = '" + profe + "'";
+        c = db.rawQuery(query, null);
 
-            while(c.moveToNext()){
-                List.add(Integer.toString(c.getInt(1)));
-            }
-            return List;
+        while (c.moveToNext()) {
+            List.add(Integer.toString(c.getInt(1)));
+        }
+        return List;
 
 
     }
 
-    public List<String> getAllGrupo(String profe){
+    public List<String> getAllGrupo(String profe) {
         List<String> lista = new ArrayList<String>();
-        String query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='"+profe+"'";
-        c = db.rawQuery(query,null);
-        while (c.moveToNext()){
-            lista.add(c.getString(0)+", Grupo: "+Integer.toString(c.getInt(1))+" - "+c.getString(7));
+        String query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='" + profe + "'";
+        c = db.rawQuery(query, null);
+        while (c.moveToNext()) {
+            lista.add(c.getString(0) + ", Grupo: " + Integer.toString(c.getInt(1)) + " - " + c.getString(7));
         }
         return lista;
     }
 
-    public List<DatosUsuario> getAllDatoGrupo(String profe){
+    public List<DatosUsuario> getAllDatoGrupo(String profe) {
         String query = "Select * From Profesor where ID='" + profe + "'";
-        String nbrProfe="" ;
+        String nbrProfe = "";
         try {
             c = db.rawQuery(query, null);
             c.moveToFirst();
-            nbrProfe = c.getString(1)+" "+c.getString(2);
-        }catch (Exception e){
+            nbrProfe = c.getString(1) + " " + c.getString(2);
+        } catch (Exception e) {
             nbrProfe = "hubo un error";
         }
 
         List<DatosUsuario> lista = new ArrayList<DatosUsuario>();
-        query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='"+profe+"'";
-        c = db.rawQuery(query,null);
+        query = "Select * From Grupo inner join Curso on Grupo.IDCurso = Curso.Codigo where IDProfe='" + profe + "'";
+        c = db.rawQuery(query, null);
 
-        while (c.moveToNext()){
+        while (c.moveToNext()) {
             DatosUsuario datos = new DatosUsuario();
             datos.setCodigoCurso(c.getString(0));
             datos.setNombreCurso(c.getString(7));
@@ -280,30 +273,61 @@ public class DatabaseAccess {
 
     //Entrada: ID Curso
     //Salid: Nombre del curso
-    public String getNombreCurso(String codigoCurso){
+    public String getNombreCurso(String codigoCurso) {
         try {
-            String query = "Select * From Curso where Codigo='"+codigoCurso+"'";
+            String query = "Select * From Curso where Codigo='" + codigoCurso + "'";
             //String query = "Select * From Curso where Codigo='CA2125'";
             c = db.rawQuery(query, null);
             c.moveToFirst();
             return c.getString(1);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return "Error";
         }
 
     }
 
-    public int getListaAsistenciaID(String CodigoCurso, String NumeroGrupo){
+    public int getListaAsistenciaID(String CodigoCurso, String NumeroGrupo) {
 
-        try{
-            String query = "Select * From ListaAsistencia Where IDCurso= '"+CodigoCurso+"' and IDGrupo='"+NumeroGrupo+"'";
+        try {
+            String query = "Select * From ListaAsistencia Where IDCurso= '" + CodigoCurso + "' and IDGrupo='" + NumeroGrupo + "'";
             c = db.rawQuery(query, null);
             c.moveToFirst();
             int id = c.getInt(0);
-            return id;
+            return 1;
+        } catch (Exception e) {
+            return -2;
         }
-        catch (Exception e){
+    }
+
+
+    //entrada: codigo curso, num grupo
+    //salida: id lista asistencia, -1 si lista no existe para ese dia
+    public int getListaAsistenciaID(String codigoCurso, String numGrupo, String fecha){
+        try{
+            String query = "Select * From ListaAsistencia Where IDCurso= '"+codigoCurso+"' and IDGrupo='"+numGrupo+"'";
+            c = db.rawQuery(query,null);
+            if(c!=null){
+                while (c.moveToNext()){
+                    String listaFecha = c.getString(3);
+                    DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = inputFormat.parse(listaFecha);
+                    DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String output = outputFormat.format(date);
+
+                    date = inputFormat.parse(fecha);
+                    String output2 = outputFormat.format(date);
+                    Log.d("TAG-Fecha de lista",output);
+                    Log.d("TAG-FECHA-param", output2);
+                    if(output.equals(output2)){
+                        return c.getInt(0);
+                    }
+                }
+                return -1;
+            }
+            else{
+                return -3;
+            }
+        }catch (Exception e){
             return -2;
         }
     }
@@ -497,21 +521,77 @@ public class DatabaseAccess {
         int i = 1;
         try {
             Date date = Calendar.getInstance().getTime();
-            String dia = (String) android.text.format.DateFormat.format("EEEE",date);
+            //String dia = (String) android.text.format.DateFormat.format("EEEE",date);
             //if(checkDiaCurso(idCurso,idGrupo,dia)) {
-             if(true){
+             if(!isListaAsistenciaID(idCurso,idGrupo)){
                  db.execSQL(query);
                 return "Exitoso";
             }
             else{
-                return "La lista de asistencia no esta disponible";
+                return "La lista de asistencia ya existe";
             }
         }
         catch (Exception e){
             return "Hubo un error";
         }
     }
+    public String auxIslista(String idCurso, String idGrupo){
+        String query = "Select * from ListaAsistencia Where IDCurso='"+idCurso+"' and IDGrupo='"+idGrupo+"'";
+        c=db.rawQuery(query,null);
+        while (c.moveToNext()){
+            try{
+                String listaFecha = c.getString(3);
+                DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = inputFormat.parse(listaFecha);
+                DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String output = outputFormat.format(date);
+                date = Calendar.getInstance().getTime();
+                String output2 = outputFormat.format(date);
+                if(output.equals(output2)){
+                    return "Son iguales";
+                }
+
+
+            }catch (Exception e){
+                return "Error";
+            }
+        }
+        return "No encontre";
+
+    }
+
+    public boolean isListaAsistenciaID(String idCurso, String idGrupo){
+        String query = "Select * from ListaAsistencia Where IDCurso='"+idCurso+"' and IDGrupo='"+idGrupo+"'";
+        c=db.rawQuery(query,null);
+
+        while (c.moveToNext()){
+            try {
+                String listaFecha = c.getString(3);
+                DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = inputFormat.parse(listaFecha);
+                DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String output = outputFormat.format(date);
+                date = Calendar.getInstance().getTime();
+                String output2 = outputFormat.format(date);
+
+                if(output.equals(output2)){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return false;
+
+    }
+
     //INSERT into ListaAsistencia (IDCurso, IDGrupo, Fecha) Values ('IC8842','1',datetime('now'))
+
 
     public String fetchListaAsistencia(String idCurso, String idGrupo, String fecha){
         String query = "Select * from ListaAsistencia where IDCurso='"+idCurso+"' and IDGrupo='"+idGrupo+"'";
@@ -556,42 +636,7 @@ public class DatabaseAccess {
         return  true;
     }
 
-    public boolean checkDiaCurso(String idCurso, String idGrupo, String dia){
-        String query = "Select * from Grupo where IDCurso='"+idCurso+"', and Numero='"+idGrupo+"'";
-        c = db.rawQuery(query,null);
-        c.moveToFirst();
-        String dia1,dia2;
-        dia1 = c.getString(3);
-        dia2 = c.getString(4);
-        String[]letra1=dia1.split("-");
-        String[]letra2=dia2.split("-");
-        String currentDay;
-        if(dia=="Monday"){
-            currentDay="m";
-        }
-        else if(dia.equals("Tuesday")){
-            currentDay="k";
-        }
-        else if(dia.equals("Wednesday")){
-            currentDay="m";
-        }
-        else if(dia.equals("Thursday")){
-            currentDay="j";
-        }
-        else if(dia.equals("Friday")){
-            currentDay="v";
-        }
-        else{
-            currentDay="s";
-        }
 
-        if(letra1[0].toLowerCase().equals(currentDay) | letra2[0].toLowerCase().equals(currentDay)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
 
     public String registrarAsistenciaEstudiante(int idListaAsistencia, int carneEstudiante, String estado) {
         String query = "Insert into AsistenciaPorEstudiante VALUES ('"+Integer.toString(idListaAsistencia)+"','"+Integer.toString(carneEstudiante)+"','"+estado+"')";

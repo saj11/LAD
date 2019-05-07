@@ -118,31 +118,11 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.list_item_profesor, null);
             }
             view.setBackgroundResource(R.drawable.border);
-/*
-            view.setBackgroundResource(R.drawable.border);
-            GradientDrawable gd = new GradientDrawable();
-            // Specify the shape of drawable
-            gd.setShape(GradientDrawable.RECTANGLE);
-            // Set the fill color of drawable
-            gd.setColor(Color.TRANSPARENT); // make the background transparent
-            // Create a 2 pixels width red colored border for drawable
-            gd.setStroke(4, Color.BLUE); // border width and color
-            // Make the border rounded
-            gd.setCornerRadius(30.0f);
-*/
+
             TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
             TextView listItemright = (TextView) view.findViewById(R.id.list_item_string_right);
             listItemright.setText("Grupo: "+list.get(position).getNumeroGrupo());
             listItemText.setText(list.get(position).getCodigoCurso()+" - "+list.get(position).getNombreCurso());
-            //listItemText.setBackground(gd);
-            //listItemText.setWidth(200);
-            //listItemText.setMinHeight(50);
-            //listItemText.setBackgroundResource(R.drawable.border);
-            //listItemText.setTextColor(Color.parseColor("#FF3E80F1"));
-            //listItemText.setPadding(0,10,0,0);
-            //listItemText.setBackgroundColor(Color.parseColor("#FF3E80F1"));
-
-            //view.setBackgroundColor(Color.parseColor("#FF3E80F1"));
             listItemText.setOnClickListener(new View.OnClickListener(
                     //sdk version min 16
             ) {

@@ -12,6 +12,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,6 +48,8 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
     ListView mListV;
     ImageView mImgViewQR, mImgViewCurso;
     TextView mTextPerfil, thirdPanelTV;
+    boolean mTimerRunning;
+
     private int dotscount;
     private ImageView[] dots;
     private int[] layouts = {R.layout.slides_first_slide, R.layout.slides_second_slide, R.layout.slides_third_slide};
@@ -73,6 +79,8 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
 
         //Image view
         mImgViewQR = (ImageView) findViewById(R.id.ProfesorMainImageViewQR);
+
+
         mImgViewCurso = (ImageView)findViewById(R.id.ProfesorMainImageCursos);
 
         mImgViewCurso.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +93,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         });
         //list view
         mListV = (ListView)findViewById(R.id.ProfesorMainFirsListView);
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+        final DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
         List<String> list = databaseAccess.getAllGrupo(Integer.toString(bundle.getInt("id")));
         listaCursos = databaseAccess.getAllDatoGrupo(Integer.toString(bundle.getInt("id")));
@@ -94,6 +102,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         mListV.setAdapter(itemsAdapter);*/
         MyCustomAdapter myCustomAdapter = new MyCustomAdapter(listaCursos,ProfesorMainMenuActivity.this);
         mListV.setAdapter(myCustomAdapter);
+
 
         //dots view
         sliderDotspanel = (LinearLayout)findViewById(R.id.ProfesorMainLinearLayout);
@@ -236,7 +245,50 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
             mBtnStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startTimer();
+
+                    String[] horario1 = datos.getDia1().split("-");
+                    String[] horario2 = datos.getDia2().split("-");
+
+                    if(checkDiaListaAsistencia(horario1[0],horario2[0])){
+                        if(mTimerRunning){
+                            mTimeLeftinMillis = START_TIME_MILLIS;
+                            mTimerRunning = false;
+                            countDownTimer.cancel();
+                            updateCountDownText();
+                        }
+                        else {
+                            Date date = Calendar.getInstance().getTime();
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String fechaActual = formatter.format(date);
+                            Log.d("TAG-Fecha-antes",fechaActual);
+                            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+                            databaseAccess.openWrite();
+                            int idListaAsistencia = databaseAccess.getListaAsistenciaID(datos.getCodigoCurso(),datos.getNumeroGrupo(),fechaActual);
+                            databaseAccess.close();
+                            if(idListaAsistencia==-1){
+                                databaseAccess.openWrite();
+                                databaseAccess.crearListaAsistencia(datos.getCodigoCurso(),datos.getNumeroGrupo());
+                                databaseAccess.close();
+                                Toast.makeText(ProfesorMainMenuActivity.this, "La lista de asistencia ha sido iniciada con exito", Toast.LENGTH_LONG).show();
+                                startTimer();
+                            }
+                            else if(idListaAsistencia == -2){
+                                Toast.makeText(ProfesorMainMenuActivity.this, "Hubo un error, cod:"+datos.getCodigoCurso()+", grupo: "+datos.getNumeroGrupo(),Toast.LENGTH_LONG).show();
+                            }
+                            else if(idListaAsistencia == -3){
+                                Toast.makeText(ProfesorMainMenuActivity.this,"Nulo",Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(ProfesorMainMenuActivity.this, "La lista de asistencia ya existe", Toast.LENGTH_LONG).show();
+                                startTimer();
+                            }
+                            //startTimer();
+                        }
+                    }
+
+                    else{
+                        Toast.makeText(ProfesorMainMenuActivity.this,"No se encuentra en el horario establecido", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
@@ -255,9 +307,10 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
 
                 @Override
                 public void onFinish() {
-
+                    mTimerRunning = false;
                 }
             }.start();
+            mTimerRunning = true;
         }
         public void updateCountDownText(){
             int minutes =(int) (mTimeLeftinMillis/1000) /60;
@@ -303,18 +356,8 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.list_item_profesor, null);
             }
-/*
-            view.setBackgroundResource(R.drawable.border);
-            GradientDrawable gd = new GradientDrawable();
-            // Specify the shape of drawable
-            gd.setShape(GradientDrawable.RECTANGLE);
-            // Set the fill color of drawable
-            gd.setColor(Color.TRANSPARENT); // make the background transparent
-            // Create a 2 pixels width red colored border for drawable
-            gd.setStroke(4, Color.BLUE); // border width and color
-            // Make the border rounded
-            gd.setCornerRadius(30.0f);
-*/          TextView listItemRightText = (TextView) view.findViewById(R.id.list_item_string_right);
+
+            TextView listItemRightText = (TextView) view.findViewById(R.id.list_item_string_right);
             final TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
             listItemText.setText(list.get(position).getCodigoCurso( )+" - "+list.get(position).getNombreCurso());
             listItemRightText.setText("Grupo: "+list.get(position).getNumeroGrupo());
@@ -324,10 +367,15 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
             ) {
                 @Override
                 public void onClick(View v) {
-                    viewPager = (ViewPager)findViewById(R.id.ProfesorMainViewPager);
+                    viewPager = (ViewPager) findViewById(R.id.ProfesorMainViewPager);
                     mpagerAdapter = new MpagerAdapter(layouts,ProfesorMainMenuActivity.this,list.get(position));
                     viewPager.setAdapter(mpagerAdapter);
                     dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.active_dot));
+                    if(mTimerRunning){
+                        countDownTimer.cancel();
+                    }
+                    mTimerRunning = false;
+
                     /*
                     try{
                         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
@@ -342,10 +390,44 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
                 }
             });
 
-
-
-
             return view;
+        }
+    }
+
+    //Entrada: Letra del horario del curso
+    //Salida: True si el dia concuerda
+    public boolean checkDiaListaAsistencia(String letraDia1, String letraDia2){
+        Date date = Calendar.getInstance().getTime();
+        String dia = (String) android.text.format.DateFormat.format("EEEE",date);
+        if(dia.equals(getDia(letraDia1)) | dia.equals(getDia(letraDia2))){
+            return true;
+        }
+
+        return false;
+
+
+
+    }
+
+    //entrada: letra del horario
+    //salida: Dia asociada con la letra
+    public String getDia(String letraDia){
+        String dia = letraDia.toLowerCase();
+        switch (dia){
+            case "l":
+                return "Monday";
+            case "k":
+                return "Tuesday";
+            case "m":
+                return "Wednesday";
+            case "j":
+                return "Thursday";
+            case "v":
+                return "Friday";
+            case "s":
+                return "Saturday";
+            default:
+                return "Domingo";
         }
     }
 
