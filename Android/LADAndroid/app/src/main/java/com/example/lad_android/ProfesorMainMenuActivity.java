@@ -3,6 +3,7 @@ package com.example.lad_android;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -211,11 +212,14 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         public View getSecondPanel(LayoutInflater inflater){
             View returnView = inflater.inflate(R.layout.slides_second_slide,null);
             TextView tv = (TextView) returnView.findViewById(R.id.ProfesorMainSecondSlideCodCurso);
+            //tv.setTextColor(Color.parseColor("#fffff"));
             TextView tvGrupo = (TextView) returnView.findViewById(R.id.ProfesorMainSecondSlideGrupo);
             TextView tvDia1 = (TextView)returnView.findViewById(R.id.ProfesorMainSecondSlideHorario1);
+            tvDia1.setTextColor(Color.parseColor("#010203"));
             TextView tvDia2 = (TextView)returnView.findViewById(R.id.ProfesorMainSecondslideHorario2);
+            tvDia2.setTextColor(Color.parseColor("#010203"));
             tv.setText(datos.getNombreCurso());
-            tvGrupo.setText(datos.getNumeroGrupo());
+            tvGrupo.setText("Grupo: "+ datos.getNumeroGrupo());
             String[] horario1 = datos.getDia1().split("-");
             String[] horario2 = datos.getDia2().split("-");
             tvDia1.setText("       "+horario1[0]+"\n"+horario1[1]+"-"+horario1[2]);

@@ -20,6 +20,7 @@ import com.example.lad_android.DatabaseHelper.DatabaseAccess;
 import com.example.lad_android.Profesor.CrearGrupoActivity;
 import com.example.lad_android.Profesor.MenuGrupoActivity;
 import com.example.lad_android.Profesor.MenuListaAsistenciaActivity;
+import com.example.lad_android.Profesor.PerfilActivity;
 import com.example.lad_android.models.DatosUsuario;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
     TextView mTextUsuario;
     ListView mListLista;
     FloatingActionButton mButtonCrear;
-    Bundle bundle = new Bundle();
+    Bundle bundle;
     List<DatosUsuario> listaCursos;
     ImageView mImgViewQR;
 
@@ -37,8 +38,19 @@ public class ProfesorMenuCursosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_menu_cursos);
-
+        bundle = getIntent().getExtras();
         mTextUsuario = (TextView)findViewById(R.id.ProfesorMenuCursosUsuario);
+        mTextUsuario.setText(bundle.getString("usuario")+" "+bundle.getString("apellido"));
+        mTextUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfesorMenuCursosActivity.this, PerfilActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+
         mListLista = (ListView)findViewById(R.id.ProfesorMenuCursosListView);
         //crear Cursos
         mButtonCrear = (FloatingActionButton)findViewById(R.id.ProfesorMenuCursosFloatingBtn);
