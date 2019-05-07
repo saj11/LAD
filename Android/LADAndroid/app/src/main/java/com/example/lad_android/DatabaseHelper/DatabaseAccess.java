@@ -676,7 +676,7 @@ public class DatabaseAccess {
             String curso = c.getString(1);
             String grupo = Integer.toString(2);
             String fecha = c.getString(3);
-            lista.add(id+" - "+curso+" - "+grupo+" - "+fecha);
+            lista.add(curso+" - Grupo: "+grupo+" - "+fecha);
         }
         return lista;
 
