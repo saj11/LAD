@@ -18,6 +18,7 @@ public class ProfesorHistorialCursoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_historial_curso);
+        this.setTitle("Historial de listas de asistencia");
         bundle = getIntent().getExtras();
         mListaAsistencia = (ListView)findViewById(R.id.ProfesorHistorialListView);
 

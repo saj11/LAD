@@ -12,6 +12,7 @@ public class ProfesorEstadisticaCursoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_estadistica_curso);
         bundle = getIntent().getExtras();
+        this.setTitle("Estadisticas");
 
     }
 }

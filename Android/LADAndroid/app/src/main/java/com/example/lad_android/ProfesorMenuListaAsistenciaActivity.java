@@ -19,7 +19,7 @@ public class ProfesorMenuListaAsistenciaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_menu_lista_asistencia);
-
+        this.setTitle("Menu Lista Asistencia");
         mTextCurso = (TextView)findViewById(R.id.ProfesorMenuAsisCodCursoTV);
         mTextGrupo = (TextView)findViewById(R.id.ProfesorMenuAsisGrupoTV);
         mBtnListaAsis = (Button)findViewById(R.id.ProfesorMenuAsisListaAsisBtn);
