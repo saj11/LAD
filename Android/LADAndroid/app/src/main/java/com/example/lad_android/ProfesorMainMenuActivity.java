@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -28,8 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
-import com.example.lad_android.Profesor.CrearGrupoActivity;
 import com.example.lad_android.Profesor.PerfilActivity;
+import com.example.lad_android.Profesor.ProfesorMenuCursosActivity;
 import com.example.lad_android.models.DatosUsuario;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;

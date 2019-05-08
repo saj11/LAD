@@ -1,7 +1,9 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.lad_android.R;
 
 public class ProfesorEstadisticaCursoActivity extends AppCompatActivity {
 

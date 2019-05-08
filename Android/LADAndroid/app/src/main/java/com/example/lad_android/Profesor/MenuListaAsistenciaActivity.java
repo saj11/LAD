@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.lad_android.ListaAsistenciaGrupo;
 import com.example.lad_android.QRCodigoActivity;
 import com.example.lad_android.R;
 

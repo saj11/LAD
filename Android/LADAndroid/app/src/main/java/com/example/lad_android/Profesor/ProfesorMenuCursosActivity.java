@@ -1,12 +1,10 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,10 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
-import com.example.lad_android.Profesor.CrearGrupoActivity;
-import com.example.lad_android.Profesor.MenuGrupoActivity;
-import com.example.lad_android.Profesor.MenuListaAsistenciaActivity;
-import com.example.lad_android.Profesor.PerfilActivity;
+import com.example.lad_android.ProfesorMainMenuActivity;
+import com.example.lad_android.R;
 import com.example.lad_android.models.DatosUsuario;
 
 import java.util.List;

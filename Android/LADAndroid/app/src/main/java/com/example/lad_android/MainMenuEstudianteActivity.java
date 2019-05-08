@@ -1,13 +1,10 @@
 package com.example.lad_android;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,9 +13,8 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.Estudiante.MainMenuEstudianteCursoActivity;
 import com.google.zxing.Result;
-
-import java.util.Scanner;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 

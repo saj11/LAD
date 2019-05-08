@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.Estudiante;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.MainMenuEstudianteActivity;
+import com.example.lad_android.R;
 import com.example.lad_android.models.DatosCursoEstudiante;
-import com.example.lad_android.models.DatosUsuario;
 
 import java.util.ArrayList;
 import java.util.List;
