@@ -11,11 +11,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
 import com.example.lad_android.DatabaseHelper.DatabaseHelper;
 import com.example.lad_android.models.Usuario;
 
 public class MainActivity extends AppCompatActivity {
+
+    String url = "jdbc;mysql//35.224.224.166:3306/Lad";
+    String  user = "root";
+    String pass = "LadDataBase2019";
+
 
     ImageView mImageLogo;
     EditText mTextUsuario;
@@ -142,4 +153,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Debe iniciar Sesion", Toast.LENGTH_SHORT).show();
 
     }
+
+    
+
 }
