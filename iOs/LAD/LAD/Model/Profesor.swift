@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct Profesor {
+struct Profesor: Usuario {
     var nombre: String
-    var apellido: String
+    var apellidos: String
     var correo: String
     var tiempoTardiaCodigo: Int
     var tiempoVigenciaCodigo: Int

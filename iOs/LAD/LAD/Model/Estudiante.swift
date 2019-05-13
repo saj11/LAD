@@ -8,10 +8,9 @@
 
 import Foundation
 
-struct Estudiante{
+struct Estudiante: Usuario{
     var nombre: String
     var apellidos: String
     var id: Int
     var correo: String
-    
 }

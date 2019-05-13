@@ -239,7 +239,7 @@ class SQLiteManager: DataBaseManager {
             let dia1 = Expression<String>("Dia1")
             let dia2 = Expression<String>("Dia2")
             let cod = Expression<String>("Codigo")
-            let key = Expression<String>("Llave")
+            //let key = Expression<String>("Llave")
             
             //let query = grupo.select(grupo[numero], grupo[dia1], grupo[dia2], grupo[cod], grupo[key])
             let query = grupo.select(grupo[numero], grupo[dia1], grupo[dia2], grupo[cod])
@@ -259,6 +259,7 @@ class SQLiteManager: DataBaseManager {
         let listaAsistencia = Table("ListaAsistencia")
         let idCurso = Expression<String>("IDCurso")
         let idGrupo = Expression<Int>("IDGrupo")
+        let horario = Expression<String>("Horario")
         let fecha = Expression<String>("Fecha")
         
         let grupo = Table("Grupo")
@@ -266,17 +267,20 @@ class SQLiteManager: DataBaseManager {
         let idCurs = Expression<String>("IDCurso")
         let codigo = Expression<String>("Codigo")
         
-        let insert = listaAsistencia.insert(idCurso <- idC, idGrupo <- idG, fecha <- fech)
-        let update = grupo.filter(numero == idG && idCurs == idC).update(codigo <- code)
+        let date:String
+        
+        do{
+            date = try connection?.scalar("SELECT date('now')") as! String
+        }catch{
+            print(error)
+            return false
+        }
+        
+        let insert = listaAsistencia.insert(idCurso <- idC, idGrupo <- idG, horario <- fech, fecha <- date)
         do{
             try self.connection?.run(insert)
-            do{
-                try self.connection?.run(update)
-                return true
-            }catch{
-                print(error)
-                return false
-            }
+            
+            return true
         }catch{
             print(error)
             return false
@@ -355,7 +359,7 @@ class SQLiteManager: DataBaseManager {
         let listaAsistencia = Table("ListaAsistencia")
         let asistenciaPorEstudiante = Table("AsistenciaPorEstudiante")
         
-        let fecha = Expression<String>("Fecha")
+        let horario = Expression<String>("Horario")
         let estado = Expression<String>("Estado")
         let id = Expression<Int>("ID")
         let idListaAsist = Expression<Int>("IDListaAsist")
@@ -363,7 +367,7 @@ class SQLiteManager: DataBaseManager {
         let idGrupo = Expression<Int>("IDGrupo")
         let carne = Expression<Int>("Carne")
         
-        let query = listaAsistencia.select(fecha, estado)
+        let query = listaAsistencia.select(horario, estado)
                                    .join(asistenciaPorEstudiante, on: listaAsistencia[id] == asistenciaPorEstudiante[idListaAsist])
                                     .where(listaAsistencia[idCurso] == idCourse && asistenciaPorEstudiante[carne] == idUser &&
                                            listaAsistencia[idGrupo] == numberGroup)
@@ -428,5 +432,189 @@ class SQLiteManager: DataBaseManager {
             return false
         }
     }
-
+    
+    func getStudentsFromAttendanceList(idAttendanceList: Int)-> Array<Row>{
+        var result: Array<Row> = Array<Row>()
+        do{
+            let listaAsistencia = Table("ListaAsistencia")
+            let asistenciaPorEstudiante = Table("AsistenciaPorEstudiante")
+            let estudiante = Table("Estudiante")
+            
+            let nombre = Expression<String>("Nombre")
+            let apellidos = Expression<String>("Apellidos")
+            let estado = Expression<String>("Estado")
+            let id = Expression<Int>("ID")
+            let idListaAsist = Expression<Int>("IDListaAsist")
+            let carne = Expression<Int>("Carne")
+            
+            let query = listaAsistencia.select(estudiante[nombre], estudiante[apellidos], asistenciaPorEstudiante[estado])
+                .join(asistenciaPorEstudiante, on: listaAsistencia[id] == asistenciaPorEstudiante[idListaAsist])
+                .join(estudiante, on: asistenciaPorEstudiante[carne] == estudiante[carne])
+                .where(listaAsistencia[id] == idAttendanceList)
+            result = Array((try self.connection?.prepare(query))!)
+            
+            return result
+        }catch{
+            print("Select user failed: \(error)")
+        }
+        return result
+    }
+    
+    func getAllCourses(idUser: String)-> Array<Row>{
+        var result: Array<Row> = Array<Row>()
+        
+        do{
+            let profesor = Table("Profesor")
+            let grupo = Table("Grupo")
+            let curso = Table("Curso")
+            
+            let nombre = Expression<String>("Nombre")
+            let idProfe = Expression<String>("IDProfe")
+            let id = Expression<String>("ID")
+            let idCurso = Expression<String>("IDCurso")
+            let curso2 = Expression<String>("Codigo")
+            let correo = Expression<String>("Correo")
+            
+            let query = grupo.select(curso[nombre])
+                .join(profesor, on: grupo[idProfe] == profesor[id])
+                .join(curso, on: curso[curso2] == grupo[idCurso])
+                .where(profesor[correo] == idUser)
+            
+            result = Array((try self.connection?.prepare(query))!)
+            
+            return result
+        }catch{
+            print("Select user failed: \(error)")
+            return result
+        }
+    }
+    
+    func getAllCourses()-> Array<Row>{
+        var result: Array<Row> = Array<Row>()
+        
+        do{
+            let curso = Table("Curso")
+            
+            let nombre = Expression<String>("Nombre")
+            
+            let query = curso.select(curso[nombre])
+            
+            result = Array((try self.connection?.prepare(query))!)
+            
+            return result
+        }catch{
+            print("Select user failed: \(error)")
+            return result
+        }
+    }
+    
+    func getNumberGroups(nombreCurso: String)-> Int{
+        let grupo = Table("Grupo")
+        let curso = Table("Curso")
+        
+        let idCurso = Expression<String>("IDCurso")
+        let codigo = Expression<String>("Codigo")
+        let numero = Expression<Int>("Numero")
+        let nombre = Expression<String>("Nombre")
+        
+        do{
+            let count = try connection?.scalar(grupo.select(numero.count)
+                .join(curso, on: grupo[idCurso] == curso[codigo])
+                .where(curso[nombre] == nombreCurso)) ?? 0
+            
+            return count+1
+        }catch{
+            print("Select number of groups failed: \(error)")
+            return 0
+        }
+    }
+    
+    func getNumberOfLA(idCurse: String, idGroup: Int)-> Int{
+        let listaAsistencia = Table("ListaAsistencia")
+        
+        let id = Expression<Int>("ID")
+        let fecha = Expression<String>("Fecha")
+        let idCurso = Expression<String>("IDCurso")
+        let idGrupo = Expression<Int>("IDGrupo")
+        
+        do{
+            let date = try connection?.scalar("SELECT date('now')") as! String
+            
+            let idLA = try self.connection?.scalar(listaAsistencia.select(id)
+                .where(listaAsistencia[fecha] == date && listaAsistencia[idCurso] == idCurse && listaAsistencia[idGrupo] == idGroup)) ?? 0
+            
+            return idLA
+        }catch{
+            print("Select id of listaAsistencia failed: \(error)")
+            return 0
+        }
+    }
+    
+    func addNewCourse(idCurse: String, number: Int, idProfessor: String, firstDay: String, secondDay: String, code: String)-> Bool{
+        let grupo = Table("Grupo")
+        let profesor = Table("Profesor")
+        let curso = Table("Curso")
+        
+        let id = Expression<Int>("ID")
+        let correo = Expression<String>("Correo")
+        let idCurso = Expression<String>("IDCurso")
+        let nombreCurso = Expression<String>("Nombre")
+        let numero = Expression<Int>("numero")
+        let idProfe = Expression<Int>("IDProfe")
+        let dia1 = Expression<String>("Dia1")
+        let dia2 = Expression<String>("Dia2")
+        let codigo = Expression<String>("Codigo")
+        
+        do{
+            let query = try (connection?.scalar(profesor.select(id)
+                .where(profesor[correo] == idProfessor)))!
+            
+            let query2 = try connection?.scalar(curso.select(codigo).where(nombreCurso == idCurse))
+            
+            try self.connection?.run(grupo.insert(idCurso <- query2!, numero <- number, idProfe <- query, dia1 <- firstDay, dia2 <- secondDay, codigo <- code))
+            return true
+        }catch{
+            print("select user failed: \(error)")
+            print("Error: No se pudo ingresar el nuevo grupo a la BD.")
+            return false
+        }
+    }
+    
+    func getDateOfAvailableLA(idCurse: String, idGroup: Int)-> Array<Row>{
+        let listaAsistencia = Table("ListaAsistencia")
+        
+        let fecha = Expression<String>("Fecha")
+        let idCurso = Expression<String>("IDCurso")
+        let idGrupo = Expression<Int>("IDGrupo")
+        
+        var result: Array<Row> = Array<Row>()
+        do{
+            result = Array(try (self.connection?.prepare(listaAsistencia.select(fecha)
+                .where(listaAsistencia[idCurso] == idCurse && listaAsistencia[idGrupo] == idGroup)))!)
+            
+            return result
+        }catch{
+            print("Select id of listaAsistencia failed: \(error)")
+            return result
+        }
+    }
+    
+    func getNumberOfLA(idCurse: String, idGroup: Int, date: String)-> Int{
+        let listaAsistencia = Table("ListaAsistencia")
+        
+        let id = Expression<Int>("ID")
+        let fecha = Expression<String>("Fecha")
+        let idCurso = Expression<String>("IDCurso")
+        let idGrupo = Expression<Int>("IDGrupo")
+        
+        do{
+            let idLA = try self.connection?.scalar(listaAsistencia.select(id)
+                .where(listaAsistencia[fecha] == date && listaAsistencia[idCurso] == idCurse && listaAsistencia[idGrupo] == idGroup)) ?? 0
+            
+            return idLA
+        }catch{
+            print("Select id of listaAsistencia failed: \(error)")
+            return 0
+        }
+    }
 }

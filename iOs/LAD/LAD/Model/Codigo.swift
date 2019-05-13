@@ -20,14 +20,13 @@ class Codigo{
     
     init(code: String) {
         self.qrCode = code
-        self.data = ""//Data(base64Encoded: self.qrCode)!
         
-        self.createImage()
+        self.data = ""
     }
     
     func getUIImage()-> UIImage{
-        let dataDecoded:Data = NSData(base64Encoded: self.qrCode, options: NSData.Base64DecodingOptions(rawValue: 0))! as Data
-
+        let dataDecoded = Data(base64Encoded: self.qrCode, options: .ignoreUnknownCharacters)!//NSData(base64Encoded: self.qrCode)! as Data
+        
         let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
         return decodedimage
     }
@@ -47,7 +46,7 @@ class Codigo{
     
     private func createCode() -> CIImage?{
         guard let qrFilter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
-        qrFilter.setValue(self.data.data(using: String.Encoding.ascii), forKey: "inputMessage")
+        qrFilter.setValue(self.data.data(using: .utf8), forKey: "inputMessage")
         qrFilter.setValue("Q", forKey: "inputCorrectionLevel")
         guard let qrImage = qrFilter.outputImage else { return nil }
         
@@ -59,8 +58,8 @@ class Codigo{
         
         let imageData = qrImage.generatePNGRepresentation()
         
-        let strBase64 = imageData.base64EncodedString()
-        
+        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+
         self.qrCode = strBase64
     }
     

@@ -35,10 +35,12 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.image.layer.cornerRadius = image.frame.height/2
         self.image.clipsToBounds = true
         
-        self.nameLabel.text = String(format: "%@ %@", self.controller.getProfesor().nombre, self.controller.getProfesor().apellido)
+        //self.nameLabel.text = String(format: "%@ %@", self.controller.getProfesor().nombre, self.controller.getProfesor().apellidos)
+        self.nameLabel.text = String(format: "%@ %@", controller.getUsuario().nombre, controller.getUsuario().apellidos)
         self.nameLabel.textAlignment = .center
         
-        self.emailLabel.text = self.controller.getProfesor().correo
+        //self.emailLabel.text = self.controller.getProfesor().correo
+        self.emailLabel.text = self.controller.getUsuario().correo
         self.emailLabel.textAlignment = .center
         self.emailLabel.textColor = UIColor.gray
         
@@ -47,6 +49,13 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.configTable.rowHeight = UITableView.automaticDimension
         
         self.optionTable.rowHeight = UITableView.automaticDimension
+        
+        self.configTable.isScrollEnabled = false
+        self.optionTable.isScrollEnabled = false
+        
+        /*if !String(describing: controller.getUsuario().self).elementsEqual("Profesor"){
+            configTable.isHidden = true
+        }*/
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -72,7 +81,7 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if(tableView == configTable){
+        if tableView == configTable{
             let cell = tableView.dequeueReusableCell(withIdentifier: "configItem", for: indexPath)
             cell.textLabel?.text = self.listConfig[indexPath.section]
             cell.textLabel?.textColor = UIColor.black
@@ -92,7 +101,6 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
             
             return cell
         }
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

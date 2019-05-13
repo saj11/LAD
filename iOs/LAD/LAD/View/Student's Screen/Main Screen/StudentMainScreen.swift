@@ -69,7 +69,7 @@ class StudentMainScreen: UIViewController{
             captureSession.addOutput(captureMetadataOutput)
             
             // Set delegate and use the default dispatch queue to execute the call back
-            captureMetadataOutput.setMetadataObjectsDelegate(self as! AVCaptureMetadataOutputObjectsDelegate, queue: DispatchQueue.main)
+            captureMetadataOutput.setMetadataObjectsDelegate(self as AVCaptureMetadataOutputObjectsDelegate, queue: DispatchQueue.main)
             captureMetadataOutput.metadataObjectTypes = supportedCodeTypes
             //            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
             
@@ -105,36 +105,44 @@ class StudentMainScreen: UIViewController{
     // MARK: - Helper methods
     
     func launchApp(confirmationMessage: String) {
-        
+        //HoraInicio, HoraFinal, NombreProfesor, ApellidoProfesor, Curso, Grupo, Horario(Dia de la semana<Inicial>), Horario(Dia de la semana<Inicial>)
         if presentedViewController != nil {
             return
         }
         
-        var message = confirmationMessage.split(separator: ",")
+        let regEx1 = "[0-9]+:[0-9]+,[0-9]+:[0-9]+,[a-zA-Z]+,[a-zA-Z]+,[a-zA-Z]+,[0-9]+,[A-Z]{1},[A-Z]{1}"
+        let regEx2 = "[0-9]+:[0-9]+,[0-9]+:[0-9]+,[a-zA-Z]+,[a-zA-Z]+,[a-zA-Z]+,[0-9]+,[A-Z]{1}"
         
-        let alertPrompt = UIAlertController(title: "LAD - Estudiante", message: "Confirmar Asistencia en el Curso: \(message[4]) Grupo: \(message[5]) del Profesor: \(message[2]) \(message[3])", preferredStyle: .alert)
+        let pred1 = NSPredicate(format:"SELF MATCHES %@", regEx1)
+        let pred2 = NSPredicate(format:"SELF MATCHES %@", regEx2)
         
-        let confirmAction = UIAlertAction(title: "Confirm", style: .default, handler: { (action) -> Void in
-            
-            let mensaje: String
-            
-            if self.controller.confirmPresence(data: message){
-                mensaje = "Su Asistencia se Registro Satisfactoriamente. Puede dirigirse inmediatamente a la zona de Asistencia."
-            }else{
-                mensaje = "Su Asistencia NO se Registro Satisfactoriamente."
-            }
-            
-            let alert = UIAlertController(title: "Lista de Asistencia Digital", message: mensaje, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default))
-            self.present(alert, animated: true, completion: nil)
-        })
+        if pred1.evaluate(with: confirmationMessage) || pred2.evaluate(with: confirmationMessage){
+            var message = confirmationMessage.split(separator: ",")
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let alertPrompt = UIAlertController(title: "LAD - Estudiante", message: "Confirmar Asistencia en el Curso: \(message[4]) Grupo: \(message[5]) del Profesor: \(message[2]) \(message[3])", preferredStyle: .alert)
         
-        alertPrompt.addAction(confirmAction)
-        alertPrompt.addAction(cancelAction)
+            let confirmAction = UIAlertAction(title: "Confirm", style: .default, handler: { (action) -> Void in
+                
+                let mensaje: String
+                
+                if self.controller.confirmPresence(data: message){
+                    mensaje = "Su Asistencia se Registro Satisfactoriamente. Puede dirigirse inmediatamente a la zona de Asistencia."
+                }else{
+                    mensaje = "Su Asistencia NO se Registro Satisfactoriamente."
+                }
+                
+                let alert = UIAlertController(title: "Lista de Asistencia Digital", message: mensaje, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default))
+                self.present(alert, animated: true, completion: nil)
+            })
         
-        present(alertPrompt, animated: true, completion: nil)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+            alertPrompt.addAction(confirmAction)
+            alertPrompt.addAction(cancelAction)
+        
+            present(alertPrompt, animated: true, completion: nil)
+        }
     }
 }
 

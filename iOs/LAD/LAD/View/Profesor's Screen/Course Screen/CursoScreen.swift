@@ -31,12 +31,16 @@ class CursoScreen: UITableViewController, FloatyDelegate {
         rightBarButton.image = UIImage(named: "user-icon")
         self.navigationItem.rightBarButtonItem = rightBarButton
         
+        let leftBarButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.myLeftSideBarButtonItemTapped(_:)))
+        leftBarButton.image = UIImage(named: "plus-icon")
+        self.navigationItem.leftBarButtonItem = leftBarButton
+        
         self.tableView.separatorStyle = .none
         self.tableView.flashScrollIndicators()
         
         floaty.buttonColor = UIColor.green
         floaty.sticky = true
-        self.tableView!.addSubview(floaty)
+        self.view.insertSubview(floaty, at: 0)
         
         (number, listCourses) = self.controller.numberOfCourse()
         
@@ -102,10 +106,15 @@ class CursoScreen: UITableViewController, FloatyDelegate {
         }
     }
     
-    @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!)
-    {
+    @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!){
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let perfilScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "PerfilScreen")
         self.navigationController!.pushViewController(perfilScreen, animated: true)
+    }
+    
+    @objc func myLeftSideBarButtonItemTapped(_ sender:UIBarButtonItem!){
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let createCurseScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "createCurse")
+        self.navigationController!.pushViewController(createCurseScreen, animated: true)
     }
 }

@@ -40,38 +40,44 @@ class Login: UIViewController{
     }
     
     @IBAction func signIn(_ sender: DesignableButton) {
-        //let userN = userNameTF.text
-        //let pass = passwordTF.text
+        var userN = userNameTF.text
+        var pass = passwordTF.text
         
-        //let userN = "cbenavides@itcr.ac.cr"
-        //let userN = "mestrada@itcr.ac.cr"
-        //let userN = "p@gmail.com"
-        //let pass = "hola1234"
-        //let pass = "123456789"
+        userN = "cbenavides@itcr.ac.cr"
+        //userN = "mestrada@itcr.ac.cr"
+        //userN = "p@gmail.com"
+        pass = "hola1234"
+        //pass = "123456789"
         
-        let userN = "2015100516"
-        let pass = "123456789"
+        //userN = "2015100516"
+        //pass = "123456789"
         
         var typeUser: String
         
-        if userN.isInt{
+        if userN!.isInt{
             typeUser = "Estudiante"
         }else{
             typeUser = "Profesor"
         }
         
-        if(self.controller.validateUser(typeUser: typeUser, email: userN, password: pass)){
-            if typeUser.elementsEqual("Profesor"){
-                let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let cursoScreen = storyboard.instantiateViewController(withIdentifier: "NavController2") as! UINavigationController
-                self.present(cursoScreen, animated: true, completion: nil)
+        if(!userN!.isEmpty && !pass!.isEmpty){
+            if(self.controller.validateUser(typeUser: typeUser, email: userN!, password: pass!)){
+                if typeUser.elementsEqual("Profesor"){
+                    let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                    let cursoScreen = storyboard.instantiateViewController(withIdentifier: "ProfesorTabBarController") as! UITabBarController
+                    self.present(cursoScreen, animated: true, completion: nil)
+                }else{
+                    let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                    let cursoScreen = storyboard.instantiateViewController(withIdentifier: "StudentTabBarController") as! UITabBarController
+                    self.present(cursoScreen, animated: true, completion: nil)
+                }
             }else{
-                let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let cursoScreen = storyboard.instantiateViewController(withIdentifier: "StudentTabBarController") as! UITabBarController
-                self.present(cursoScreen, animated: true, completion: nil)
+                let alert = UIAlertController(title: "Lista de Asistencia Digital", message: "Error: No concide el usuario con la contraseña proporcionada", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default))
+                self.present(alert, animated: true, completion: nil)
             }
         }else{
-            let alert = UIAlertController(title: "Lista de Asistencia Digital", message: "Error: No concide el usuario con la contraseña proporcionada", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Lista de Asistencia Digital", message: "Error: No introdujo el usuario o la contraseña", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default))
             self.present(alert, animated: true, completion: nil)
         }

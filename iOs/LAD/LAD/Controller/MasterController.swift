@@ -14,10 +14,12 @@ class MasterController{
     //MARK: Properties
     private let dbManager: SQLiteManager
     private let encrypter: NativeEncryption
+    private var usuario: Usuario!
     private var profesor: Profesor!
     private var estudiante: Estudiante!
     private var curso: Curso!
     private var grupo: Grupo!
+    private var listGroup: [Grupo]
     private var info: String!
     private var timeAlive: (Int, Int)!
     static let shared = MasterController()
@@ -30,6 +32,8 @@ class MasterController{
         if(!self.dbManager.openDataBase()){
             print("Error: No se pudo establecer comunicación con la Base de Datos")
         }
+        
+        listGroup = [Grupo]()
     }
     
     func setCurso(curso:Curso){ self.curso = curso }
@@ -48,6 +52,10 @@ class MasterController{
     
     func getTimeAlive() -> (Int, Int)? { return self.timeAlive }
     
+    func getUsuario() -> Usuario { return usuario }
+    
+    func getListGroup() -> [Grupo]? { return listGroup }
+    
     func validateNewUser(typeUser: String, input: String)-> Bool{
         let emailArray:Array<Row> = dbManager.selectUser(typeUser: typeUser)
         let correo = Expression<String>("Correo")
@@ -63,27 +71,22 @@ class MasterController{
     }
     
     func addNewUser(typeUser: String, data: Array<Any>)-> Bool{
-        do{
-            var dataList:Array<Any> = data
-            
-            if typeUser.elementsEqual("P") {
-                dataList.append(15)
-                dataList.append(120)
-            }
-
-            if(self.dbManager.addUser(typeUser: typeUser, dataArray: dataList)){
-                if typeUser.elementsEqual("P"){
-                    self.profesor = Profesor(nombre: dataList[0] as! String, apellido: dataList[1] as! String, correo: dataList[2] as! String, tiempoTardiaCodigo: dataList[4] as! Int, tiempoVigenciaCodigo: dataList[5] as! Int)
-                }else{
-                    self.estudiante = Estudiante(nombre: dataList[0] as! String, apellidos: dataList[1] as! String, id: dataList[2] as! Int, correo: dataList[3] as! String)
-                }
-                return true
-            }
-            return false
-        }catch{
-            print("Error")
-            return false
+        var dataList:Array<Any> = data
+        
+        if typeUser.elementsEqual("P") {
+            dataList.append(15)
+            dataList.append(120)
         }
+
+        if(self.dbManager.addUser(typeUser: typeUser, dataArray: dataList)){
+            if typeUser.elementsEqual("P"){
+                self.profesor = Profesor(nombre: dataList[0] as! String, apellidos: dataList[1] as! String, correo: dataList[2] as! String, tiempoTardiaCodigo: dataList[4] as! Int, tiempoVigenciaCodigo: dataList[5] as! Int)
+            }else{
+                self.estudiante = Estudiante(nombre: dataList[0] as! String, apellidos: dataList[1] as! String, id: dataList[2] as! Int, correo: dataList[3] as! String)
+            }
+            return true
+        }
+        return false
     }
     
     func validateUser(typeUser: String, email: String, password: String)-> Bool{
@@ -95,21 +98,23 @@ class MasterController{
         let tiempoVigenciaCodigo = Expression<Int>("TiempoVigenciaCodigo")
         
         let result: Array<Row> = self.dbManager.validateUser(typeUser: typeUser, input: email)
-        do{
-            let dbDecrypPass = self.encrypter.decrypt(message: result[0][contraseña])
-
-            if(!result.isEmpty && password.elementsEqual(dbDecrypPass)){
-                if typeUser.elementsEqual("Profesor"){
-                    self.profesor = Profesor(nombre: result[0][nombre],apellido: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
-                }else{
-                    self.estudiante = Estudiante(nombre: result[0][nombre], apellidos: result[0][apellidos], id: Int(email)!, correo: result[0][correo])
-                }
-                return true
+        
+        var dbDecrypPass: String!
+            
+        DispatchQueue.global(qos: .background).sync {
+            dbDecrypPass = self.encrypter.decrypt(message: result[0][contraseña])
+        }
+        
+        if(!result.isEmpty && password.elementsEqual(dbDecrypPass)){
+            if typeUser.elementsEqual("Profesor"){
+                self.profesor = Profesor(nombre: result[0][nombre],apellidos: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
+                usuario = self.profesor
             }else{
-                return false
+                self.estudiante = Estudiante(nombre: result[0][nombre], apellidos: result[0][apellidos], id: Int(email)!, correo: result[0][correo])
+                usuario = self.estudiante
             }
-        }catch{
-            print(error)
+            return true
+        }else{
             return false
         }
     }
@@ -141,6 +146,7 @@ class MasterController{
         let apellidos = Expression<String>("Apellidos")
         
         var listaCursos:Array<(Curso, Int, String)> = Array<(Curso, Int, String)>()
+        
         let courses = self.dbManager.numberOfCourse(idUser: self.estudiante.id)
         
         for curso in courses!{
@@ -154,72 +160,59 @@ class MasterController{
         return (listaCursos.count, listaCursos)
     }
     
-    func groupsOf() -> (Int, Array<Grupo>) {
+    func groupsOf() -> Array<Grupo> {
         let numero = Expression<Int>("Numero")
         let dia1 = Expression<String>("Dia1")
         let dia2 = Expression<String>("Dia2")
         let codigo = Expression<String>("Codigo")
-        let key = Expression<String>("Llave")
+        //let key = Expression<String>("Llave")
 
-        
-        var listaGrupos:Array<Grupo> = Array<Grupo>()
         let grupos = self.dbManager.groupOf(codCurso: self.curso.codigo, email: self.profesor.correo)
         
         for grupo in grupos{
             //Day saca el dia del mes, no el dia de la semana!!! Corregir
                 if(grupo[codigo].isEmpty){
-                    listaGrupos.append(Grupo(curso: self.curso, num: grupo[numero], profesor: self.profesor, horario1: grupo[dia1], horario2: grupo[dia2]))
+                    listGroup.append(Grupo(curso: self.curso!, num: grupo[numero], profesor: self.profesor!, horario1: grupo[dia1], horario2: grupo[dia2]))
                 }else{
-                    do{
-                        listaGrupos.append(Grupo(curso: self.curso, num: grupo[numero], profesor: self.profesor, horario1: grupo[dia1], horario2: grupo[dia2], code: try self.encrypter.decrypt(message: grupo[codigo])))
-                    }catch{
-                        print(error)
-                    }
+                    
+                    listGroup.append(Grupo(curso: self.curso, num: grupo[numero], profesor: self.profesor, horario1: grupo[dia1], horario2: grupo[dia2], code: grupo[codigo]))
             }
         }
-        
-        return (listaGrupos.count, listaGrupos)
+        return listGroup
     }
     
     func crearCodigo(data: String){
         print("Data: \(data)")
-        do{
-            //let encryptedInformation:String
-            //let key:String
-            //(encryptedInformation, key) = try self.encrypter.encrypt(data: data)
-            //encryptedInformation = self.encrypter.encrypt(message: data)
-            print("Encrypted Information \(data)")
-            if((self.getGrupo().getCode()?.getData().isEmpty)!){
-                self.getGrupo().getCode()?.setData(data: data)
-                
-                let group = self.getGrupo()
-                
-                //if(self.dbManager.updateCode(idC: self.curso.codigo, idG: group.getNumber(), code: (self.getGrupo().getCode()?.getQRCode())!, key: key)){
-                if(self.dbManager.updateCode(idC: self.curso.codigo, idG: group.getNumber(), code: (self.getGrupo().getCode()?.getQRCode())!, key: "")){
-                    print("Code Updated Succesfully")
-                }else{
-                    print("Code Updated Unsuccesfully")
-                }
-                //self.codigo.createImage()
+        //let encryptedInformation:String
+        //let key:String
+        //(encryptedInformation, key) = try self.encrypter.encrypt(data: data)
+        //encryptedInformation = self.encrypter.encrypt(message: data)
+        print("Encrypted Information \(data)")
+        if((self.getGrupo().getCode()?.getData().isEmpty)!){
+            self.getGrupo().getCode()?.setData(data: data)
+            
+            let group = self.getGrupo()
+            
+            //if(self.dbManager.updateCode(idC: self.curso.codigo, idG: group.getNumber(), code: (self.getGrupo().getCode()?.getQRCode())!, key: key)){
+            if(self.dbManager.updateCode(idC: self.curso.codigo, idG: group.getNumber(), code: (self.getGrupo().getCode()?.getQRCode())!, key: "")){
+                print("Code Updated Succesfully")
+            }else{
+                print("Code Updated Unsuccesfully")
             }
-        }catch{
-            print(error)
+            //self.codigo.createImage()
         }
     }
     
-    /*func crearListaAsistencia(fecha:String){
-        let image: UIImage = self.getCodigo().getImage()
-        let imageData = image.generatePNGRepresentation()
-        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-        if(self.dbManager.crearLA(idC: self.curso.codigo, idG: self.grupo.getNumber(), fech: fecha, code: strBase64)){
+    func crearListaAsistencia(fecha:String){
+        if(self.dbManager.crearLA(idC: self.curso.codigo, idG: self.grupo.getNumber(), fech: fecha, code: (self.grupo.getCode()?.getQRCode())!)){
             print("Sirvio")
         }else{
             print("No Sirvio")
         }
-    }*/
+    }
     
     func setTimeMaxPresence(time:Int){
-        if(self.dbManager.setTimeMaxPresence(email: self.profesor.correo, time: time)){
+        if(dbManager.setTimeMaxPresence(email: self.profesor.correo, time: time)){
             print("Change Time Max Presence Succesfully")
         }else{
             print("Change Time Max Presence Unsuccesfully")
@@ -227,7 +220,7 @@ class MasterController{
     }
     
     func setTimeCodeAvailable(time: Int){
-        if(self.dbManager.setTimeCodeAvailable(email: self.profesor.correo, time: time)){
+        if(dbManager.setTimeCodeAvailable(email: self.profesor.correo, time: time)){
             print("Change Time Code Available Succesfully")
         }else{
             print("Change Time Code Available Unsuccesfully")
@@ -235,7 +228,7 @@ class MasterController{
     }
     
     func setNewPassword(password: String){
-        if(self.dbManager.setNewPassword(email: self.profesor.correo, password: password)){
+        if(dbManager.setNewPassword(email: self.profesor.correo, password: password)){
             print("Change Succesfully")
         }else{
             print("Change Unsuccesfully")
@@ -306,7 +299,7 @@ class MasterController{
     
     func belongsToCourse(courseName: String)-> Bool{
         var listCourses:Array<(Curso, Int, String)> = Array<(Curso, Int, String)>()
-        (_, listCourses) = self.numberOfCourse()
+        (_, listCourses) = numberOfCourse()
         
         for course in listCourses{
             if course.0.nombre.elementsEqual(courseName){
@@ -322,7 +315,7 @@ class MasterController{
         
         if belongsToCourse(courseName: nombreCurso){
             let curso = Curso(codigo: "", nombre: nombreCurso)
-            let profesor = Profesor(nombre: String(data[2]), apellido: String(data[3]), correo: "", tiempoTardiaCodigo: 0, tiempoVigenciaCodigo: 0)
+            let profesor = Profesor(nombre: String(data[2]), apellidos: String(data[3]), correo: "", tiempoTardiaCodigo: 0, tiempoVigenciaCodigo: 0)
             let grupo = Grupo(
                 curso: curso,
                 num: Int(String(data[5]))!,
@@ -332,9 +325,9 @@ class MasterController{
             )
             
             if grupo.validateSchedule(){
-                var estado:String = grupo.validateSchedule()
-                var numberLAD = Int(String(data[8]))
-                if self.dbManager.confirmPresence(numberList: numberLAD!, userID: self.estudiante.id, state: estado){
+                let estado:String = grupo.validateSchedule()
+                let numberLAD = dbManager.getNumberOfLA(idCurse: curso.codigo, idGroup: grupo.getNumber())
+                if self.dbManager.confirmPresence(numberList: numberLAD, userID: self.estudiante.id, state: estado){
                     return true
                 }
                 return false
@@ -343,34 +336,85 @@ class MasterController{
         }
         return false
     }
-}
-
-extension UIImage {
     
-    /**
-     Creates the UIImageJPEGRepresentation out of an UIImage
-     @return Data
-     */
-    
-    func generatePNGRepresentation() -> Data {
+    func getStudentsFrom(date: String = "")-> (Int, Array<(String, String)>){
+        let nombre = Expression<String>("Nombre")
+        let apellidos = Expression<String>("Apellidos")
+        let estado = Expression<String>("Estado")
         
-        let newImage = self.copyOriginalImage()
-        let newData = newImage.pngData()
+        var listaEstudiantes:Array<(String, String)> = Array<(String, String)>()
+        let estudiantes:Array<Row>
         
-        return newData!
+        if date.count > 0 {
+            estudiantes = self.dbManager.getStudentsFromAttendanceList(idAttendanceList: dbManager.getNumberOfLA(idCurse: getGrupo().getCurse().codigo, idGroup: getGrupo().getNumber(), date: date))
+        }else{
+            estudiantes = self.dbManager.getStudentsFromAttendanceList(idAttendanceList: self.grupo.getNumberAL())
+        }
+        
+        for estudiante in estudiantes{
+            listaEstudiantes.append((String("\(estudiante[nombre]) \(estudiante[apellidos])"), estudiante[estado]))
+        }
+        
+        return (listaEstudiantes.count, listaEstudiantes)
     }
     
-    /**
-     Copies Original Image which fixes the crash for extracting Data from UIImage
-     @return UIImage
-     */
-    
-    private func copyOriginalImage() -> UIImage {
-        UIGraphicsBeginImageContext(self.size);
-        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext();
+    func getAllCourses()-> Array<String>{
+        var listCourses: Array<String> = Array<String>()
         
-        return newImage!
+        let nombre = Expression<String>("Nombre")
+        
+        let queryResult = dbManager.getAllCourses(idUser: usuario.correo)
+        
+        for curso in queryResult{
+            listCourses.append(curso[nombre])
+        }
+        
+        return listCourses
+    }
+    
+    func getAllNameCourses()-> Array<String>{
+        var listCourses: Array<String> = Array<String>()
+        
+        let nombre = Expression<String>("Nombre")
+        
+        let queryResult = dbManager.getAllCourses()
+        
+        for curso in queryResult{
+            listCourses.append(curso[nombre])
+        }
+        
+        return listCourses
+    }
+    
+    func numberOfGroups(nameCurse: String) -> Int {
+        return dbManager.getNumberGroups(nombreCurso: nameCurse)
+    }
+    
+    func addNewCourse(idCurse: String, number: Int, firstDay: String, secondDay: String, startTime: String, endTime: String)-> Bool {
+        
+        var time = endTime.split(separator: ":")
+        
+        let hour = Int(String(time[0]))!
+        let minute = Int(String(time[1]))!+15
+        
+        let info = String(format: "%@,%@,%@,%@,%@,%d,%@,%@", startTime, String(format: "%d:%d", hour, minute), getProfesor().nombre, getProfesor().apellidos, idCurse, number, firstDay, secondDay)
+        
+        let code = Codigo()
+        code.setData(data: info)
+        
+        return dbManager.addNewCourse(idCurse: idCurse, number: number, idProfessor: profesor!.correo, firstDay: firstDay, secondDay: secondDay, code: code.getQRCode())
+    }
+    
+    func getAvailableLA()-> Array<String>{
+        var listDates: Array<String> = Array<String>()
+        
+        let fecha = Expression<String>("Fecha")
+        
+        let queryResult = dbManager.getDateOfAvailableLA(idCurse: getGrupo().getCurse().codigo, idGroup: getGrupo().getNumber())
+        
+        for dates in queryResult{
+            listDates.append(dates[fecha])
+        }
+        return listDates
     }
 }

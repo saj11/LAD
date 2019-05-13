@@ -6,6 +6,9 @@ target 'LAD' do
   pod 'CryptoSwift'
   pod 'SQLite.swift'
   pod 'EllipticCurveKeyPair'
+  pod 'SRCountdownTimer'
+  pod 'DTZFloatingActionButton'
+  pod 'Koyomi'
 
   # Pods for LAD
 

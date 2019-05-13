@@ -28,22 +28,22 @@ class CreatingUser: UIViewController{
     }
     
     @IBAction func signUp(_ sender: DesignableButton) {
-        /*let userName = userNameTF.text
+        let userName = userNameTF.text
         let lastName = lastNameTF.text
         let email = emailTF.text
         let password = passwordTF.text
-        let confirmPass = passwordRepTF.text*/
+        let confirmPass = passwordRepTF.text
         
-        let userName = "prueba"
+        /*let userName = "prueba"
         let lastName = "prueba"
         let email = "pp@gmail.com"
         let password = "123456789"
-        let confirmPass = "123456789"
+        let confirmPass = "123456789"*/
         
-        if((password.elementsEqual(confirmPass))){
-            let encryptedPass = NativeEncryption.encrypt(message:password)
+        if((password!.elementsEqual(confirmPass!))){
+            let encryptedPass = NativeEncryption.encrypt(message:password!)
             let dataArray = [userName, lastName, email, encryptedPass]
-            if(self.controller.validateNewUser(typeUser: "P", input: email)){
+            if(self.controller.validateNewUser(typeUser: "P", input: email!)){
                 if(self.controller.addNewUser(typeUser: "P", data: dataArray)){
                     let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                     let cursoScreen = storyboard.instantiateViewController(withIdentifier: "NavController2") as! UINavigationController

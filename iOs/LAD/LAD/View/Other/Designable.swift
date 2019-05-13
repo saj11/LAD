@@ -189,3 +189,38 @@ extension String{
         return Int(self) != nil
     }
 }
+
+extension Date {
+    func adding(minutes: Int) -> Date {
+        return Calendar.current.date(byAdding: .minute, value: minutes, to: self)!
+    }
+}
+
+extension UIImage {
+    /*
+     Creates the UIImageJPEGRepresentation out of an UIImage
+     @return Data
+    */
+    
+    func generatePNGRepresentation() -> Data {
+        
+        let newImage = self.copyOriginalImage()
+        let newData = newImage.pngData()
+        
+        return newData!
+    }
+    
+    /*
+     Copies Original Image which fixes the crash for extracting Data from UIImage
+     @return UIImage
+    */
+    
+    private func copyOriginalImage() -> UIImage {
+        UIGraphicsBeginImageContext(self.size);
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        
+        return newImage!
+    }
+}

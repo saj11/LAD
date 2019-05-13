@@ -75,6 +75,7 @@ class NativeEncryption : Encrypter {
             print(error)
         }
         return ""
+            
     }
     
     func signing(message: String){

@@ -30,25 +30,25 @@ class CreatingStudent: UIViewController {
     }
     
     @IBAction func signUp(_ sender: UIButton) {
-        /*let userName = userNameTF.text
+        let userName = nameTF.text
          let lastName = lastNameTF.text
          let id = carnetTF.text
          let email = emailTF.text
          let password = passwordTF.text
-         let confirmPass = passwordRepTF.text*/
+         let confirmPass = repeatPasswordTF.text
         
-        let userName = "joseph"
+        /*let userName = "joseph"
         let lastName = "salazar"
         let id = 2015100516
         let email = "jossalazar@ic-itcr.ac.cr"
         let password = "123456789"
-        let confirmPass = "123456789"
+        let confirmPass = "123456789"*/
         
-        if((password.elementsEqual(confirmPass))){
-            let encryptedPass = NativeEncryption.encrypt(message: password)
+        if((password!.elementsEqual(confirmPass!))){
+            let encryptedPass = NativeEncryption.encrypt(message: password!)
             let userData = [userName, lastName, id, email, encryptedPass] as [Any]
             
-            if(self.controller.validateNewUser(typeUser: "S", input: email)){
+            if(self.controller.validateNewUser(typeUser: "S", input: email!)){
                 if(self.controller.addNewUser(typeUser: "S", data: userData)){
                     let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                     let cursoScreen = storyboard.instantiateViewController(withIdentifier: "StudentTabBarController") as! UITabBarController

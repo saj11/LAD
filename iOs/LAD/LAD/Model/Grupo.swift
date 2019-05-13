@@ -40,6 +40,7 @@ class Grupo{
     private var horario: Horario!
     private var codigo: Codigo?
     private var listaDias: [DiaSemana]!
+    private var numeroLA: Int!
     
     init(curso: Curso, num: Int, profesor: Profesor, horario1: String, horario2: String) {
         self.dayArray = ["D","L","K","M","J","V","S"]
@@ -115,11 +116,17 @@ class Grupo{
     
     func setCode(code:String){ self.codigo = Codigo(code: code) }
     
-    func getCode()-> Codigo?{ return self.codigo }
+    func setNumberAL(number: Int) { numeroLA = number }
     
-    func getNumber()-> Int{ return self.numero }
+    func getCode()-> Codigo?{ return codigo }
     
-    func getSchedule()-> Horario { return self.horario }
+    func getNumber()-> Int{ return numero }
+    
+    func getSchedule()-> Horario { return horario }
+    
+    func getNumberAL()-> Int { return numeroLA }
+    
+    func getCurse()-> Curso { return curso }
     
     func getSchedule(numberDay:Int) -> Dia {
         return self.horario.dia1.diaSemana.rawValue == self.listaDias[numberDay-1].rawValue ? self.horario.dia1 : self.horario.dia2

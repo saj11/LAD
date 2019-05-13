@@ -24,16 +24,13 @@ class ListScreen: UIViewController, UITableViewDelegate, UITableViewDataSource {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        tabBarItem = UITabBarItem(title: "Materias", image: UIImage(named: "student-list-icon"), tag: 2)
+        tabBarItem = UITabBarItem(title: "Materias", image: UIImage(named: "list-icon"), tag: 2)
         
         self.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
-        
-        //self.tabBarItem.
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setNavBar()
         
         let rightBarButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.myRightSideBarButtonItemTapped(_:)))
         rightBarButton.image = UIImage(named: "user-icon")

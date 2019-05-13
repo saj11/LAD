@@ -1,30 +1,42 @@
 PODS:
   - CryptoSwift (1.0.0)
+  - DTZFloatingActionButton (0.4.0)
   - EllipticCurveKeyPair (1.0.2)
   - Floaty (4.1.0)
+  - Koyomi (1.2.7)
   - SQLite.swift (0.11.5):
     - SQLite.swift/standard (= 0.11.5)
   - SQLite.swift/standard (0.11.5)
+  - SRCountdownTimer (1.1)
 
 DEPENDENCIES:
   - CryptoSwift
+  - DTZFloatingActionButton
   - EllipticCurveKeyPair
   - Floaty
+  - Koyomi
   - SQLite.swift
+  - SRCountdownTimer
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CryptoSwift
+    - DTZFloatingActionButton
     - EllipticCurveKeyPair
     - Floaty
+    - Koyomi
     - SQLite.swift
+    - SRCountdownTimer
 
 SPEC CHECKSUMS:
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  DTZFloatingActionButton: 746febb29e47f9023089cb7bab15da2b1cbbf888
   EllipticCurveKeyPair: 80c2effda68925851c12562dcfc3fe94489b5eba
   Floaty: 1a4e213f3512cf3045ef9cb0c1ff456226d1f66a
+  Koyomi: f03615b8d2bb5a5a4752c6404a9794ed7ef7b327
   SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
+  SRCountdownTimer: 9c92e444b5403c92f01dd6610299b8c634bc8562
 
-PODFILE CHECKSUM: 2992068e09edb8601b4c45b93b98ed2a00bf03a1
+PODFILE CHECKSUM: faf3590fbf57c8658c4f46d48842f7d484cd023e
 
 COCOAPODS: 1.6.1
