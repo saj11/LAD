@@ -3,6 +3,7 @@ package com.example.lad_android;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,7 @@ import com.example.lad_android.models.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
-    String url = "jdbc;mysql//35.224.224.166:3306/Lad";
+    String url = "jdbc:mysql//35.224.224.166:3306/Lad";
     String  user = "root";
     String pass = "LadDataBase2019";
 
@@ -150,10 +151,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(MainActivity.this, "Debe iniciar Sesion", Toast.LENGTH_SHORT).show();
+        String res = testDB();
+        Toast.makeText(MainActivity.this, res, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, "Debe iniciar Sesion", Toast.LENGTH_SHORT).show();
 
     }
 
-    
+    public String testDB(){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        String result;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url, user, pass);
+            result = "Database con success";
+        }
+        catch (Exception e){
+            result="Error";
+        }
+        return result;
+
+    }
 
 }

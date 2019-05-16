@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.lad_android.models.DatosCalendario;
 import com.example.lad_android.models.DatosCursoEstudiante;
 import com.example.lad_android.models.DatosListaAsistenciaEstudiante;
 import com.example.lad_android.models.DatosUsuario;
@@ -291,9 +292,22 @@ public class DatabaseAccess {
         try {
             String query = "Select * From ListaAsistencia Where IDCurso= '" + CodigoCurso + "' and IDGrupo='" + NumeroGrupo + "'";
             c = db.rawQuery(query, null);
-            c.moveToFirst();
-            int id = c.getInt(0);
-            return 1;
+
+            while(c.moveToNext()){
+                String listaFecha = c.getString(3);
+                DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date dia = inputFormat.parse(listaFecha);
+                DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String output = outputFormat.format(dia);
+                Date date = Calendar.getInstance().getTime();
+                String output2 = outputFormat.format(date);
+
+                if(output.equals(output2)){
+                    return c.getInt(0);
+                }
+
+            }
+            return -1;
         } catch (Exception e) {
             return -2;
         }
@@ -682,6 +696,24 @@ public class DatabaseAccess {
 
     }
 
+    public List<DatosCalendario> getListaAsisnteciaProfesorCurso(String codCurso, String numGrupo){
+        List<DatosCalendario> lista = new ArrayList<DatosCalendario>();
+        String query = "Select * from ListaAsistencia Where IDCurso ='"+codCurso+"' and IDGrupo='"+numGrupo+"'";
+        c = db.rawQuery(query,null);
+        try{
+            while(c.moveToNext()){
+                DatosCalendario datos = new DatosCalendario();
+                datos.setID(c.getInt(0));
+                datos.setFecha(c.getString(3));
+                lista.add(datos);
+            }
+        }
+        catch (Exception e){
+            Log.d("Profesor","Error en lista de asistencia acceso");
+        }
+        return lista;
+
+    }
 
     public String getCountTable(){
         String query = "delete from ListaAsistencia";
@@ -730,6 +762,8 @@ public class DatabaseAccess {
         return lista;
 
     }
+
+
 
 
 }

@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
 import com.example.lad_android.R;
@@ -44,6 +45,8 @@ public class ListaAsistenciaGrupo extends AppCompatActivity {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
         int IDListaAsistencia = databaseAccess.getListaAsistenciaID(bundle.getString("IDCurso"),bundle.getString("Numero"));
+        Toast.makeText(ListaAsistenciaGrupo.this, "ID: "+IDListaAsistencia, Toast.LENGTH_LONG).show();
+
         List<DatosListaAsistenciaEstudiante> lista = new ArrayList<DatosListaAsistenciaEstudiante>();
         String nombreCurso = databaseAccess.getNombreCurso(bundle.getString("IDCurso"));
 
