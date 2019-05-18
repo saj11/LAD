@@ -460,6 +460,36 @@ class SQLiteManager: DataBaseManager {
         return result
     }
     
+    func getStudentsFromAttendanceList(idCurse:String, idGroup:Int)-> Array<Row>{
+        var result: Array<Row> = Array<Row>()
+        
+        do{
+            let listaAsistencia = Table("ListaAsistencia")
+            let asistenciaPorEstudiante = Table("AsistenciaPorEstudiante")
+            let estudiante = Table("Estudiante")
+            
+            let nombre = Expression<String>("Nombre")
+            let apellidos = Expression<String>("Apellidos")
+            let id = Expression<Int>("ID")
+            let idListaAsist = Expression<Int>("IDListaAsist")
+            let idCurso = Expression<String>("IDCurso")
+            let idGrupo = Expression<Int>("IDGrupo")
+            let carne = Expression<Int>("Carne")
+            let estado = Expression<String>("Estado")
+            
+            let query = listaAsistencia.select(estudiante[nombre], estudiante[apellidos], asistenciaPorEstudiante[estado])
+                .join(asistenciaPorEstudiante, on: listaAsistencia[id] == asistenciaPorEstudiante[idListaAsist])
+                .join(estudiante, on: asistenciaPorEstudiante[carne] == estudiante[carne])
+                .where(listaAsistencia[idCurso] == idCurse && listaAsistencia[idGrupo] == idGroup )
+            result = Array((try self.connection?.prepare(query))!)
+            
+            return result
+        }catch{
+            print("Select user failed: \(error)")
+        }
+        return result
+    }
+    
     func getAllCourses(idUser: String)-> Array<Row>{
         var result: Array<Row> = Array<Row>()
         
@@ -615,6 +645,45 @@ class SQLiteManager: DataBaseManager {
         }catch{
             print("Select id of listaAsistencia failed: \(error)")
             return 0
+        }
+    }
+    
+    func getStadistics(idCurse: String, idGroup: Int, nameStudent:String = "")-> Array<Array<Any>>{
+        var result: Array<Array> = Array< Array<Any> >()
+        var query:String
+        var stmt: Statement
+        
+        do{
+            if nameStudent.isEmpty{
+                query = """
+                SELECT estado,count(Estado), strftime('%m', Fecha) as month
+                FROM ListaAsistencia la
+                INNER JOIN AsistenciaPorEstudiante ae ON(la.ID = ae.IDListaAsist)
+                WHERE la.IDCurso = (?) AND la.IDGrupo = (?)
+                GROUP BY strftime('%m', Fecha), estado
+                """
+                stmt = try (self.connection?.run(query, idCurse, idGroup))!
+            }else{
+                query = """
+                SELECT estado,count(Estado), strftime('%m', Fecha) as month
+                FROM ListaAsistencia la
+                INNER JOIN AsistenciaPorEstudiante ae ON(la.ID = ae.IDListaAsist)
+                INNER JOIN Estudiante est ON(ae.Carne = est.Carne)
+                WHERE la.IDCurso = (?) AND la.IDGrupo = (?) AND
+                      est.Nombre = (?)
+                GROUP BY strftime('%m', Fecha), estado
+                """
+                stmt = try (self.connection?.run(query, idCurse, idGroup, nameStudent))!
+            }
+            
+            for row in stmt{
+                result.append([row[0]!, row[1]!, row[2]!])
+            }
+            
+            return result
+        }catch{
+            print("Select id of listaAsistencia failed: \(error)")
+            return result
         }
     }
 }

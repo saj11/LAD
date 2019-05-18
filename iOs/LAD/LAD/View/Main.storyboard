@@ -166,7 +166,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <userGuides>
-                            <userLayoutGuide location="140" affinity="minY"/>
+                            <userLayoutGuide location="729" affinity="minY"/>
+                            <userLayoutGuide location="406" affinity="minY"/>
                         </userGuides>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="_______________" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aHI-Jr-Tx7">
@@ -202,7 +203,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </scrollView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="SiY-nv-lhf">
+                            <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" currentPage="1" translatesAutoresizingMaskIntoConstraints="NO" id="SiY-nv-lhf">
                                 <rect key="frame" x="67" y="403" width="240" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="pageIndicatorTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -841,7 +842,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8d-l0-JGl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7334" y="194"/>
+            <point key="canvasLocation" x="7284" y="194"/>
         </scene>
         <!--Historial Assistance Screen-->
         <scene sceneID="B1r-Ha-pBy">
@@ -945,7 +946,53 @@
                 <swipeGestureRecognizer direction="right" id="8C8-k4-G6p"/>
                 <swipeGestureRecognizer direction="right" id="h2O-IK-YVU"/>
             </objects>
-            <point key="canvasLocation" x="8453.6000000000004" y="193.5960591133005"/>
+            <point key="canvasLocation" x="8390" y="194"/>
+        </scene>
+        <!--Stadistic Screen-->
+        <scene sceneID="bhs-d9-zNz">
+            <objects>
+                <viewController storyboardIdentifier="StadisticScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VBY-wd-xdY" customClass="StadisticScreen" customModule="LAD" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xtR-3T-qeF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <userGuides>
+                            <userLayoutGuide location="140" affinity="minY"/>
+                            <userLayoutGuide location="729" affinity="minY"/>
+                        </userGuides>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KQL-Wh-f9R">
+                                <rect key="frame" x="0.0" y="44" width="375" height="632"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="delegate" destination="VBY-wd-xdY" id="z6s-Do-6Ru"/>
+                                </connections>
+                            </scrollView>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="pAE-jo-YQe">
+                                <rect key="frame" x="0.0" y="684" width="375" height="37"/>
+                                <color key="pageIndicatorTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="currentPageIndicatorTintColor" red="0.0" green="0.97695225480000003" blue="0.18774566049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </pageControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="KQL-Wh-f9R" firstAttribute="leading" secondItem="pAE-jo-YQe" secondAttribute="leading" id="7eo-sU-G0U"/>
+                            <constraint firstItem="pAE-jo-YQe" firstAttribute="top" secondItem="KQL-Wh-f9R" secondAttribute="bottom" constant="8" symbolic="YES" id="976-JE-UGu"/>
+                            <constraint firstItem="KQL-Wh-f9R" firstAttribute="trailing" secondItem="pAE-jo-YQe" secondAttribute="trailing" id="HU2-DD-93n"/>
+                            <constraint firstItem="KQL-Wh-f9R" firstAttribute="leading" secondItem="xtR-3T-qeF" secondAttribute="leading" id="JA7-5f-FtG"/>
+                            <constraint firstAttribute="bottom" secondItem="KQL-Wh-f9R" secondAttribute="bottom" constant="136" id="RWO-01-g2j"/>
+                            <constraint firstAttribute="trailing" secondItem="KQL-Wh-f9R" secondAttribute="trailing" id="c4U-4w-ovK"/>
+                            <constraint firstItem="KQL-Wh-f9R" firstAttribute="top" secondItem="RNw-3K-4hz" secondAttribute="top" id="i3f-vf-U3y"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="RNw-3K-4hz"/>
+                    </view>
+                    <connections>
+                        <outlet property="pageControl" destination="pAE-jo-YQe" id="0cT-dh-S80"/>
+                        <outlet property="scrollView" destination="KQL-Wh-f9R" id="Ycy-hD-J0T"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K7l-az-6am" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="9376.7999999999993" y="193.5960591133005"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="xRk-0R-PjI">
@@ -1026,7 +1073,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo v1.0" translatesAutoresizingMaskIntoConstraints="NO" id="Sfm-FG-iZO">
-                                                <rect key="frame" x="95" y="50" width="185.00000000000011" height="225"/>
+                                                <rect key="frame" x="95" y="50" width="185" height="225"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="225" id="Z8D-fa-8Ov"/>
                                                 </constraints>

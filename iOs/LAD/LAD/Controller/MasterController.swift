@@ -337,7 +337,7 @@ class MasterController{
         return false
     }
     
-    func getStudentsFrom(date: String = "")-> (Int, Array<(String, String)>){
+    func getStudentsFrom(date: String)-> (Int, Array<(String, String)>){
         let nombre = Expression<String>("Nombre")
         let apellidos = Expression<String>("Apellidos")
         let estado = Expression<String>("Estado")
@@ -356,6 +356,60 @@ class MasterController{
         }
         
         return (listaEstudiantes.count, listaEstudiantes)
+    }
+    
+    func getStudentsFrom()-> Dictionary<String, [Int]>{
+        var resultDict: [String: [Int]] = [:]
+        let estudiantes:Array<Row>
+        
+        let nombre = Expression<String>("Nombre")
+        let apellidos = Expression<String>("Apellidos")
+        let estado = Expression<String>("Estado")
+        
+        estudiantes = self.dbManager.getStudentsFromAttendanceList(idCurse: grupo.getCurse().codigo, idGroup: grupo.getNumber())
+        
+        var keys = [String](resultDict.keys)
+        for row in estudiantes{
+            let key = row[nombre]+" "+row[apellidos]
+            if keys.contains(key){
+                var oldValue = resultDict[row[nombre]+" "+row[apellidos]]
+                switch row[estado]{
+                case "P":
+                    oldValue![0] += 1
+                    break
+                case "A":
+                    oldValue![1] += 1
+                    break
+                case "T":
+                    oldValue![2] += 1
+                    break
+                default:
+                    break
+                }
+                
+                resultDict.updateValue(oldValue!, forKey: key)
+            }else{
+                var newValue:[Int] = [0,0,0]
+                switch row[estado]{
+                case "P":
+                    newValue[0] += 1
+                    break
+                case "A":
+                    newValue[1] += 1
+                    break
+                case "T":
+                    newValue[2] += 1
+                    break
+                default:
+                    break
+                }
+                
+                resultDict[key] = newValue
+                keys.append(key)
+            }
+        }
+        
+        return resultDict
     }
     
     func getAllCourses()-> Array<String>{
@@ -416,5 +470,52 @@ class MasterController{
             listDates.append(dates[fecha])
         }
         return listDates
+    }
+    
+    func getStadistics(type: String, state: String, student: String = "")-> Double{
+        let rawStadistic: Array<Array> = dbManager.getStadistics(idCurse: "IC7602", idGroup: 1, nameStudent: student)
+        
+        var typeAssistant: [String : Int] = [
+            "P": 0,
+            "A": 0,
+            "T": 0
+        ]
+        
+        switch type {
+        case "Total":
+            for row in rawStadistic{
+                print(row)
+                let t = row[0] as! String
+                let n = Int(row[1] as! Int64)
+                
+                typeAssistant.updateValue(typeAssistant[t]! + n, forKey: t)
+                
+                print(typeAssistant)
+            }
+            return Double(typeAssistant[state]!)
+        case "Promedio":
+            for row in rawStadistic{
+                let t = row[0] as! String
+                let n = Int(row[1] as! Int64)
+                
+                typeAssistant.updateValue(typeAssistant[t]! + n, forKey: t)
+            }
+            let total = typeAssistant.reduce(0) { (result, tupleOKeyAndValue) in
+                return result + tupleOKeyAndValue.value
+            }
+            
+            print("Total: \(total) = ")
+            return Double(typeAssistant[state]! / total)
+        /*case "Promedio Por Mes":
+            for row in rawStadistic{
+                let t = row[0] as! String
+                let n = row[1] as! Int
+                
+                typeAssistant.updateValue(typeAssistant[t]! + n, forKey: t)
+            }
+        */
+        default:
+            return -1.0
+        }
     }
 }

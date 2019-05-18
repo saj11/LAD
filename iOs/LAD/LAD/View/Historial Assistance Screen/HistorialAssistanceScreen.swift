@@ -110,7 +110,6 @@ class HistorialAssistanceScreen: UIViewController {
         }else{
             currentDate = 1
         }
-        print(currentDate)
         monthLabel.text = String(format: "%@ %@", year[String(currentDate)]!, getYear())
     }
     
@@ -122,7 +121,6 @@ class HistorialAssistanceScreen: UIViewController {
         }else{
             currentDate = 12
         }
-        print(currentDate)
         monthLabel.text = String(format: "%@ %@", year[String(currentDate)]!, getYear())
     }
     
@@ -142,14 +140,10 @@ extension HistorialAssistanceScreen: KoyomiDelegate {
     func koyomi(_ koyomi: Koyomi, didSelect date: Date?, forItemAt indexPath: IndexPath) {
         selectedDate = (date?.description.split(separator: " "))!
         
-        var selectedDate2 = "2019-04-30"
-        //if availableLA.contains(String(selectedDate![0])){
-        if availableLA.contains(selectedDate2){
-            //(number, listStudents) = controller.getStudentsFrom(date: String(selectedDate![0]))
+        if availableLA.contains(String(selectedDate![0])){
+            (number, listStudents) = controller.getStudentsFrom(date: String(selectedDate![0]))
+            
             AssistanceTableView.isHidden = false
-
-            (number, listStudents) = controller.getStudentsFrom(date: selectedDate2)
-            print(number, listStudents)
             
             AssistanceTableView.reloadData()
         }else{
@@ -161,6 +155,10 @@ extension HistorialAssistanceScreen: KoyomiDelegate {
 extension HistorialAssistanceScreen: UITableViewDelegate, UITableViewDataSource, ButtonsDelegate {
     func stateTapped(_ tag: Int) {
         print("I have pressed a button with a tag: \(tag)")
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return listStudents.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

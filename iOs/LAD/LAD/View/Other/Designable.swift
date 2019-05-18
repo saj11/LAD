@@ -90,18 +90,6 @@ extension UIViewController {
     }
 }
 
-extension UIImage {
-    static func gradientImageWithBounds(bounds: CGRect) -> UIImage {
-        let gradientLayer = CAGradientLayer(frame: bounds, start: .centerLeft, end: .centerRight, type: .axial)
-        
-        UIGraphicsBeginImageContext(gradientLayer.bounds.size)
-        gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image!
-    }
-}
-
 extension CAGradientLayer {
     
     enum Point {
@@ -222,5 +210,27 @@ extension UIImage {
         UIGraphicsEndImageContext();
         
         return newImage!
+    }
+    
+    static func gradientImageWithBounds(bounds: CGRect) -> UIImage {
+        let gradientLayer = CAGradientLayer(frame: bounds, start: .centerLeft, end: .centerRight, type: .axial)
+        
+        UIGraphicsBeginImageContext(gradientLayer.bounds.size)
+        gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image!
+    }
+}
+
+extension Double {
+    func isDouble()-> Bool{
+        var (_, fractionalPart) = modf(self)
+        fractionalPart = fractionalPart*10
+        if Int(fractionalPart) == 0{
+            return false
+        }
+        
+        return true
     }
 }

@@ -34,7 +34,11 @@
 		BD639838224848390001AECF /* Grupo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD639837224848390001AECF /* Grupo.swift */; };
 		BD63983A224859DB0001AECF /* Codigo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD639839224859DB0001AECF /* Codigo.swift */; };
 		BD78A061225FBB2200228A6B /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = BD78A060225FBB2200228A6B /* Podfile */; };
-		BD8D8A0B22890172003D3386 /* Stadistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8D8A0A22890171003D3386 /* Stadistic.swift */; };
+		BD8D8A0B22890172003D3386 /* StadisticScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8D8A0A22890171003D3386 /* StadisticScreen.swift */; };
+		BD8F693322890D3E003573EB /* StadisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8F693222890D3E003573EB /* StadisticView.swift */; };
+		BD8F693522890D48003573EB /* StadisticView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD8F693422890D48003573EB /* StadisticView.xib */; };
+		BD8F693722892479003573EB /* SpecificStadisticView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD8F693622892479003573EB /* SpecificStadisticView.xib */; };
+		BD8F6939228926A4003573EB /* SpecificStadisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8F6938228926A4003573EB /* SpecificStadisticView.swift */; };
 		BDA4A73E223498350002EF36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA4A73D223498350002EF36 /* AppDelegate.swift */; };
 		BDA4A745223498390002EF36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDA4A744223498390002EF36 /* Assets.xcassets */; };
 		BDA4A748223498390002EF36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDA4A746223498390002EF36 /* LaunchScreen.storyboard */; };
@@ -117,7 +121,11 @@
 		BD639837224848390001AECF /* Grupo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupo.swift; sourceTree = "<group>"; };
 		BD639839224859DB0001AECF /* Codigo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codigo.swift; sourceTree = "<group>"; };
 		BD78A060225FBB2200228A6B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		BD8D8A0A22890171003D3386 /* Stadistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stadistic.swift; sourceTree = "<group>"; };
+		BD8D8A0A22890171003D3386 /* StadisticScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadisticScreen.swift; sourceTree = "<group>"; };
+		BD8F693222890D3E003573EB /* StadisticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadisticView.swift; sourceTree = "<group>"; };
+		BD8F693422890D48003573EB /* StadisticView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StadisticView.xib; sourceTree = "<group>"; };
+		BD8F693622892479003573EB /* SpecificStadisticView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpecificStadisticView.xib; sourceTree = "<group>"; };
+		BD8F6938228926A4003573EB /* SpecificStadisticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificStadisticView.swift; sourceTree = "<group>"; };
 		BDA4A73A223498350002EF36 /* LAD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LAD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDA4A73D223498350002EF36 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BDA4A744223498390002EF36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -257,6 +265,7 @@
 		BD5A2AFB225471CB00A66167 /* MainOpction Screen */ = {
 			isa = PBXGroup;
 			children = (
+				BD8D8A0D22890C72003D3386 /* Stadistic Screen */,
 				BDD56CB92287BBA4009DDE4D /* Historial Assistance Screen */,
 				BD47029E2259C9C900FDA0DF /* Assistance Screen */,
 				BD5A2AFC2254720200A66167 /* PrincipalScreen.swift */,
@@ -312,7 +321,6 @@
 				BDCF730B225141BA005FFEDF /* Encryption.swift */,
 				BD2189C922624312003397CE /* Encrypter.swift */,
 				BDAD3ED722626844007EC8E0 /* NativeEncryption.swift */,
-				BD8D8A0A22890171003D3386 /* Stadistic.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -328,6 +336,18 @@
 				BD25D7DB226E58E600E86978 /* Usuario.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		BD8D8A0D22890C72003D3386 /* Stadistic Screen */ = {
+			isa = PBXGroup;
+			children = (
+				BD8D8A0A22890171003D3386 /* StadisticScreen.swift */,
+				BD8F693222890D3E003573EB /* StadisticView.swift */,
+				BD8F693422890D48003573EB /* StadisticView.xib */,
+				BD8F693622892479003573EB /* SpecificStadisticView.xib */,
+				BD8F6938228926A4003573EB /* SpecificStadisticView.swift */,
+			);
+			path = "Stadistic Screen";
 			sourceTree = "<group>";
 		};
 		BDA4A731223498350002EF36 = {
@@ -553,6 +573,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD8F693722892479003573EB /* SpecificStadisticView.xib in Resources */,
 				BDC598BC2266C86C008C2C06 /* CustomTableViewCell2.xib in Resources */,
 				BD5CD2A3227A4658002B9C9A /* MainSlide.xib in Resources */,
 				BD216CAE22696F4900C91151 /* TableViewCell3.xib in Resources */,
@@ -562,6 +583,7 @@
 				BDF0BAFA22512E3300664E3D /* Main.storyboard in Resources */,
 				BD35B4A12266730E0011183B /* CustomTableViewCell.xib in Resources */,
 				BDA4A748223498390002EF36 /* LaunchScreen.storyboard in Resources */,
+				BD8F693522890D48003573EB /* StadisticView.xib in Resources */,
 				BDA4A745223498390002EF36 /* Assets.xcassets in Resources */,
 				BD3495692253EE33004CA78E /* lad.db in Resources */,
 			);
@@ -694,7 +716,9 @@
 				BDAABED12273B5BE0077FE2A /* CourseScreen.swift in Sources */,
 				BDC598BE2266CF4F008C2C06 /* DetailList.swift in Sources */,
 				BD2189CA22624312003397CE /* Encrypter.swift in Sources */,
+				BD8F6939228926A4003573EB /* SpecificStadisticView.swift in Sources */,
 				BDA4A76F2234AEA60002EF36 /* Designable.swift in Sources */,
+				BD8F693322890D3E003573EB /* StadisticView.swift in Sources */,
 				BD5CD2A1227A4639002B9C9A /* MainSlide.swift in Sources */,
 				BD63983A224859DB0001AECF /* Codigo.swift in Sources */,
 				BD25D7DC226E58E600E86978 /* Usuario.swift in Sources */,
@@ -721,7 +745,7 @@
 				BDC598BB2266C86C008C2C06 /* CustomTableViewCell2.swift in Sources */,
 				BDDB1E1A22488B930023B66B /* Login.swift in Sources */,
 				BD04E8EB227A8922002E2131 /* CourseListScreen.swift in Sources */,
-				BD8D8A0B22890172003D3386 /* Stadistic.swift in Sources */,
+				BD8D8A0B22890172003D3386 /* StadisticScreen.swift in Sources */,
 				BD25D7DF226E7CC300E86978 /* CreateCourseScreen.swift in Sources */,
 				BDD56CBB2287BC14009DDE4D /* HistorialAssistanceScreen.swift in Sources */,
 				BD639836224847DD0001AECF /* Curso.swift in Sources */,

@@ -23,17 +23,17 @@ class AsistenciaScreen: UITableViewController, ButtonsDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.cellSpacingHeight = 5
+        cellSpacingHeight = 5
         
-        self.navigationItem.title = "Asistencia"
+        navigationItem.title = "Asistencia"
         
-        self.tableView.allowsSelection = false
+        tableView.allowsSelection = false
         
         let rightBarButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.done, target: self, action: nil)
         rightBarButton.image = UIImage(named: "refresh-icon")
         self.navigationItem.rightBarButtonItem = rightBarButton
         
-        (number, listStudents) = controller.getStudentsFrom()
+        (number, listStudents) = controller.getStudentsFrom(date: "")
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

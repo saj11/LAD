@@ -115,6 +115,10 @@ class PrincipalScreen: UIViewController, UITableViewDelegate, UITableViewDataSou
             let historialAsistenciaScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "HistorialAssistanceScreen")
             self.navigationController!.pushViewController(historialAsistenciaScreen, animated: true)
             break
+        case 2:
+            let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let stadisticScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "StadisticScreen")
+            self.navigationController!.pushViewController(stadisticScreen, animated: true)
         default:
             break
         }
