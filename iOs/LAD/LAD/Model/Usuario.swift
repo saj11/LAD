@@ -8,8 +8,14 @@
 
 import Foundation
 
+enum TipoUsuario {
+    case Estudiante
+    case Profesor
+}
+
 protocol Usuario {
     var nombre: String { get }
     var apellidos: String { get }
     var correo: String { get }
+    var tipo: TipoUsuario { get set }
 }

@@ -216,7 +216,6 @@
 			children = (
 				BD6054D9227A8273003CCF1C /* Course List Screen */,
 				BDAABECF2273B5720077FE2A /* Start Screen */,
-				BD4702A1225A769D00FDA0DF /* ProfileScreen */,
 				BD5A2AFB225471CB00A66167 /* MainOpction Screen */,
 			);
 			path = "Profesor's Screen";
@@ -410,6 +409,7 @@
 			children = (
 				BD3AA28322650B100037959E /* Student's Screen */,
 				BD3AA28222650AEE0037959E /* Profesor's Screen */,
+				BD4702A1225A769D00FDA0DF /* ProfileScreen */,
 				BDDB1E14224889F90023B66B /* Creating User */,
 				BDDB1E1322487A440023B66B /* Login */,
 				BD5A2AFE2254736D00A66167 /* Other */,

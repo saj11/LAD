@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    //MARK: Properties
+class PerfilScreen: UIViewController {
     
+    //MARK: Properties
     private let controller: MasterController = MasterController.shared
     private var number:Int = 0
     private var listConfig:Array<String> = ["Tiempo Maximo de Presente", "Tiempo de Vigencia del Codigo"]
@@ -19,14 +19,21 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     var cellSpacingHeight: CGFloat = 0
     
+    //MARK: IBOutlet-Properties
     @IBOutlet weak var configTable: UITableView!
     @IBOutlet weak var optionTable: UITableView!
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     
+    //MARK: Action
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.tabBar.isHidden = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Perfil"
         self.navigationItem.leftBarButtonItem?.title = "Done"
@@ -35,11 +42,9 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.image.layer.cornerRadius = image.frame.height/2
         self.image.clipsToBounds = true
         
-        //self.nameLabel.text = String(format: "%@ %@", self.controller.getProfesor().nombre, self.controller.getProfesor().apellidos)
         self.nameLabel.text = String(format: "%@ %@", controller.getUsuario().nombre, controller.getUsuario().apellidos)
         self.nameLabel.textAlignment = .center
         
-        //self.emailLabel.text = self.controller.getProfesor().correo
         self.emailLabel.text = self.controller.getUsuario().correo
         self.emailLabel.textAlignment = .center
         self.emailLabel.textColor = UIColor.gray
@@ -53,9 +58,9 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.configTable.isScrollEnabled = false
         self.optionTable.isScrollEnabled = false
         
-        /*if !String(describing: controller.getUsuario().self).elementsEqual("Profesor"){
+        if controller.getUsuario().tipo == .Estudiante{
             configTable.isHidden = true
-        }*/
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -66,6 +71,25 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!)
+    {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let qrScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "qrScreen")
+        self.navigationController!.pushViewController(qrScreen, animated: true)
+    }
+
+    @IBAction func deleteUser(_ sender: Any) {
+        _ = controller.deleteUser()
+        
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let loginScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "LoginScreen")
+        self.navigationController!.pushViewController(loginScreen, animated: true)
+    }
+    
+}
+
+extension PerfilScreen: UITableViewDelegate, UITableViewDataSource {
+    //MARK: Table View
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -105,7 +129,6 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // note that indexPath.section is used rather than indexPath.row
-        print("Hey You tapped cell number \(indexPath.section).")
         if(tableView == configTable){
             switch self.listConfig[indexPath.section] {
             case "Tiempo Maximo de Presente":
@@ -190,14 +213,5 @@ class PerfilScreen: UIViewController, UITableViewDelegate, UITableViewDataSource
                 break
             }
         }
-        
     }
-    
-    @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!)
-    {
-        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let qrScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "qrScreen")
-        self.navigationController!.pushViewController(qrScreen, animated: true)
-    }
-    
 }

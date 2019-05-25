@@ -43,6 +43,7 @@ class HistorialAssistanceScreen: UIViewController {
     private var availableLA: Array<String> = Array<String>()
     private var cellSpacingHeight: CGFloat!
     private var selectedDate: Array<String.SubSequence>!
+    private var buttonsAvailable: Bool!
     
     //MARK: Functions
     func getYear()->String{
@@ -58,12 +59,12 @@ class HistorialAssistanceScreen: UIViewController {
         //Calendar
         koyomi.calendarDelegate = self
         
-        let customColorScheme = (dayBackgrond: #colorLiteral(red: 0.9592562318, green: 0.9592562318, blue: 0.9592562318, alpha: 1),
+        let customColorScheme = (dayBackgrond: UIColor.white,
                                  weekBackgrond: UIColor.red,
                                  week: UIColor.white,
                                  weekday: UIColor.black,
                                  holiday: (saturday: #colorLiteral(red: 0.5723067522, green: 0.5723067522, blue: 0.5723067522, alpha: 1), sunday: #colorLiteral(red: 0.5723067522, green: 0.5723067522, blue: 0.5723067522, alpha: 1)),
-                                 otherMonth: UIColor.lightGray,
+                                 otherMonth: UIColor.white,
                                  separator: #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1))
         
         koyomi.style = KoyomiStyle.custom(customColor: customColorScheme)
@@ -94,11 +95,18 @@ class HistorialAssistanceScreen: UIViewController {
         
         //Tablew View
         availableLA = controller.getAvailableLA()
-        print(availableLA)
         
         cellSpacingHeight = 5
         AssistanceTableView.isHidden = true
         AssistanceTableView.allowsSelection = false
+        
+        let px = 1 / UIScreen.main.scale
+        let frame = CGRect(x: 0, y: 0, width: AssistanceTableView.frame.size.width, height: px)
+        let line = UIView(frame: frame)
+        AssistanceTableView.tableHeaderView = line
+        line.backgroundColor = AssistanceTableView.separatorColor
+        
+        buttonsAvailable = true;
     }
     
     //MARK: Gestures
@@ -140,6 +148,26 @@ extension HistorialAssistanceScreen: KoyomiDelegate {
     func koyomi(_ koyomi: Koyomi, didSelect date: Date?, forItemAt indexPath: IndexPath) {
         selectedDate = (date?.description.split(separator: " "))!
         
+        let calendar = Calendar.current
+        let weekDay = calendar.component(.weekday, from: date!)
+        let date1: Date
+        
+        var numberOfDays: Date
+        
+        if weekDay == 4 || weekDay == 5 || weekDay == 6 {
+           numberOfDays = calendar.date(byAdding: .day, value: 5, to: date!)!
+        }else{
+            numberOfDays = calendar.date(byAdding: .day, value: 3, to: date!)!
+        }
+        
+        //Dias maximos para poder justificar
+        let diffOfDays = calendar.dateComponents([Calendar.Component.day], from: numberOfDays, to: Date()).day
+        
+        
+        
+        if diffOfDays! > 3 { buttonsAvailable = false}
+        else { buttonsAvailable = true }
+
         if availableLA.contains(String(selectedDate![0])){
             (number, listStudents) = controller.getStudentsFrom(date: String(selectedDate![0]))
             
@@ -168,6 +196,14 @@ extension HistorialAssistanceScreen: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = Bundle.main.loadNibNamed("TableViewCell3", owner: self, options: nil)?.first as! TableViewCell3
         
+        if buttonsAvailable{
+            cell.buttonAvailable = true
+            
+        }else{
+            cell.buttonAvailable = false
+        }
+        
+        cell.makeButtonAvailable()
         if !listStudents.isEmpty {
             cell.delegate = self
             cell.setState(stateInput: listStudents[indexPath.section].1)

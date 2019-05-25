@@ -22,10 +22,11 @@ var WeekDay:Dictionary = [
 class CreateCourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource{
     
     private var controller: MasterController = MasterController.shared
-    private var listCourses: Array<String>!
+    private var listCourses: Array<(String,String)>!
     private var listGroups: Array<String>!
     private var listDays: Array<String>!
     private var listChoosenDays: Array<String>!
+    private var actualCourse: (String,String)!
     
     @IBOutlet weak var subjectTextField: UITextField!
     @IBOutlet weak var groupTextField: UITextField!
@@ -87,7 +88,7 @@ class CreateCourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     func pickerView( _ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView.tag {
         case 1:
-            return listCourses[row]
+            return listCourses[row].0
         default:
             return ""
         }
@@ -97,16 +98,17 @@ class CreateCourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         
         switch pickerView.tag {
         case 1:
-            subjectTextField.text = listCourses[row]
-            //groupTextField.isEnabled = true
+            subjectTextField.text = listCourses[row].0
             
-            let numberOfGroups = controller.numberOfGroups(nameCurse: listCourses[row])
+            actualCourse = listCourses[row]
+            
+            let numberOfGroups = controller.numberOfGroups(nameCurse: listCourses[row].0)
             
             groupTextField.text = String(numberOfGroups)
             
             break
         case 2:
-            subjectTextField.text = listCourses[row]
+            subjectTextField.text = listCourses[row].0
             break
         default:
             break
@@ -178,6 +180,8 @@ class CreateCourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDa
             listChoosenDays.append("")
         }
         
+        controller.setCreateGroup(value: true)
+        
         let course = subjectTextField.text == nil ? "" : subjectTextField.text!
         if course.count > 0 {
             let group = groupTextField.text == nil ? "" : groupTextField.text!
@@ -186,7 +190,7 @@ class CreateCourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDa
                 let endHour = date2TextField.text == nil ? "" : date2TextField.text!
                 
                 if startHour.count > 0 && endHour.count > 0 {
-                    if controller.addNewCourse(idCurse: course, number: Int(group)!, firstDay: listChoosenDays[0], secondDay: listChoosenDays[1], startTime: startHour, endTime: endHour){
+                    if controller.addNewCourse(nameCurse: actualCourse.1, idCurse: actualCourse.0, number: Int(group)!, firstDay: listChoosenDays[0], secondDay: listChoosenDays[1], startTime: startHour, endTime: endHour){
                         let alert = UIAlertController(title: "Nuevo Curso", message: "Curso Nuevo Agregado Satisfactoriamente.", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "Ok", style: .default, handler: { alert -> Void in
                             self.navigationController?.popViewController(animated: true)
@@ -194,7 +198,7 @@ class CreateCourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDa
                         
                         alert.addAction(okAction)
                         self.present(alert, animated: true, completion: nil)
-                    
+                        
                     }
                 }else{
                     let alert = UIAlertController(title: "Nuevo Curso", message: "Error: No ha seleccionado un horario.", preferredStyle: .alert)

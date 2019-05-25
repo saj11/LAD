@@ -44,6 +44,12 @@ class DetailList: UIViewController, UITableViewDelegate, UITableViewDataSource{
         self.numeroTardia.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        (number, ladDia1, ladDia2) = self.controller.getAttendanceList()
+        
+        ladTable.reloadData()
+    }
+    
     func hasElement(element: String, list:Array<String>)-> Int{
         var count: Int = 0
         for item in list{
@@ -96,7 +102,6 @@ class DetailList: UIViewController, UITableViewDelegate, UITableViewDataSource{
             cell.dia1View.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         }
         
-        print(ladDia2.count, indexPath.section)
         if !ladDia2.isEmpty && ladDia2.count >= indexPath.section+1{
             switch ladDia2[indexPath.section]{
             case "P":

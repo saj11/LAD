@@ -20,6 +20,17 @@ enum DiaSemana:String {
     case None = ""
 }
 
+enum NumeroDiaSemana:Int {
+    case D = 1
+    case L = 2
+    case K = 3
+    case M = 4
+    case J = 5
+    case V = 6
+    case S = 7
+    case None = 0
+}
+
 struct Dia {
     var diaSemana: DiaSemana = DiaSemana.None
     var horaInicio: Date = Date()
@@ -124,9 +135,29 @@ class Grupo{
     
     func getSchedule()-> Horario { return horario }
     
-    func getNumberAL()-> Int { return numeroLA }
+    func getNumberAL()-> Int { return numeroLA ?? 0}
     
     func getCurse()-> Curso { return curso }
+    
+    func mapDay(day:String) -> Int {
+        
+        if day.isEmpty {return 0}
+        
+        let weekDay = ["D","L","K","M","J","V","S"]
+        
+        return weekDay.firstIndex(of: day)!+1
+    }
+    
+    func getNearSchedule() -> Dia {
+        let calendar = Calendar.current
+        let day = calendar.component(.weekday, from: Date())
+        
+        let tmp = [abs(day-mapDay(day: horario.dia1.diaSemana.rawValue)), abs(day-mapDay(day: horario.dia2.diaSemana.rawValue)) ]
+        
+        let minValue = min(tmp[0], tmp[1])
+        
+        return tmp.firstIndex(of: minValue) == 0 ? horario.dia1 : horario.dia2
+    }
     
     func getSchedule(numberDay:Int) -> Dia {
         return self.horario.dia1.diaSemana.rawValue == self.listaDias[numberDay-1].rawValue ? self.horario.dia1 : self.horario.dia2
@@ -154,7 +185,7 @@ class Grupo{
         return false
     }
     
-    func validateSchedule()-> String{
+    func getAssistanceState(lateTime: Int)-> String{
         //Apple use GMT so it is GMT+6 in CR
         let calendar = Calendar.current
         let components = calendar.dateComponents([.weekday, .hour, .minute], from: Date())
@@ -171,7 +202,7 @@ class Grupo{
                 let horaFinal = day.horaFinal.addingTimeInterval(-3600*6)
                 
                 if now >= horaInicio && now <= horaFinal{
-                    if now <= horaInicio.addingTimeInterval(900){ return "P"}
+                    if now <= horaInicio.addingTimeInterval(TimeInterval(lateTime*60)){ return "P"}
                     else {return "T"}
                 }
             }

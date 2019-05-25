@@ -9,6 +9,7 @@
 import Foundation
 
 struct Estudiante: Usuario{
+    var tipo: TipoUsuario
     var nombre: String
     var apellidos: String
     var id: Int

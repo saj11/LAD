@@ -24,8 +24,6 @@ class StudentMainScreen: UIViewController{
         tabBarItem = UITabBarItem(title: "Scan QR", image: UIImage(named: "scanqr-icon"), tag: 2)
         
         self.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
-        
-        //self.tabBarItem.
     }
     
     override func viewDidLoad() {
@@ -105,18 +103,17 @@ class StudentMainScreen: UIViewController{
     // MARK: - Helper methods
     
     func launchApp(confirmationMessage: String) {
-        //HoraInicio, HoraFinal, NombreProfesor, ApellidoProfesor, Curso, Grupo, Horario(Dia de la semana<Inicial>), Horario(Dia de la semana<Inicial>)
+        //HoraInicio, HoraFinal, NombreProfesor, ApellidoProfesor, Curso, Grupo, Horario(Dia de la semana<Inicial>), Horario(Dia de la semana<Inicial>)]
+        print(confirmationMessage)
         if presentedViewController != nil {
             return
         }
         
-        let regEx1 = "[0-9]+:[0-9]+,[0-9]+:[0-9]+,[a-zA-Z]+,[a-zA-Z]+,[a-zA-Z]+,[0-9]+,[A-Z]{1},[A-Z]{1}"
-        let regEx2 = "[0-9]+:[0-9]+,[0-9]+:[0-9]+,[a-zA-Z]+,[a-zA-Z]+,[a-zA-Z]+,[0-9]+,[A-Z]{1}"
+        let regEx = "[0-9]+:[0-9]+,[0-9]+:[0-9]+,[a-zA-Z]+,[a-zA-Z]+,([a-zA-Z]+[ ]?)+,[0-9]+,[A-Z]{1},[A-Z]*"
         
-        let pred1 = NSPredicate(format:"SELF MATCHES %@", regEx1)
-        let pred2 = NSPredicate(format:"SELF MATCHES %@", regEx2)
+        let pred1 = NSPredicate(format:"SELF MATCHES %@", regEx)
         
-        if pred1.evaluate(with: confirmationMessage) || pred2.evaluate(with: confirmationMessage){
+        if pred1.evaluate(with: confirmationMessage){
             var message = confirmationMessage.split(separator: ",")
         
             let alertPrompt = UIAlertController(title: "LAD - Estudiante", message: "Confirmar Asistencia en el Curso: \(message[4]) Grupo: \(message[5]) del Profesor: \(message[2]) \(message[3])", preferredStyle: .alert)
@@ -166,7 +163,6 @@ extension StudentMainScreen: AVCaptureMetadataOutputObjectsDelegate {
             
             if metadataObj.stringValue != nil {
                 launchApp(confirmationMessage: metadataObj.stringValue!)
-                //messageLabel.text = metadataObj.stringValue
             }
         }
     }

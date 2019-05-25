@@ -10,11 +10,13 @@ import Foundation
 import UIKit
 import DTZFloatingActionButton
 
-class CourseListScreen: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CourseListScreen: UIViewController {
+    
+    //MARK: IBOutlet - Properties
+    @IBOutlet weak var tableView: UITableView!
+    
     //MARK: Properties
     private let controller: MasterController = MasterController.shared
-    
-    @IBOutlet weak var tableView: UITableView!
     private var number:Int = 0
     private var listSubject: [Grupo]!
     private var cellSpacingHeight: CGFloat = 0
@@ -25,7 +27,17 @@ class CourseListScreen: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         tabBarItem = UITabBarItem(title: "Materias", image: UIImage(named: "list-icon"), tag: 2)
         
-        self.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 0)
+        self.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if controller.getCreateGroup(){
+            
+            listSubject = controller.getListGroup()
+                
+            tableView.reloadData()
+        }
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidLoad() {
@@ -53,6 +65,24 @@ class CourseListScreen: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.view.addSubview(actionButton)
     }
     
+    func floatButtonTapped()
+    {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let createCurseScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "createCurseScreen")
+        self.navigationController!.pushViewController(createCurseScreen, animated: true)
+    }
+    
+    //MARK: OBJ-C
+    @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!)
+    {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let perfilScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "PerfilScreen")
+        self.navigationController!.pushViewController(perfilScreen, animated: true)
+    }
+}
+
+extension CourseListScreen: UITableViewDelegate, UITableViewDataSource{
+    //MARK: Table View
     func numberOfSections(in tableView: UITableView) -> Int {
         return listSubject.count
     }
@@ -112,22 +142,40 @@ class CourseListScreen: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.controller.setGrupo(grupo: listSubject[indexPath.section])
         
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-         let principalScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "PrincipalScreen")
-         self.navigationController!.pushViewController(principalScreen, animated: true)
+        let principalScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "PrincipalScreen")
+        self.navigationController!.pushViewController(principalScreen, animated: true)
     }
     
-    func floatButtonTapped()
-    {
-        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let createCurseScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "createCurseScreen")
-        self.navigationController!.pushViewController(createCurseScreen, animated: true)
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
     
-    @objc func myRightSideBarButtonItemTapped(_ sender:UIBarButtonItem!)
-    {
-        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let perfilScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "PerfilScreen")
-        self.navigationController!.pushViewController(perfilScreen, animated: true)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            controller.setGrupo(grupo: listSubject[indexPath.section])
+            
+            let alert = UIAlertController(title: "Eliminar Grupo", message: "¿Esta Seguro que desea borrar este curso?", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { alert -> Void in
+                if !self.controller.deleteGroup(){
+                    let alert2 = UIAlertController(title: "Eliminar Grupo", message: "Error: No se pudo eliminar el grupo.", preferredStyle: .alert)
+                    alert2.addAction(UIAlertAction(title: "Ok", style: .default))
+                    
+                    self.present(alert2, animated: true, completion: nil)
+                }else{
+                    self.listSubject.remove(at: indexPath.section)
+                    
+                    self.controller.removeGroup(pos: indexPath.section)
+                    
+                    let indexSetTable = IndexSet(arrayLiteral: indexPath.section)
+                    self.tableView.deleteSections(indexSetTable, with: .fade)
+                    
+                    self.controller.setCreateGroup(value: true)
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "NO", style: .cancel))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }
-

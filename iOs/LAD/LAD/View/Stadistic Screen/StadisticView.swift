@@ -44,19 +44,21 @@ class StadisticView: UIView {
     func setInfo(typeNumber: Int){
         var type: String, state: String
         
-        print(typeNumber)
         switch typeNumber {
         case 1:
             type = StadisticView.subTitle.Total.rawValue
             state = StadisticView.state.Presente.initial
+            view.backgroundColor = UIColor.green
             break
         case 2:
             type = StadisticView.subTitle.Total.rawValue
             state = StadisticView.state.Ausente.initial
+            view.backgroundColor = UIColor.red
             break
         case 3:
             type = StadisticView.subTitle.Total.rawValue
             state = StadisticView.state.Tardia.initial
+            view.backgroundColor = UIColor.orange
             break
         default:
             type = ""
@@ -84,8 +86,4 @@ class StadisticView: UIView {
     @objc func handleTap(sender: UITapGestureRecognizer? = nil) {
         print("Tap")
     }
-    
-    
-    
-    
 }

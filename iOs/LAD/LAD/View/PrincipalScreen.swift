@@ -106,9 +106,17 @@ class PrincipalScreen: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         switch indexPath.section {
         case 0:
-            let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let asistenciaScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "AsistenciaScreen")
-            self.navigationController!.pushViewController(asistenciaScreen, animated: true)
+            if controller.getGrupo().getNumberAL() != 0{
+                let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let asistenciaScreen: UIViewController = storyboard.instantiateViewController(withIdentifier: "AsistenciaScreen")
+                self.navigationController!.pushViewController(asistenciaScreen, animated: true)
+            }else{
+                let alert = UIAlertController(title: "Lista de Asistencia", message: "Solo se puede ver la Lista de Asistencia en los dias del curso.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Ok", style: .default))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
             break
         case 1:
             let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)

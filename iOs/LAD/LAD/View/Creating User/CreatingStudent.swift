@@ -9,16 +9,18 @@
 import Foundation
 import UIKit
 
-class CreatingStudent: UIViewController {
-    var controller: MasterController = MasterController.shared
+class CreatingStudent: UIViewController{
+    private var controller: MasterController = MasterController.shared
+    private var initialPoint: CGPoint!
     // MARK: Properties
     
     @IBOutlet weak var nameTF: UITextField!
-    @IBOutlet weak var lastNameTF: DesignableTextField!
-    @IBOutlet weak var carnetTF: DesignableTextField!
-    @IBOutlet weak var emailTF: DesignableTextField!
-    @IBOutlet weak var passwordTF: DesignableTextField!
-    @IBOutlet weak var repeatPasswordTF: DesignableTextField!
+    @IBOutlet weak var lastNameTF: UITextField!
+    @IBOutlet weak var carnetTF: UITextField!
+    @IBOutlet weak var emailTF: UITextField!
+    @IBOutlet weak var passwordTF: UITextField!
+    @IBOutlet weak var repeatPasswordTF: UITextField!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     //MARK: Actions
     
@@ -26,10 +28,20 @@ class CreatingStudent: UIViewController {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         
+        nameTF.delegate = self
+        lastNameTF.delegate = self
+        carnetTF.delegate = self
+        emailTF.delegate = self
+        passwordTF.delegate = self
+        repeatPasswordTF.delegate = self
         
+        scrollView.isDirectionalLockEnabled = true
+        scrollView.delegate = self
+        
+        initialPoint = CGPoint(x: 0, y: 0)
     }
     
-    @IBAction func signUp(_ sender: UIButton) {
+    @IBAction func signUp(_ sender: AnyObject) {
         let userName = nameTF.text
          let lastName = lastNameTF.text
          let id = carnetTF.text
@@ -68,6 +80,35 @@ class CreatingStudent: UIViewController {
             let alert = UIAlertController(title: "Usuario Estudiante", message: "Error: La contraseña no coincide con la confirmación", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default))
             self.present(alert, animated: true, completion: nil)
+        }
+    }
+}
+
+extension CreatingStudent: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+            initialPoint.y += (nextField.frame.origin.y - textField.frame.origin.y)
+            scrollView.setContentOffset(initialPoint, animated: true)
+            view.endEditing(true)
+            
+            nextField.becomeFirstResponder()
+        } else {
+            // Not found, so remove keyboard.
+            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            view.endEditing(true)
+            
+            signUp(self)
+            textField.resignFirstResponder()
+        }
+        
+        return false
+    }
+}
+
+extension CreatingStudent: UIScrollViewDelegate{
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.x != 0 {
+            scrollView.contentOffset.x = 0
         }
     }
 }

@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 
 
-class Login: UIViewController{
+class Login: UIViewController, UITextFieldDelegate{
     var controller: MasterController = MasterController.shared
     // MARK: Properties
     
-    @IBOutlet weak var userNameTF: DesignableTextField!
-    @IBOutlet weak var passwordTF: DesignableTextField!
+    @IBOutlet weak var userNameTF: UITextField!
+    @IBOutlet weak var passwordTF: UITextField!
     
     // MARK: Actions
     
@@ -37,16 +37,19 @@ class Login: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
+        
+        userNameTF.delegate = self
+        passwordTF.delegate = self
     }
     
-    @IBAction func signIn(_ sender: DesignableButton) {
+    @IBAction func signIn(_ sender: AnyObject) {
         var userN = userNameTF.text
         var pass = passwordTF.text
         
-        userN = "cbenavides@itcr.ac.cr"
+        //userN = "cbenavides@itcr.ac.cr"
         //userN = "mestrada@itcr.ac.cr"
         //userN = "p@gmail.com"
-        pass = "hola1234"
+        //pass = "hola1234"
         //pass = "123456789"
         
         //userN = "2015100516"
@@ -81,5 +84,18 @@ class Login: UIViewController{
             alert.addAction(UIAlertAction(title: "Ok", style: .default))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+            nextField.becomeFirstResponder()
+        } else {
+            // Not found, so remove keyboard.
+            signIn(self)
+            textField.resignFirstResponder()
+        }
+
+        return false
     }
 }

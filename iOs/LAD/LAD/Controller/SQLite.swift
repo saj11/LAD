@@ -16,6 +16,12 @@ class SQLiteManager: DataBaseManager {
     private var dbUrlPath: URL!
     private var dbPath: String!
     
+    enum Options {
+        case Group
+        case Course
+        case User
+    }
+    
     func copyDatabaseIfNeeded() -> String{
         // Move database file from bundle to documents folder
         
@@ -84,6 +90,51 @@ class SQLiteManager: DataBaseManager {
         }
     }
     
+    func removeUser(email:String, type:TipoUsuario)-> Bool{
+        do{
+            let tabla: Table
+            
+            switch type {
+            case .Estudiante:
+                tabla = Table("Estudiante")
+            default:
+                tabla = Table("Profesor")
+            }
+
+            let correo = Expression<String>("Correo")
+            
+            let query = tabla.filter(tabla[correo] == email)
+            
+            if try (self.connection?.run(query.delete()))! > 0 {
+                return true
+            } else {
+                return false
+            }
+        }catch{
+            print("Delete User Failed: \(error)")
+            return false
+        }
+    }
+    
+    func removeGroup(idCourse: String, idGroup: Int)-> Bool{
+        do{
+            let grupo = Table("Grupo")
+            let idCurso = Expression<String>("IDCurso")
+            let numero = Expression<Int>("Numero")
+            
+            let query = grupo.filter(idCurso == idCourse && numero == idGroup)
+            
+            if try (self.connection?.run(query.delete()))! > 0 {
+                return true
+            } else {
+                return false
+            }
+        }catch{
+            print("Delete Group Failed: \(error)")
+            return false
+        }
+    }
+    
     func selectUser(typeUser: String)-> Array<Row>{
         var result: Array<Row> = Array<Row>()
         let table: Table
@@ -122,8 +173,7 @@ class SQLiteManager: DataBaseManager {
                 return true
             }
         }catch{
-                print("select user failed: \(error)")
-                print("Error: No se pudo ingresar el nuevo usuario a la BD.")
+            print("Error: select user failed: \(error)")
                 return false
         }
     }
@@ -155,7 +205,7 @@ class SQLiteManager: DataBaseManager {
             
             result = Array((try self.connection?.prepare(query))!)
         }catch{
-            print("select user failed: \(error)")
+            print("Error: Select user failed: \(error)")
         }
         return result
     }
@@ -177,7 +227,7 @@ class SQLiteManager: DataBaseManager {
                              .join(profesor, on: grupo[idProfe] == profesor[id])
                              .join(curso, on: grupo[idCurso] == curso[codigo])
                 .filter(profesor[correo] == email)
-
+            
             result = Array(try (self.connection?.prepare(query))!)
             return result
         }catch{
@@ -262,24 +312,14 @@ class SQLiteManager: DataBaseManager {
         let horario = Expression<String>("Horario")
         let fecha = Expression<String>("Fecha")
         
-        let grupo = Table("Grupo")
-        let numero = Expression<Int>("Numero")
-        let idCurs = Expression<String>("IDCurso")
-        let codigo = Expression<String>("Codigo")
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd"
+        let formattedDate = format.string(from: Date())
         
-        let date:String
-        
-        do{
-            date = try connection?.scalar("SELECT date('now')") as! String
-        }catch{
-            print(error)
-            return false
-        }
-        
-        let insert = listaAsistencia.insert(idCurso <- idC, idGrupo <- idG, horario <- fech, fecha <- date)
+        let insert = listaAsistencia.insert(idCurso <- idC, idGrupo <- idG, horario <- fech, fecha <- formattedDate)
         do{
             try self.connection?.run(insert)
-            
+        
             return true
         }catch{
             print(error)
@@ -371,9 +411,6 @@ class SQLiteManager: DataBaseManager {
                                    .join(asistenciaPorEstudiante, on: listaAsistencia[id] == asistenciaPorEstudiante[idListaAsist])
                                     .where(listaAsistencia[idCurso] == idCourse && asistenciaPorEstudiante[carne] == idUser &&
                                            listaAsistencia[idGrupo] == numberGroup)
-        print("##########")
-        print("getAttendanceList")
-        print(query.asSQL())
         do{
             result = Array((try self.connection?.prepare(query))!)
             return result
@@ -404,10 +441,6 @@ class SQLiteManager: DataBaseManager {
             .join(grupo, on: listaAsistencia[idCurso] == grupo[idCurso] && listaAsistencia[idGrupo] == grupo[numero])
             .where(listaAsistencia[idCurso] == idCourse && asistenciaPorEstudiante[carne] == idUser && listaAsistencia[idGrupo] == numberGroup)
             .limit(1)
-        
-        print("##########")
-        print("getDaysOfCourse")
-        print(query.asSQL())
         do{
             result = Array((try self.connection?.prepare(query))!)
             return result
@@ -526,8 +559,9 @@ class SQLiteManager: DataBaseManager {
             let curso = Table("Curso")
             
             let nombre = Expression<String>("Nombre")
+            let codigo = Expression<String>("Codigo")
             
-            let query = curso.select(curso[nombre])
+            let query = curso.select(curso[nombre], curso[codigo])
             
             result = Array((try self.connection?.prepare(query))!)
             
@@ -559,19 +593,25 @@ class SQLiteManager: DataBaseManager {
         }
     }
     
-    func getNumberOfLA(idCurse: String, idGroup: Int)-> Int{
+    func getNumberOfLA(nameCurse: String, idGroup: Int)-> Int{
         let listaAsistencia = Table("ListaAsistencia")
+        let curso = Table("Curso")
         
         let id = Expression<Int>("ID")
         let fecha = Expression<String>("Fecha")
         let idCurso = Expression<String>("IDCurso")
         let idGrupo = Expression<Int>("IDGrupo")
+        let nombre = Expression<String>("Nombre")
+        let codigo = Expression<String>("Codigo")
         
         do{
-            let date = try connection?.scalar("SELECT date('now')") as! String
+            let format = DateFormatter()
+            format.dateFormat = "yyyy-MM-dd"
+            let formattedDate = format.string(from: Date())
             
             let idLA = try self.connection?.scalar(listaAsistencia.select(id)
-                .where(listaAsistencia[fecha] == date && listaAsistencia[idCurso] == idCurse && listaAsistencia[idGrupo] == idGroup)) ?? 0
+                .join(curso, on: listaAsistencia[idCurso] == curso[codigo])
+                .where(listaAsistencia[fecha] == formattedDate && curso[nombre] == nameCurse && listaAsistencia[idGrupo] == idGroup)) ?? 0
             
             return idLA
         }catch{
@@ -684,6 +724,24 @@ class SQLiteManager: DataBaseManager {
         }catch{
             print("Select id of listaAsistencia failed: \(error)")
             return result
+        }
+    }
+    
+    func timeToBePresent(name: String, lastName: String) -> Int {
+        let profesor = Table("Profesor")
+        
+        let nombre = Expression<String>("Nombre")
+        let apellido = Expression<String>("Apellidos")
+        let tiempoTardiaCodigo = Expression<Int>("TiempoTardiaCodigo")
+        
+        do{
+            let time = try connection?.scalar(profesor.select(profesor[tiempoTardiaCodigo])
+                .where(profesor[nombre] == name && profesor[apellido] == lastName)) ?? 0
+            
+            return time
+        }catch{
+            print("Select number of groups failed: \(error)")
+            return 0
         }
     }
 }

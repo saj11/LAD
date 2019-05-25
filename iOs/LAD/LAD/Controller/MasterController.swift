@@ -18,10 +18,13 @@ class MasterController{
     private var profesor: Profesor!
     private var estudiante: Estudiante!
     private var curso: Curso!
+    private var nuevoCurso: Curso!
     private var grupo: Grupo!
     private var listGroup: [Grupo]
     private var info: String!
     private var timeAlive: (Int, Int)!
+    private var createGroup: Bool = false
+    
     static let shared = MasterController()
     
     //Initialization
@@ -42,19 +45,37 @@ class MasterController{
     
     func setInfo(info:String){ self.info = info }
     
-    func setTimeAlive(hour: Int, minute: Int){ self.timeAlive = (hour, minute) }
+    func setTimeAlive(hour: Int, minute: Int){ timeAlive = (hour, minute) }
     
-    func getProfesor()-> Profesor{ return self.profesor }
+    func setCreateGroup(value: Bool) { createGroup = value }
     
-    func getCurso()-> Curso { return self.curso }
+    func getProfesor()-> Profesor{ return profesor }
     
-    func getGrupo()-> Grupo { return self.grupo }
+    func getCurso()-> Curso { return curso }
     
-    func getTimeAlive() -> (Int, Int)? { return self.timeAlive }
+    func getGrupo()-> Grupo { return grupo }
+    
+    func getTimeAlive() -> (Int, Int)? { return timeAlive }
     
     func getUsuario() -> Usuario { return usuario }
     
     func getListGroup() -> [Grupo]? { return listGroup }
+    
+    func getCreateGroup() -> Bool { return createGroup }
+    
+    func timeToBePresent(profesorName: String, profesorLastName: String) -> Int { return dbManager.timeToBePresent(name: profesorName, lastName: profesorLastName)}
+    
+    func removeGroup(pos:Int) {
+        listGroup.remove(at: pos)
+    }
+    
+    func deleteUser()-> Bool{
+        return dbManager.removeUser(email: usuario.correo, type: usuario.tipo)
+    }
+    
+    func deleteGroup()-> Bool{
+        return dbManager.removeGroup(idCourse: grupo.getCurse().codigo, idGroup: grupo.getNumber())
+    }
     
     func validateNewUser(typeUser: String, input: String)-> Bool{
         let emailArray:Array<Row> = dbManager.selectUser(typeUser: typeUser)
@@ -80,9 +101,9 @@ class MasterController{
 
         if(self.dbManager.addUser(typeUser: typeUser, dataArray: dataList)){
             if typeUser.elementsEqual("P"){
-                self.profesor = Profesor(nombre: dataList[0] as! String, apellidos: dataList[1] as! String, correo: dataList[2] as! String, tiempoTardiaCodigo: dataList[4] as! Int, tiempoVigenciaCodigo: dataList[5] as! Int)
+                self.profesor = Profesor(tipo: .Profesor, nombre: dataList[0] as! String, apellidos: dataList[1] as! String, correo: dataList[2] as! String, tiempoTardiaCodigo: dataList[4] as! Int, tiempoVigenciaCodigo: dataList[5] as! Int)
             }else{
-                self.estudiante = Estudiante(nombre: dataList[0] as! String, apellidos: dataList[1] as! String, id: dataList[2] as! Int, correo: dataList[3] as! String)
+                self.estudiante = Estudiante(tipo: .Estudiante, nombre: dataList[0] as! String, apellidos: dataList[1] as! String, id: dataList[2] as! Int, correo: dataList[3] as! String)
             }
             return true
         }
@@ -99,6 +120,8 @@ class MasterController{
         
         let result: Array<Row> = self.dbManager.validateUser(typeUser: typeUser, input: email)
         
+        if result.isEmpty { return false }
+        
         var dbDecrypPass: String!
             
         DispatchQueue.global(qos: .background).sync {
@@ -107,11 +130,13 @@ class MasterController{
         
         if(!result.isEmpty && password.elementsEqual(dbDecrypPass)){
             if typeUser.elementsEqual("Profesor"){
-                self.profesor = Profesor(nombre: result[0][nombre],apellidos: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
+                self.profesor = Profesor(tipo: .Profesor, nombre: result[0][nombre],apellidos: result[0][apellidos], correo: email, tiempoTardiaCodigo: result[0][tiempoTardiaCodigo], tiempoVigenciaCodigo: result[0][tiempoVigenciaCodigo])
                 usuario = self.profesor
+                usuario.tipo = .Profesor
             }else{
-                self.estudiante = Estudiante(nombre: result[0][nombre], apellidos: result[0][apellidos], id: Int(email)!, correo: result[0][correo])
+                self.estudiante = Estudiante(tipo: .Estudiante, nombre: result[0][nombre], apellidos: result[0][apellidos], id: Int(email)!, correo: result[0][correo])
                 usuario = self.estudiante
+                usuario.tipo = .Estudiante
             }
             return true
         }else{
@@ -182,12 +207,11 @@ class MasterController{
     }
     
     func crearCodigo(data: String){
-        print("Data: \(data)")
         //let encryptedInformation:String
         //let key:String
         //(encryptedInformation, key) = try self.encrypter.encrypt(data: data)
         //encryptedInformation = self.encrypter.encrypt(message: data)
-        print("Encrypted Information \(data)")
+        //print("Encrypted Information \(data)")
         if((self.getGrupo().getCode()?.getData().isEmpty)!){
             self.getGrupo().getCode()?.setData(data: data)
             
@@ -197,25 +221,33 @@ class MasterController{
             if(self.dbManager.updateCode(idC: self.curso.codigo, idG: group.getNumber(), code: (self.getGrupo().getCode()?.getQRCode())!, key: "")){
                 print("Code Updated Succesfully")
             }else{
-                print("Code Updated Unsuccesfully")
+                print("Error: Code Updated Unsuccesfully")
             }
             //self.codigo.createImage()
         }
     }
     
-    func crearListaAsistencia(fecha:String){
-        if(self.dbManager.crearLA(idC: self.curso.codigo, idG: self.grupo.getNumber(), fech: fecha, code: (self.grupo.getCode()?.getQRCode())!)){
-            print("Sirvio")
-        }else{
-            print("No Sirvio")
+    func crearListaAsistencia(fecha:String)-> Bool{
+        if(dbManager.crearLA(idC: grupo.getCurse().codigo, idG: grupo.getNumber(), fech: fecha, code: (grupo.getCode()?.getQRCode())!)){
+            
+            let format = DateFormatter()
+            format.dateFormat = "yyyy-MM-dd"
+            let formattedDate = format.string(from: Date())
+            
+            grupo.setNumberAL(number: dbManager.getNumberOfLA(idCurse: grupo.getCurse().codigo, idGroup: grupo.getNumber(), date: formattedDate))
+            
+            return true
         }
+        
+        return false
     }
     
     func setTimeMaxPresence(time:Int){
         if(dbManager.setTimeMaxPresence(email: self.profesor.correo, time: time)){
+            profesor.tiempoTardiaCodigo = time
             print("Change Time Max Presence Succesfully")
         }else{
-            print("Change Time Max Presence Unsuccesfully")
+            print("Error: Change Time Max Presence Unsuccesfully")
         }
     }
     
@@ -223,7 +255,7 @@ class MasterController{
         if(dbManager.setTimeCodeAvailable(email: self.profesor.correo, time: time)){
             print("Change Time Code Available Succesfully")
         }else{
-            print("Change Time Code Available Unsuccesfully")
+            print("Error: Change Time Code Available Unsuccesfully")
         }
     }
     
@@ -231,7 +263,7 @@ class MasterController{
         if(dbManager.setNewPassword(email: self.profesor.correo, password: password)){
             print("Change Succesfully")
         }else{
-            print("Change Unsuccesfully")
+            print("Error: Change Unsuccesfully")
         }
     }
     
@@ -254,14 +286,11 @@ class MasterController{
             }
         }
         
-        print("##########")
-        print("getDaysOfCourse")
-        print(diaCurso)
         return diaCurso
     }
     
     func getAttendanceList() -> (Int, Array<String>, Array<String>) {
-        let fecha = Expression<String>("Fecha")
+        let fecha = Expression<String>("Horario")
         let estado = Expression<String>("Estado")
         
         let lad = self.dbManager.getAttendanceList(idCourse: self.curso.codigo, idUser: self.estudiante.id, numberGroup: self.grupo.getNumber())
@@ -272,10 +301,7 @@ class MasterController{
         
         //Dias que dan clases de un grupo en un curso especifico(Curso y Grupo seleccionado por el usuario)
         var dias = getDaysOfCourse()
-        print("##########")
-        print("getDaysOfCourse")
         for item in lad{
-            print(item)
             dia = (item[fecha]) //Ej:   D-H1-H2 -> L-9:30-11:30
             dia = String(dia.split(separator: "-")[0])  // [L, 9:30, 11:30]
             switch dia{
@@ -313,24 +339,28 @@ class MasterController{
         //15:39,15:54,Carlos,Benavides,Redes,1,K,J
         let nombreCurso = String(data[4])
         
-        if belongsToCourse(courseName: nombreCurso){
-            let curso = Curso(codigo: "", nombre: nombreCurso)
-            let profesor = Profesor(nombre: String(data[2]), apellidos: String(data[3]), correo: "", tiempoTardiaCodigo: 0, tiempoVigenciaCodigo: 0)
-            let grupo = Grupo(
-                curso: curso,
-                num: Int(String(data[5]))!,
-                profesor: profesor,
-                horario1: String("\(String(data[6]))-\(String(data[0]))-\(String(data[1]))"),
-                horario2: String("\(String(data[7]))-\(String(data[0]))-\(String(data[1]))")
-            )
-            
-            if grupo.validateSchedule(){
-                let estado:String = grupo.validateSchedule()
-                let numberLAD = dbManager.getNumberOfLA(idCurse: curso.codigo, idGroup: grupo.getNumber())
-                if self.dbManager.confirmPresence(numberList: numberLAD, userID: self.estudiante.id, state: estado){
-                    return true
-                }
-                return false
+        let curso = Curso(codigo: "", nombre: nombreCurso)
+        let profesor = Profesor(tipo: .Profesor, nombre: String(data[2]), apellidos: String(data[3]), correo: "", tiempoTardiaCodigo: 0, tiempoVigenciaCodigo: 0)
+        
+        //Apple use GMT so it is GMT+6 in CR
+        var day2: String
+        if data.count > 7 {
+            day2 = String("\(String(data[7]))-\(String(data[0]))-\(String(data[1]))")
+        }else{
+            day2 = ""
+        }
+        let grupo = Grupo(
+            curso: curso,
+            num: Int(String(data[5]))!,
+            profesor: profesor,
+            horario1: String("\(String(data[6]))-\(String(data[0]))-\(String(data[1]))"),
+            horario2: day2
+        )
+        if grupo.validateSchedule(){
+            let estado:String = grupo.getAssistanceState(lateTime: timeToBePresent(profesorName: profesor.nombre, profesorLastName: profesor.apellidos))
+            let numberLAD = dbManager.getNumberOfLA(nameCurse: curso.nombre, idGroup: grupo.getNumber())
+            if self.dbManager.confirmPresence(numberList: numberLAD, userID: self.estudiante.id, state: estado){
+                return true
             }
             return false
         }
@@ -426,15 +456,16 @@ class MasterController{
         return listCourses
     }
     
-    func getAllNameCourses()-> Array<String>{
-        var listCourses: Array<String> = Array<String>()
+    func getAllNameCourses()-> Array<(String, String)>{
+        var listCourses: Array<(String, String)> = Array<(String, String)>()
         
         let nombre = Expression<String>("Nombre")
+        let codigo = Expression<String>("Codigo")
         
         let queryResult = dbManager.getAllCourses()
         
         for curso in queryResult{
-            listCourses.append(curso[nombre])
+            listCourses.append((curso[nombre], curso[codigo]))
         }
         
         return listCourses
@@ -444,19 +475,26 @@ class MasterController{
         return dbManager.getNumberGroups(nombreCurso: nameCurse)
     }
     
-    func addNewCourse(idCurse: String, number: Int, firstDay: String, secondDay: String, startTime: String, endTime: String)-> Bool {
+    func addNewCourse(nameCurse: String, idCurse: String, number: Int, firstDay: String, secondDay: String, startTime: String, endTime: String)-> Bool {
         
-        var time = endTime.split(separator: ":")
+        let day1 = String(format:"%@-%@-%@", firstDay, startTime, endTime)
+        let day2 = secondDay.isEmpty ? "" : String(format:"%@-%@-%@", secondDay, startTime, endTime)
         
-        let hour = Int(String(time[0]))!
-        let minute = Int(String(time[1]))!+15
+        //var time = endTime.split(separator: ":")
         
-        let info = String(format: "%@,%@,%@,%@,%@,%d,%@,%@", startTime, String(format: "%d:%d", hour, minute), getProfesor().nombre, getProfesor().apellidos, idCurse, number, firstDay, secondDay)
+        //let hour = Int(String(time[0]))!
+        //let minute = Int(String(time[1]))!
+        
+        let info = String(format: "%@,%@,%@,%@,%@,%d,%@,%@", startTime, endTime, getProfesor().nombre, getProfesor().apellidos, idCurse, number, firstDay, secondDay)
         
         let code = Codigo()
         code.setData(data: info)
         
-        return dbManager.addNewCourse(idCurse: idCurse, number: number, idProfessor: profesor!.correo, firstDay: firstDay, secondDay: secondDay, code: code.getQRCode())
+        let newGroup = Grupo(curso: Curso(codigo: nameCurse, nombre: idCurse), num: number, profesor: profesor, horario1: day1, horario2: day2, code: code.getQRCode())
+        
+        listGroup.append(newGroup)
+        
+        return dbManager.addNewCourse(idCurse: idCurse, number: number, idProfessor: profesor!.correo, firstDay: day1, secondDay: day2, code: code.getQRCode())
     }
     
     func getAvailableLA()-> Array<String>{
@@ -473,7 +511,7 @@ class MasterController{
     }
     
     func getStadistics(type: String, state: String, student: String = "")-> Double{
-        let rawStadistic: Array<Array> = dbManager.getStadistics(idCurse: "IC7602", idGroup: 1, nameStudent: student)
+        let rawStadistic: Array<Array> = dbManager.getStadistics(idCurse: grupo.getCurse().codigo, idGroup: grupo.getNumber(), nameStudent: student)
         
         var typeAssistant: [String : Int] = [
             "P": 0,
@@ -484,13 +522,10 @@ class MasterController{
         switch type {
         case "Total":
             for row in rawStadistic{
-                print(row)
                 let t = row[0] as! String
                 let n = Int(row[1] as! Int64)
                 
                 typeAssistant.updateValue(typeAssistant[t]! + n, forKey: t)
-                
-                print(typeAssistant)
             }
             return Double(typeAssistant[state]!)
         case "Promedio":
@@ -504,7 +539,6 @@ class MasterController{
                 return result + tupleOKeyAndValue.value
             }
             
-            print("Total: \(total) = ")
             return Double(typeAssistant[state]! / total)
         /*case "Promedio Por Mes":
             for row in rawStadistic{

@@ -15,5 +15,4 @@ class DetailSlide: UIView {
     @IBOutlet weak var schedule1Label: UILabel!
     @IBOutlet weak var schedule2Label: UILabel!
     @IBOutlet weak var subView: UIView!
-    
 }

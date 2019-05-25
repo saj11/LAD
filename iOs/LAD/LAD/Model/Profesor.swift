@@ -9,6 +9,7 @@
 import Foundation
 
 struct Profesor: Usuario {
+    var tipo: TipoUsuario
     var nombre: String
     var apellidos: String
     var correo: String

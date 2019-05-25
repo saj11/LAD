@@ -22,6 +22,7 @@ class TableViewCell3: UITableViewCell {
     
     var actualState: State = .Ausente
     var delegate: ButtonsDelegate!
+    var buttonAvailable: Bool = true
     
     @IBOutlet weak var studentName: UILabel!
     @IBOutlet weak var state: UIButton!
@@ -33,11 +34,16 @@ class TableViewCell3: UITableViewCell {
         state.layer.cornerRadius = state.frame.width / 2
         state.layer.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         state.layer.borderColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+        
     }
     
     @IBAction func buttonPressed(_ sender: UIButton) {
         delegate?.stateTapped(sender.tag)
         next()
+    }
+    
+    func makeButtonAvailable(){
+        state.isEnabled = buttonAvailable
     }
     
     func setState(stateInput: String){

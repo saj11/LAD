@@ -11,12 +11,6 @@ import LocalAuthentication
 import EllipticCurveKeyPair
 
 class NativeEncryption : Encrypter {
-    var context: LAContext!
-    
-    init() {
-        self.context = LAContext()
-    }
-    
     struct Shared {
         static let manager: EllipticCurveKeyPair.Manager = {
             let publicAccessControl = EllipticCurveKeyPair.AccessControl(protection: kSecAttrAccessibleAlwaysThisDeviceOnly, flags: [])
@@ -65,7 +59,7 @@ class NativeEncryption : Encrypter {
         }
         
         do{
-            let result = try Shared.manager.decrypt(encrypted, authenticationContext: self.context)
+            let result = try Shared.manager.decrypt(encrypted, authenticationContext: LAContext())
             guard let decrypted = String(data: result, encoding: .utf8) else {
                 print("Could not convert decrypted data to string")
                 return ""
@@ -81,7 +75,7 @@ class NativeEncryption : Encrypter {
     func signing(message: String){
         do{
             let digest = message.data(using: .utf8)!
-            let signature = try Shared.manager.sign(digest, authenticationContext: self.context)
+            let signature = try Shared.manager.sign(digest, authenticationContext: LAContext())
             print(signature)
         }catch{
             print(error)

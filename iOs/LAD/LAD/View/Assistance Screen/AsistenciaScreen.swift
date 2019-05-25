@@ -29,15 +29,24 @@ class AsistenciaScreen: UITableViewController, ButtonsDelegate {
         
         tableView.allowsSelection = false
         
-        let rightBarButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.done, target: self, action: nil)
+        let rightBarButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.done, target: self, action: #selector(refreshLAData(_:)))
         rightBarButton.image = UIImage(named: "refresh-icon")
-        self.navigationItem.rightBarButtonItem = rightBarButton
         
-        (number, listStudents) = controller.getStudentsFrom(date: "")
+        self.navigationItem.rightBarButtonItem = rightBarButton
+
+        (_, listStudents) = controller.getStudentsFrom(date: "")
+    }
+    
+    //Refresh Functions
+    @objc private func refreshLAData(_ sender: Any) {
+        // Fetch New LA Data
+        (_, listStudents) = controller.getStudentsFrom(date: "")
+        
+        tableView.reloadData()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return number
+        return listStudents.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -14,7 +14,7 @@ struct Subject{
     var group: Grupo
 }
 
-class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class CourseScreen: UIViewController{
     
     //MARK: Properties
     private var controller: MasterController = MasterController.shared
@@ -23,12 +23,12 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
     private var slide2: MainSlide!
     private var slide1: DetailSlide!
     private var slide3: TimeSlide!
+    private var actualGroup: Grupo!
     
     //MARK: GUI Properties
-    @IBOutlet weak var subjectTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
-    private var subjectPickerView: UIPickerView!
+    @IBOutlet weak var courseTableView: UITableView!
     
     //MARK: Actions
     
@@ -36,7 +36,18 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         super.init(coder: aDecoder)
         tabBarItem = UITabBarItem(title: "QR Code", image: UIImage(named: "qr-icon"), tag: 2)
         
-        self.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 0)
+        self.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if controller.getCreateGroup(){
+            listSubject = controller.getListGroup()
+            
+            courseTableView.reloadData()
+            
+            controller.setCreateGroup(value: false)
+        }
     }
     
     override func viewDidLoad() {
@@ -44,12 +55,7 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         
         createNavBar()
         
-        subjectPickerView = UIPickerView()
-        subjectPickerView.delegate = self
-        
         scrollView.delegate = self
-        
-        subjectTextField.inputView = subjectPickerView
         
         slide1 = (Bundle.main.loadNibNamed("DetailSlide", owner: self, options: nil)?.first as! DetailSlide)
         slide2 = (Bundle.main.loadNibNamed("MainSlide", owner: self, options: nil)?.first as! MainSlide)
@@ -61,8 +67,10 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         pageControl.numberOfPages = slides.count
         pageControl.currentPage = 0
         view.bringSubviewToFront(pageControl)
-        
-        subjectTextField.isHidden = true
+    }
+    
+    func getActualGroup() -> Grupo {
+        return actualGroup
     }
     
     func createNavBar(){
@@ -73,6 +81,11 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         
         let navItem = UINavigationItem(title: "Codigo QR")
         navItem.largeTitleDisplayMode = .always
+        
+        let rightBarButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.exportar(_:)))
+        rightBarButton.image = UIImage(named: "share-icon")
+        rightBarButton.tintColor = #colorLiteral(red: 0, green: 0.9769522548, blue: 0.1877456605, alpha: 1)
+        navItem.rightBarButtonItem = rightBarButton
         
         navBar.setItems([navItem], animated: true)
     }
@@ -85,25 +98,14 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         if controller.getListGroup()!.isEmpty{
             for course in listCourses{
                 self.controller.setCurso(curso: course)
-                self.controller.groupsOf()
+                _ = self.controller.groupsOf()
             }
         }
         listSubject = controller.getListGroup()
         
         setInfo(item: 0)
-    }
-    
-    //MARK: Page Control
-    func setupSlideScrollView(slideList : [Any]) {
-        scrollView.frame = CGRect(x: 67, y: 162, width: scrollView.frame.width, height: scrollView.frame.height)
-        scrollView.contentSize = CGSize(width: scrollView.frame.width * CGFloat(slides.count), height: scrollView.frame.height)
-        scrollView.isPagingEnabled = true
         
-        
-        for i in 0 ..< slideList.count {
-            (slideList[i] as! UIView).frame = CGRect(x: scrollView.frame.width * CGFloat(i), y: 0, width: view.frame.width, height: view.frame.height)
-            scrollView.addSubview(slideList[i] as! UIView)
-        }
+        controller.setGrupo(grupo: listSubject[0])
     }
 
     func setInfo(item:Int){
@@ -120,24 +122,17 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         slide2.imageView.layer.magnificationFilter = CALayerContentsFilter.nearest
         slide2.imageView.image = grupo.getCode()?.getUIImage()
         
-        slide3.clear()
         slide3.startTimeLabel.text = dates.0
         slide3.endTimeLabel.text = dates.1
-        slide3.timerProgressView.useMinutesAndSecondsRepresentation = true
-        slide3.timerProgressView.labelTextColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        slide3.timerProgressView.labelFont = UIFont(name: "HelveticaNeue-Bold", size: 40)
-        slide3.timerProgressView.lineWidth = 7
-        
         
         slides = [slide1, slide2, slide3]
     }
     
     func setSchedule(group: Grupo, slide: DetailSlide){
-        var date = Date()
         let calendar = Calendar.current
-        let day = calendar.component(.weekday, from: date)
+        let day = calendar.component(.weekday, from: Date())
         
-        date = group.getSchedule(numberDay: day).horaInicio
+        var date = group.getNearSchedule().horaInicio
         let hour1 = calendar.component(.hour, from: date)
         let minutes1 = calendar.component(.minute, from: date)
         
@@ -147,7 +142,7 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
             slide.schedule1Label.text = String(format: "%d:%d", hour1, minutes1)
         }
         
-        date = group.getSchedule(numberDay: day).horaFinal
+        date = group.getNearSchedule().horaFinal
         let hour2 = calendar.component(.hour, from: date)
         let minutes2 = calendar.component(.minute, from: date)
         
@@ -156,6 +151,7 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         }else{
             slide.schedule2Label.text = String(format: "%d:%d", hour2, minutes2)
         }
+        print("T##items: Any...##Any")
     }
     
     func setCodeDate()-> (String, String){
@@ -174,8 +170,8 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
             minutesString = String(minutes)
         }
         
-        hour2 = calendar.component(.hour, from: Date().adding(minutes: 15))
-        minutes2 = calendar.component(.minute, from: Date().adding(minutes: 15))
+        hour2 = calendar.component(.hour, from: Date().adding(minutes: controller.getProfesor().tiempoTardiaCodigo))
+        minutes2 = calendar.component(.minute, from: Date().adding(minutes: controller.getProfesor().tiempoTardiaCodigo))
         
         if(minutes2 < 10){
             minutesString2 = "0"+String(minutes2)
@@ -186,34 +182,40 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         return ( String(format: "%d:"+minutesString, hour), String(format: "%d:"+minutesString2, hour2) )
     }
     
+    //MARK: Obj-c Action
+    @IBAction func exportar(_ sender: Any) {
+        var image = controller.getGrupo().getCode()?.getCIImage()
+        
+        var data = image?.transformed(by: CGAffineTransform(scaleX: 10, y: 10))
+        
+        let activityViewController = UIActivityViewController(activityItems: [ UIImage(ciImage: data!)], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+        self.present(activityViewController, animated: true, completion: nil)
+    }
+}
+
+extension CourseScreen: UIScrollViewDelegate{
+    //MARK: Scroll View
+    func setupSlideScrollView(slideList : [Any]) {
+        scrollView.frame = CGRect(x: 67, y: 162, width: scrollView.frame.width, height: scrollView.frame.height)
+        scrollView.contentSize = CGSize(width: scrollView.frame.width * CGFloat(slides.count), height: scrollView.frame.height)
+        scrollView.isPagingEnabled = true
+        
+        
+        for i in 0 ..< slideList.count {
+            (slideList[i] as! UIView).frame = CGRect(x: scrollView.frame.width * CGFloat(i), y: 0, width: view.frame.width, height: view.frame.height)
+            scrollView.addSubview(slideList[i] as! UIView)
+        }
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let x = scrollView.contentOffset.x
         let w = scrollView.bounds.size.width
         pageControl.currentPage = Int(x/w)
     }
-    
-    // MARK: UIPickerView Delegation
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return listSubject.count
-    }
-    
-    func pickerView( _ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return listSubject[row].getCurse().nombre
-    }
-    
-    func pickerView( _ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        subjectTextField.text = listSubject[row].getCurse().nombre
-        
-        setInfo(item: row)
-        
-        self.view.endEditing(true)
-        self.view.setNeedsDisplay()
-    }
-    
+}
+
+extension CourseScreen: UITableViewDelegate, UITableViewDataSource{
     //MARK: TableView
     func numberOfSections(in tableView: UITableView) -> Int {
         return listSubject.count
@@ -232,6 +234,43 @@ class CourseScreen: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        setInfo(item: indexPath.section)
+        if slide3.getHasStarted(){
+            let alert = UIAlertController(title: "Cronometro", message: "No se puede crear otra Lista de Asistencia hasta que finalice el tiempo minimo para estar presente.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default))
+            
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            setInfo(item: indexPath.section)
+            controller.setGrupo(grupo: listSubject[indexPath.section])
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            controller.setGrupo(grupo: listSubject[indexPath.section])
+            
+            let alert = UIAlertController(title: "Eliminar Grupo", message: "¿Esta Seguro que desea borrar este curso?", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { alert -> Void in
+                if !self.controller.deleteGroup(){
+                    let alert2 = UIAlertController(title: "Eliminar Grupo", message: "Error: No se pudo eliminar el grupo.", preferredStyle: .alert)
+                    alert2.addAction(UIAlertAction(title: "Ok", style: .default))
+                    
+                    self.present(alert2, animated: true, completion: nil)
+                }else{
+                    self.listSubject.remove(at: indexPath.section)
+                    
+                    self.controller.removeGroup(pos: indexPath.section)
+                    
+                    let indexSetTable = IndexSet(arrayLiteral: indexPath.section)
+                    self.courseTableView.deleteSections(indexSetTable, with: .fade)
+                    
+                    self.controller.setCreateGroup(value: true)
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "NO", style: .cancel))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }
