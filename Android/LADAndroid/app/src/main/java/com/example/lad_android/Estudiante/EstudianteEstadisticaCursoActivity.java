@@ -22,7 +22,7 @@ public class EstudianteEstadisticaCursoActivity extends AppCompatActivity {
         mTextTardia = (TextView) findViewById(R.id.EstudianteEstadisticaCursoNumeroTardiaTV);
         mTextAusente = (TextView) findViewById(R.id.EstudianteEstadisticaCursoNumeroAusenteTV);
 
-        
+
 
     }
 }
