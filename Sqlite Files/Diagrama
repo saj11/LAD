@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>16718f42-859b-4eb7-ad7e-d002d96d7224.SCHEMA:main</OriginalElement>
+  <nodes>
+    <node x="176.0" y="402.0">16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.ListaAsistencia</node>
+    <node x="455.5" y="0.0">16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.sqlite_master</node>
+    <node x="0.0" y="402.0">16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Estudiante</node>
+    <node x="102.5" y="33.0">16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Curso</node>
+    <node x="186.0" y="190.0">16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Grupo</node>
+    <node x="254.5" y="0.0">16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Profesor</node>
+    <node x="73.25" y="570.0">16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.AsistenciaPorEstudiante</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.AsistenciaPorEstudiante" target="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Estudiante">
+      <point x="-45.5" y="-48.0" />
+      <point x="118.75" y="545.0" />
+      <point x="78.0" y="545.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+    <edge source="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.ListaAsistencia" target="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Grupo">
+      <point x="0.0" y="-59.0" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Grupo" target="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Profesor">
+      <point x="32.25" y="-81.0" />
+      <point x="282.75" y="165.0" />
+      <point x="332.5" y="165.0" />
+      <point x="0.0" y="70.0" />
+    </edge>
+    <edge source="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Grupo" target="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.Curso">
+      <point x="-32.25" y="-81.0" />
+      <point x="218.25" y="165.0" />
+      <point x="168.5" y="165.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.AsistenciaPorEstudiante" target="16718f42-859b-4eb7-ad7e-d002d96d7224.TABLE:main.ListaAsistencia">
+      <point x="45.5" y="-48.0" />
+      <point x="209.75" y="545.0" />
+      <point x="250.5" y="545.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.39212827988338195" x="297.5" y="382.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+  </Categories>
+</Diagram>
+
