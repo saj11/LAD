@@ -1,11 +1,10 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,11 +14,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.MainMenuActivity;
+import com.example.lad_android.ProfesorMainMenuActivity;
+import com.example.lad_android.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CrearGrupoActivity extends AppCompatActivity {
 
-
+    Spinner mSpinner;
     Button mBtnCrear, mBtnLunes, mBtnMartes, mBtnMiercoles, mBtnJueves, mBtnViernes, mBtnSabado;
     EditText mTextInicioHora1, mTextFinalHora1, mTextInicioHora2, mTextFinalHora2;
     TextView mViewDia1, mViewDia2;
@@ -31,6 +36,7 @@ public class CrearGrupoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_grupo);
+        mSpinner = (Spinner) findViewById(R.id.CrearGrupoSpinner);
         mBtnCrear = (Button) findViewById(R.id.CrearGrupoBtnCrear);
         mBtnLunes = (Button) findViewById(R.id.CrearGrupoBtnLunes);
         mBtnMartes = (Button) findViewById(R.id.CrearGrupoBtnMartes);
@@ -51,9 +57,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextInicioHora1.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextInicioHora1.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextInicioHora1.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });
@@ -64,9 +75,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextFinalHora1.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextFinalHora1.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextFinalHora1.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });
@@ -77,9 +93,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextInicioHora2.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextInicioHora2.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextInicioHora2.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });
@@ -90,9 +111,14 @@ public class CrearGrupoActivity extends AppCompatActivity {
                 timePickerDialog = new TimePickerDialog(CrearGrupoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTextFinalHora2.setText(hourOfDay+":"+minute);
+                        if(minute==0){
+                            mTextFinalHora2.setText(hourOfDay+":00");
+                        }
+                        else {
+                            mTextFinalHora2.setText(hourOfDay + ":" + minute);
+                        }
                     }
-                },0,0,true);
+                },0,00,true);
                 timePickerDialog.show();
             }
         });
@@ -104,7 +130,13 @@ public class CrearGrupoActivity extends AppCompatActivity {
         List<String> listaNbr = databaseAccess.getListaCursosNombre();
         final List<String> listaCod = databaseAccess.getListaCursosCodigo();
         databaseAccess.close();
+        List<String> listaNbrCod = new ArrayList<String>();
+        for (int i=0; i<listaCod.size();i++){
+            listaNbrCod.add(listaCod.get(i)+" - "+listaNbr.get(i));
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,listaNbrCod);
 
+        mSpinner.setAdapter(dataAdapter);
 
         mBtnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,8 +144,8 @@ public class CrearGrupoActivity extends AppCompatActivity {
 
                 if(Dia1!="" & Dia2!=""){
                     if(!"".equals(mTextInicioHora1.getText().toString()) & !"".equals(mTextInicioHora2.getText().toString()) & !"".equals(mTextFinalHora1.getText().toString()) & !"".equals(mTextFinalHora2.getText().toString()) ){
-                        String CodigoCurso = bundle.getString("IDCurso");
-                        //String CodigoCurso = listaCod.get(mSpinner.getSelectedItemPosition());
+                        //String CodigoCurso = bundle.getString("IDCurso");
+                        String CodigoCurso = listaCod.get(mSpinner.getSelectedItemPosition());
 
                         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
                         databaseAccess.openWrite();
@@ -130,7 +162,7 @@ public class CrearGrupoActivity extends AppCompatActivity {
                         databaseAccess.close();
 
                         //Toast.makeText(CrearGrupoActivity.this,"Hora: "+horario1 +" -"+horario2+"usuario: "+usuario+"numero de grypo: "+NumeroDeGrupo,Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(CrearGrupoActivity.this, MainMenuActivity.class);
+                        Intent intent = new Intent(CrearGrupoActivity.this, ProfesorMainMenuActivity.class);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }

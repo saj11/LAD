@@ -8,6 +8,12 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -18,13 +24,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".QRCodigoActivity"></activity>
-        <activity android:name=".MenuListaAsistenciaActivity" />
-        <activity android:name=".ListaAsistenciaGrupo" />
-        <activity android:name=".PerfilActivity" />
-        <activity android:name=".MenuGrupoActivity" />
-        <activity android:name=".CrearGrupoActivity" />
-        <activity android:name=".CrearCursoActivity" />
+        <activity android:name=".Estudiante.EstudianteEstadisticaCursoActivity"></activity>
+        <activity android:name=".Profesor.ProfesorHistorialCursoActivity" />
+        <activity android:name=".Estudiante.EstudiantePerfilActivity" />
+        <activity android:name=".Profesor.ProfesorEstadisticaCursoActivity" />
+        <activity android:name=".Profesor.ProfesorMenuListaAsistenciaActivity" />
+        <activity android:name=".Profesor.ProfesorMenuCursosActivity" />
+        <activity android:name=".ProfesorMainMenuActivity" />
+        <activity android:name=".RegistroSeleccionActivity" />
+        <activity android:name=".RegistroEstudianteActivity" />
+        <activity android:name=".Estudiante.MainMenuEstudianteCursoActivity" />
+        <activity android:name=".MainMenuEstudianteActivity" />
+        <activity android:name=".QRCodigoActivity" />
+        <activity android:name=".Profesor.MenuListaAsistenciaActivity" />
+        <activity android:name=".Profesor.ListaAsistenciaGrupo" />
+        <activity android:name=".Profesor.PerfilActivity" />
+        <activity android:name=".Profesor.MenuGrupoActivity" />
+        <activity android:name=".Profesor.CrearGrupoActivity" />
+        <activity android:name=".Profesor.CrearCursoActivity" />
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".RegistroActivity" />
         <activity android:name=".MainActivity">

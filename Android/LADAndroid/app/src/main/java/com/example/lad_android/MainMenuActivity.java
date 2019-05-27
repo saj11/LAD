@@ -2,19 +2,25 @@ package com.example.lad_android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.Profesor.CrearGrupoActivity;
+import com.example.lad_android.Profesor.MenuGrupoActivity;
+import com.example.lad_android.Profesor.PerfilActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +37,7 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        this.setTitle("Cursos");
         bundle = getIntent().getExtras();
         Intent i = getIntent();
         mTextUsuario = (TextView) findViewById(R.id.MainMenuUsuario);
@@ -40,7 +46,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //String usuario = i.getStringExtra("usuario");
         String usuario = bundle.getString("usuario");
         int id = bundle.getInt("id");
-        Toast.makeText(MainMenuActivity.this, "this user is: "+id,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainMenuActivity.this, "this user is: "+id,Toast.LENGTH_SHORT).show();
         mTextUsuario.setText(usuario);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
@@ -109,11 +115,30 @@ public class MainMenuActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.list_item, null);
             }
 
+            view.setBackgroundResource(R.drawable.border);
+            GradientDrawable gd = new GradientDrawable();
+            // Specify the shape of drawable
+            gd.setShape(GradientDrawable.RECTANGLE);
+            // Set the fill color of drawable
+            gd.setColor(Color.TRANSPARENT); // make the background transparent
+            // Create a 2 pixels width red colored border for drawable
+            gd.setStroke(4, Color.RED); // border width and color
+            // Make the border rounded
+            gd.setCornerRadius(30.0f);
+
             TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
             listItemText.setText(list.get(position));
+            //listItemText.setBackground(gd);
+            //listItemText.setWidth(200);
+            //listItemText.setMinHeight(50);
+            //listItemText.setBackgroundResource(R.drawable.border);
+            //listItemText.setTextColor(Color.parseColor("#FF3E80F1"));
+            //listItemText.setPadding(0,10,0,0);
+            //listItemText.setBackgroundColor(Color.parseColor("#FF3E80F1"));
 
+            //view.setBackgroundColor(Color.parseColor("#FF3E80F1"));
             listItemText.setOnClickListener(new View.OnClickListener(
-
+            //sdk version min 16
             ) {
                 @Override
                 public void onClick(View v) {
@@ -122,7 +147,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     databaseAccess.openWrite();
                     String nombreCurso = databaseAccess.getNombreCurso(lista.get(position));
                     databaseAccess.close();
-                    Toast.makeText(context,lista.get(position),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,lista.get(position),Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, MenuGrupoActivity.class);
                     intent.putExtra("IDCurso",lista.get(position));
                     intent.putExtra("NombreCurso",nombreCurso);
@@ -132,7 +157,7 @@ public class MainMenuActivity extends AppCompatActivity {
             });
 
             Button dltBtn = (Button) view.findViewById(R.id.delete_btn);
-
+            dltBtn.setBackgroundResource(R.drawable.border_delete);
             dltBtn.setOnClickListener( new View.OnClickListener(){
                                            @Override
                                            public void onClick(View v) {

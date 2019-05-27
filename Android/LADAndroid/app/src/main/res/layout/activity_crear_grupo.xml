@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CrearGrupoActivity"
+    tools:context=".Profesor.CrearGrupoActivity"
     android:orientation="vertical"
     android:gravity="center_horizontal" >
 
@@ -13,7 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".CrearGrupoActivity"
+        tools:context=".Profesor.CrearGrupoActivity"
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
@@ -23,6 +23,14 @@
             android:layout_height="wrap_content"
             app:srcCompat="@mipmap/ic_launcher_round"
             android:layout_marginTop="40dp"/>
+
+        <Spinner
+            android:id="@+id/CrearGrupoSpinner"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </Spinner>
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lunes"
-                android:layout_marginRight="130dp"
+                android:layout_marginRight="132dp"
                 android:background="@android:color/holo_green_dark"
                 />
         </LinearLayout>
@@ -58,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Martes"
-                android:layout_marginRight="0dp"
+                android:layout_marginRight="2dp"
                 android:background="@android:color/holo_green_dark"
 
                 />
@@ -82,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Miercoles"
-                android:layout_marginRight="35dp"
+                android:layout_marginRight="37dp"
                 android:background="@android:color/holo_green_dark"
                 />
             <EditText
@@ -112,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jueves"
-                android:layout_marginRight="0dp"
+                android:layout_marginRight="2dp"
                 android:background="@android:color/holo_green_dark"
                 />
             <TextView
@@ -136,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Viernes"
-                android:layout_marginRight="35dp"
+                android:layout_marginRight="37dp"
                 android:background="@android:color/holo_green_dark"
                 />
             <EditText
@@ -166,7 +174,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sabado"
-                android:layout_marginRight="130dp"
+                android:layout_marginRight="132dp"
                 android:background="@android:color/holo_green_dark"
                 />
 
@@ -174,9 +182,11 @@
 
         <Button
             android:id="@+id/CrearGrupoBtnCrear"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
             android:text="Crear Grupo"
+            android:background="@drawable/border_profe"
             android:layout_marginTop="30dp"/>
 
 

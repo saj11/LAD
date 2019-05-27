@@ -1,11 +1,11 @@
-package com.example.lad_android;
+package com.example.lad_android.DatabaseHelper;
 
 import android.content.Context;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class DatabaseOpenHelper extends SQLiteAssetHelper {
-    private static final String DATABASE_NAME="lad_Test.db";
+    private static final String DATABASE_NAME="LAD_Android_Testing.db";
     private static int DATABASE_VERSION=1;
 
     public DatabaseOpenHelper(Context context){

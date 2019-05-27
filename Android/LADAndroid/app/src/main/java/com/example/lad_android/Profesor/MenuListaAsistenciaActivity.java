@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.lad_android.QRCodigoActivity;
+import com.example.lad_android.R;
 
 public class MenuListaAsistenciaActivity extends AppCompatActivity {
 
@@ -21,6 +24,7 @@ public class MenuListaAsistenciaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_lista_asistencia);
+        this.setTitle("");
         mTextCurso = (TextView)findViewById(R.id.MenuListaAsisCursoTV);
         mTextCodigo = (TextView)findViewById(R.id.MenuListaAsisCodigoTV);
         mBtnListaAsis = (Button) findViewById(R.id.MenuListaAsisAsistenciaBtn);
@@ -48,6 +52,8 @@ public class MenuListaAsistenciaActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.Profesor;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.lad_android.DatabaseHelper.DatabaseAccess;
+import com.example.lad_android.MainMenuActivity;
+import com.example.lad_android.R;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_grupo);
-
+        this.setTitle("Grupos");
         mTextCurso = (TextView)findViewById(R.id.MenuGrupoText);
         mListGrupos = (ListView) findViewById(R.id.MenuGrupoLista);
         mFloatBtn = (FloatingActionButton) findViewById(R.id.MenuGrupoBtn);
@@ -37,7 +40,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
         Intent i = getIntent();
         String curso = i.getStringExtra("IDCurso");
         int idProfe = bundle.getInt("id");
-        Toast.makeText(this,"ID es: "+idProfe,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"ID es: "+idProfe,Toast.LENGTH_LONG).show();
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.openWrite();
         String nombreCurso = databaseAccess.getNombreCurso(curso);
@@ -51,7 +54,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
         mFloatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuGrupoActivity.this,CrearGrupoActivity.class);
+                Intent intent = new Intent(MenuGrupoActivity.this,CrearCursoActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -92,6 +95,8 @@ public class MenuGrupoActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.list_item, null);
             }
 
+            view.setBackgroundResource(R.drawable.border);
+
             TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
             listItemText.setText(list.get(position));
 
@@ -100,7 +105,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
             ) {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,list.get(position),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,list.get(position),Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, MenuListaAsistenciaActivity.class);
                     intent.putExtra("Numero",list.get(position));
                     intent.putExtras(bundle);
@@ -109,7 +114,7 @@ public class MenuGrupoActivity extends AppCompatActivity {
             });
 
             Button dltBtn = (Button) view.findViewById(R.id.delete_btn);
-
+            dltBtn.setBackgroundResource(R.drawable.border_delete);
             dltBtn.setOnClickListener( new View.OnClickListener(){
                                            @Override
                                            public void onClick(View v) {
@@ -124,9 +129,9 @@ public class MenuGrupoActivity extends AppCompatActivity {
                                                    databaseAccess.deleteGrupo(curso, numero,idProfe);
                                                    //databaseAccess.deleteCurso(curso);
                                                    databaseAccess.close();
-                                                   Toast.makeText(v.getContext(),"Datos, ID: "+curso+" ,Numero: "+numero+ ", Profe;"+idProfe,Toast.LENGTH_LONG).show();
+                                                   //Toast.makeText(v.getContext(),"Datos, ID: "+curso+" ,Numero: "+numero+ ", Profe;"+idProfe,Toast.LENGTH_LONG).show();
                                                    //Toast.makeText(v.getContext(),"Se elimino Grupo "+numero+"del Curso"+curso+" correctamente",Toast.LENGTH_SHORT).show();
-                                                   Intent intent = new Intent(v.getContext(),MainMenuActivity.class);
+                                                   Intent intent = new Intent(v.getContext(), MainMenuActivity.class);
                                                    intent.putExtras(bundle);
                                                    startActivity(intent);
                                                }

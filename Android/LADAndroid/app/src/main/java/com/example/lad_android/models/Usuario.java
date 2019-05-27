@@ -1,4 +1,4 @@
-package com.example.lad_android;
+package com.example.lad_android.models;
 
 public class Usuario {
 
