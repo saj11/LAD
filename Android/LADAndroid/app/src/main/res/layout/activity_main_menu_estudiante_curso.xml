@@ -62,13 +62,23 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/ProfesorMainImageCursos"
+        <LinearLayout
+            android:id="@+id/ProfesorMainLayout2"
             android:layout_width="0dp"
+            android:gravity="center_horizontal"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/border_profe" />
+            >
+
+            <ImageView
+                android:id="@+id/ProfesorMainImageCursos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/icono_lista" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

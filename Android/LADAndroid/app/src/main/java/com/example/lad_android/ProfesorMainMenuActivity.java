@@ -99,6 +99,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         databaseAccess.openWrite();
         List<String> list = databaseAccess.getAllGrupo(Integer.toString(bundle.getInt("id")));
         listaCursos = databaseAccess.getAllDatoGrupo(Integer.toString(bundle.getInt("id")));
+        //listaCursos = null;
         /*ArrayAdapter<String> itemsAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         mListV.setAdapter(itemsAdapter);*/
@@ -113,20 +114,25 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
 
         //Entrada: Paso un objeto de DatosUsuario especifico
 
-        mpagerAdapter = new MpagerAdapter(layouts,this,listaCursos.get(0));
-        viewPager.setAdapter(mpagerAdapter);
+        if(listaCursos.size()!=0){
+            mpagerAdapter = new MpagerAdapter(layouts,this,listaCursos.get(0));
+            viewPager.setAdapter(mpagerAdapter);
+            dotscount = mpagerAdapter.getCount();
+            dots= new ImageView[dotscount];
+            for(int i=0; i<dotscount;i++){
+                dots[i] = new ImageView(this);
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.nonactive_dot));
 
-        dotscount = mpagerAdapter.getCount();
-        dots= new ImageView[dotscount];
-        for(int i=0; i<dotscount;i++){
-            dots[i] = new ImageView(this);
-            dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.nonactive_dot));
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(8,0,8,0);
-            sliderDotspanel.addView(dots[i],params);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(8,0,8,0);
+                sliderDotspanel.addView(dots[i],params);
+            }
+            dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.active_dot));
         }
-        dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.active_dot));
+
+
+
+
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -251,6 +257,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
                     String[] horario1 = datos.getDia1().split("-");
                     String[] horario2 = datos.getDia2().split("-");
 
+                    //Busca el letra del dia y true si es algun dia de los dos
                     if(checkDiaListaAsistencia(horario1[0],horario2[0])){
                         if(mTimerRunning){
                             mTimeLeftinMillis = START_TIME_MILLIS;
@@ -441,11 +448,7 @@ public class ProfesorMainMenuActivity extends AppCompatActivity {
         if(dia.equals(getDia(letraDia1)) | dia.equals(getDia(letraDia2))){
             return true;
         }
-
         return false;
-
-
-
     }
 
     //entrada: letra del horario

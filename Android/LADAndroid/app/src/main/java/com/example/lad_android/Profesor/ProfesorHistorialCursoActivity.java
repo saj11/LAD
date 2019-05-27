@@ -46,6 +46,7 @@ public class ProfesorHistorialCursoActivity extends AppCompatActivity {
         List<DatosCalendario> listaCalendario = databaseAccess.getListaAsisnteciaProfesorCurso(bundle.getString("IDCurso"),bundle.getString("Numero"));
         List<String> lista = databaseAccess.getListaAsisntenciaProfesorCurso(bundle.getString("IDCurso"),bundle.getString("Numero"));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,lista);
+        databaseAccess.close();
         mListaAsistencia.setAdapter(adapter);
 
         mCalendarV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -68,6 +69,10 @@ public class ProfesorHistorialCursoActivity extends AppCompatActivity {
 
                 //Toast.makeText(ProfesorHistorialCursoActivity.this, date, Toast.LENGTH_LONG).show();
 
+                DatabaseAccess databaseAccess2 = DatabaseAccess.getInstance(getApplicationContext());
+                databaseAccess2.openWrite();
+                List<DatosCalendario> listaCalendario = databaseAccess2.getListaAsisnteciaProfesorCurso(bundle.getString("IDCurso"),bundle.getString("Numero"));
+
                 for(int i=0; i<listaCalendario.size();i++){
                     try {
                         String listaFecha = listaCalendario.get(i).getFecha();
@@ -79,9 +84,8 @@ public class ProfesorHistorialCursoActivity extends AppCompatActivity {
                         if(output.equals(date)){
 
                             id = listaCalendario.get(i).getID();
-                            databaseAccess.openWrite();
-                            List<DatosListaAsistenciaEstudiante> listaEstudiante = databaseAccess.getListaAsistenciaPorEstudiante(id);
-                            databaseAccess.close();
+                            List<DatosListaAsistenciaEstudiante> listaEstudiante = databaseAccess2.getListaAsistenciaPorEstudiante(id);
+                            databaseAccess2.close();
                             MyCustomAdapterGrupo myCustomAdapterGrupo = new MyCustomAdapterGrupo(listaEstudiante,ProfesorHistorialCursoActivity.this);
                             mListaAsistencia.setAdapter(myCustomAdapterGrupo);
                             Toast.makeText(ProfesorHistorialCursoActivity.this, "Lo encontre id: "+id,Toast.LENGTH_LONG).show();

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -15,6 +16,10 @@ import android.widget.Toast;
 import com.example.lad_android.DatabaseHelper.DatabaseAccess;
 import com.example.lad_android.Estudiante.MainMenuEstudianteCursoActivity;
 import com.google.zxing.Result;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -122,7 +127,8 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
                 databaseAccess.openWrite();
                 int id = databaseAccess.getListaAsistenciaID(split[0],split[2]);
                 if(id>0){
-                    String res = databaseAccess.registrarAsistenciaEstudiante(id, bundle.getInt("carne"),"Presente");
+                    //String res = databaseAccess.registrarAsistenciaEstudiante(id, bundle.getInt("carne"),"Presente");
+                    String res = checkPresente(id,split[4],split[5]);
                     Toast.makeText(MainMenuEstudianteActivity.this,res,Toast.LENGTH_LONG).show();
                 }
                 else{
@@ -137,6 +143,12 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+                databaseAccess.openWrite();
+                int id = databaseAccess.getListaAsistenciaID(split[0],split[2]);
+                databaseAccess.close();
+                String res = checkPresente(id, split[4],split[5]);
+                Toast.makeText(MainMenuEstudianteActivity.this, res, Toast.LENGTH_LONG).show();
                 scannerView.resumeCameraPreview(MainMenuEstudianteActivity.this);
             }
         });
@@ -148,6 +160,78 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
         AlertDialog alert = builder.create();
         alert.show();
         //aqui va el codigo
+    }
+
+    // DEBERIA AGARRAR LA HORA DE LA BD CUANDO SE CREA LA LISTA DE ASISTENCIA, PÉRO POR EL MOMENTO USA LA HORA ESTABLECIDA POR EL CURSO
+    public String checkPresente(int idListaAsistencia, String hora1, String hora2){
+
+        String[] primerHora  = hora1.split("-");
+        String[] segundaHora = hora2.split("-");
+        if(checkDiaListaAsistencia(primerHora[0])){
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+            try{
+                Date d = df.parse(primerHora[1]);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(d);
+                cal.add(Calendar.MINUTE, 10);
+                String newTime = df.format(cal.getTime());
+                Date newT = df.parse(newTime);
+
+                Calendar currentTime = Calendar.getInstance();
+                String currentT = df.format(currentTime.getTime());
+
+                long duration = d.getTime() - newT.getTime();
+
+                if(duration>=0){
+                    return "Presente";
+                }
+                else if(duration<0 && duration>=-30){
+                    return "Tardia";
+                }
+                else{
+                    return "Ausente";
+                }
+
+
+            }
+            catch (Exception e){
+                Log.d("Estudiante", "Error en pasrser 1");
+                return "Error";
+            }
+        }
+        else if (checkDiaListaAsistencia(segundaHora[0])){
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+            try{
+                Date d = df.parse(segundaHora[1]);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(d);
+                cal.add(Calendar.MINUTE, 10);
+                String newTime = df.format(cal.getTime());
+                Date newT = df.parse(newTime);
+
+                Calendar currentTime = Calendar.getInstance();
+                String currentT = df.format(currentTime.getTime());
+
+                long duration = d.getTime() - newT.getTime();
+
+                if(duration>=0){
+                    return "Presente";
+                }
+                else if(duration<0 && duration>=-30){
+                    return "Tardia";
+                }
+                else{
+                    return "Ausente";
+                }
+            }
+            catch (Exception e){
+                Log.d("Estudiante", "Error en pasrser 2");
+                return "Error";
+            }
+        }
+        else{
+            return "NA";
+        }
     }
 
     @Override
@@ -211,13 +295,48 @@ public class MainMenuEstudianteActivity extends AppCompatActivity implements ZXi
 
     private void onSwipeRight() {
         int res = bundle.getInt("carne");
-        Toast.makeText(MainMenuEstudianteActivity.this,"Resultado"+Integer.toString(res),Toast.LENGTH_LONG).show();
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+        databaseAccess.openWrite();
+        String stringR = databaseAccess.getListaAsistenciaFecha(13);
+        databaseAccess.close();
+        Toast.makeText(MainMenuEstudianteActivity.this,"Resultado"+Integer.toString(res)+"..."+stringR,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    public boolean checkDiaListaAsistencia(String letraDia){
+        Date date = Calendar.getInstance().getTime();
+        String dia = (String) android.text.format.DateFormat.format("EEEE",date);
+        if(dia.equals(getDia(letraDia))){
+            return true;
+        }
+        return false;
+    }
+
+    //entrada: letra del horario
+    //salida: Dia asociada con la letra
+    public String getDia(String letraDia){
+        String dia = letraDia.toLowerCase();
+        switch (dia){
+            case "l":
+                return "Monday";
+            case "k":
+                return "Tuesday";
+            case "m":
+                return "Wednesday";
+            case "j":
+                return "Thursday";
+            case "v":
+                return "Friday";
+            case "s":
+                return "Saturday";
+            default:
+                return "Domingo";
+        }
     }
 
 

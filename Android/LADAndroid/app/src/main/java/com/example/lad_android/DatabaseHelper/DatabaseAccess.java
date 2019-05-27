@@ -287,6 +287,24 @@ public class DatabaseAccess {
 
     }
 
+    //entrada: ID Curso y numero de grupo
+    //salida: Lista de id
+    public List<DatosListaAsistenciaEstudiante> getListasAsistencias(String CodigoCurso, String NumeroGrupo){
+        String query = "Select * From ListaAsistencia INNER JOIN AsistenciaPorEstudiante on ListaAsistencia.ID=AsistenciaPorEstudiante.IDListaAsist Where IDCurso= '" + CodigoCurso + "' and IDGrupo='" + NumeroGrupo + "'";
+        c = db.rawQuery(query, null);
+        List<DatosListaAsistenciaEstudiante> lista = new ArrayList<DatosListaAsistenciaEstudiante>();
+        try{
+            while(c.moveToNext()){
+                DatosListaAsistenciaEstudiante dato = new DatosListaAsistenciaEstudiante(c.getInt(5),c.getString(6));
+                lista.add(dato);
+            }
+            return lista;
+        }catch (Exception e){
+            Log.d("Profesor","Error en query");
+            return lista;
+        }
+    }
+
     public int getListaAsistenciaID(String CodigoCurso, String NumeroGrupo) {
 
         try {
@@ -343,6 +361,23 @@ public class DatabaseAccess {
             }
         }catch (Exception e){
             return -2;
+        }
+    }
+
+    public String getListaAsistenciaFecha(int IDListaAsistencia){
+        String id = Integer.toString(IDListaAsistencia);
+        String query ="Select * From ListaAsistencia Where ID ='"+IDListaAsistencia+"'";
+        String query2 = "Select * From ListaAsistencia Where IDCurso = 'CA2125'";
+        try{
+            Log.d("Estudiante", "Pase por try");
+            c = db.rawQuery(query,null);
+            c.moveToFirst();
+            Log.d("Estudiante","Pase por C");
+            return c.getString(3);
+        }
+        catch (Exception e){
+            Log.d("Estudiante", "no existe lista de asistencia");
+            return "Nulo123";
         }
     }
 
@@ -591,9 +626,7 @@ public class DatabaseAccess {
                 if(output.equals(output2)){
                     return true;
                 }
-                else{
-                    return false;
-                }
+
 
             }
             catch (Exception e){

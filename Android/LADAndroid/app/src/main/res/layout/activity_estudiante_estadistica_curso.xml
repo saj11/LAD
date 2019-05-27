@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profesor.ProfesorEstadisticaCursoActivity">
+    tools:context=".Estudiante.EstudianteEstadisticaCursoActivity">
 
     <ListView
-        android:id="@+id/ProfesorEstadisticaCursoListViewEstudiantes"
+        android:id="@+id/EstudianteEstadisticaCursoListViewEstudiantes"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginStart="8dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"></ListView>
 
     <LinearLayout
-        android:id="@+id/ProfesorEstadisticaCursoPresenteLayout"
+        android:id="@+id/EstudianteEstadisticaCursoPresenteLayout"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
@@ -30,10 +30,10 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ProfesorEstadisticaCursoListViewEstudiantes">
+        app:layout_constraintTop_toBottomOf="@+id/EstudianteEstadisticaCursoListViewEstudiantes">
 
         <TextView
-            android:id="@+id/ProfesorEstadisticaCursoPresenteTV"
+            android:id="@+id/EstudianteEstadisticaCursoPresenteTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -42,7 +42,7 @@
             android:textColor="#ffffff" />
 
         <TextView
-            android:id="@+id/ProfesorEstadisticaCursoNumeroPresenteTV"
+            android:id="@+id/EstudianteEstadisticaCursoNumeroPresenteTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -53,7 +53,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ProfesorEstadisticaCursoAusenteLayout"
+        android:id="@+id/EstudianteEstadisticaCursoAusenteLayout"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
@@ -63,10 +63,10 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ProfesorEstadisticaCursoListViewEstudiantes">
+        app:layout_constraintTop_toBottomOf="@+id/EstudianteEstadisticaCursoListViewEstudiantes">
 
         <TextView
-            android:id="@+id/ProfesorEstadisticaCursoAusenteTV"
+            android:id="@+id/EstudianteEstadisticaCursoAusenteTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -75,7 +75,7 @@
             android:textColor="#ffffff" />
 
         <TextView
-            android:id="@+id/ProfesorEstadisticaCursoNumeroAusenteTV"
+            android:id="@+id/EstudianteEstadisticaCursoNumeroAusenteTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -86,7 +86,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ProfesorEstadisticaCursoTardiaLayout"
+        android:id="@+id/EstudianteEstadisticaCursoTardiaLayout"
         android:layout_width="100dp"
         android:layout_height="97dp"
         android:layout_marginStart="8dp"
@@ -97,12 +97,12 @@
         android:background="#daac25"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/ProfesorEstadisticaCursoAusenteLayout"
-        app:layout_constraintStart_toEndOf="@+id/ProfesorEstadisticaCursoPresenteLayout"
-        app:layout_constraintTop_toBottomOf="@+id/ProfesorEstadisticaCursoListViewEstudiantes">
+        app:layout_constraintEnd_toStartOf="@+id/EstudianteEstadisticaCursoAusenteLayout"
+        app:layout_constraintStart_toEndOf="@+id/EstudianteEstadisticaCursoPresenteLayout"
+        app:layout_constraintTop_toBottomOf="@+id/EstudianteEstadisticaCursoListViewEstudiantes">
 
         <TextView
-            android:id="@+id/ProfesorEstadisticaCursoTardiaTV"
+            android:id="@+id/EstudianteEstadisticaCursoTardiaTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -142,7 +142,7 @@
 
             <ImageView
                 android:id="@+id/ProfesorEstadisticaCursoImageViewQR"
-                android:background="@drawable/icono_qr"
+                android:background="@drawable/icono_camara"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

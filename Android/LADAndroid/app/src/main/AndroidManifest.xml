@@ -24,7 +24,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Profesor.ProfesorHistorialCursoActivity"></activity>
+        <activity android:name=".Estudiante.EstudianteEstadisticaCursoActivity"></activity>
+        <activity android:name=".Profesor.ProfesorHistorialCursoActivity" />
         <activity android:name=".Estudiante.EstudiantePerfilActivity" />
         <activity android:name=".Profesor.ProfesorEstadisticaCursoActivity" />
         <activity android:name=".Profesor.ProfesorMenuListaAsistenciaActivity" />
