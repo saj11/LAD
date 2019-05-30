@@ -781,7 +781,7 @@ public class DatabaseAccess {
 
     //entrada: carne
     //salida: lista de cursos y grupos
-    public List<DatosCursoEstudiante> getCursosEstudiante(int carne){
+    public List<DatosCursoEstudiante> getEstadisticasEstudiante(int carne){
         String query = "select * from AsistenciaPorEstudiante inner join ListaAsistencia on AsistenciaPorEstudiante.IDListaAsist = ListaAsistencia.ID inner join Curso on ListaAsistencia.IDCurso = Curso.Codigo where Carne = '"+Integer.toString(carne)+"'";
         c = db.rawQuery(query,null);
         List<DatosCursoEstudiante> lista = new ArrayList<DatosCursoEstudiante>();
@@ -790,11 +790,29 @@ public class DatabaseAccess {
             datos.setIDCurso(c.getString(4));
             datos.setIDGrupo(Integer.toString(c.getInt(5)));
             datos.setNombreCurso(c.getString(8));
+            datos.setEstado(c.getString(2));
             lista.add(datos);
         }
         return lista;
 
     }
+
+    public List<DatosCursoEstudiante> getCursosEstudiante(int carne){
+        String query = "select DISTINCT IDCurso,IDGrupo,Nombre from AsistenciaPorEstudiante inner join ListaAsistencia on AsistenciaPorEstudiante.IDListaAsist = ListaAsistencia.ID inner join Curso on ListaAsistencia.IDCurso = Curso.Codigo where Carne = '"+Integer.toString(carne)+"'";
+        c = db.rawQuery(query,null);
+        List<DatosCursoEstudiante> lista = new ArrayList<DatosCursoEstudiante>();
+        while(c.moveToNext()){
+            DatosCursoEstudiante datos = new DatosCursoEstudiante();
+            datos.setIDCurso(c.getString(0));
+            datos.setIDGrupo(Integer.toString(c.getInt(1)));
+            datos.setNombreCurso(c.getString(2));
+            lista.add(datos);
+        }
+        return lista;
+
+    }
+
+
 
 
 

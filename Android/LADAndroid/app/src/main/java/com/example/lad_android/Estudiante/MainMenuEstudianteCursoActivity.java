@@ -47,7 +47,7 @@ public class MainMenuEstudianteCursoActivity extends AppCompatActivity {
         MyCustomAdapter myCustomAdapter = new MyCustomAdapter(listaCursos,MainMenuEstudianteCursoActivity.this);
         mListViewCurso.setAdapter(myCustomAdapter);
         Toast.makeText(MainMenuEstudianteCursoActivity.this,Integer.toString(carne),Toast.LENGTH_LONG).show();
-
+        mTextPerfil.setText(bundle.getString("usuario"));
         mTextPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,7 +113,12 @@ public class MainMenuEstudianteCursoActivity extends AppCompatActivity {
             ) {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(MainMenuEstudianteCursoActivity.this, EstudianteEstadisticaCursoActivity.class);
+                    bundle.putString("IDCurso",list.get(position).getIDCurso());
+                    bundle.putString("IDGrupo",list.get(position).getIDGrupo());
+                    bundle.putString("NombreCurso",list.get(position).getNombreCurso());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             });
 
