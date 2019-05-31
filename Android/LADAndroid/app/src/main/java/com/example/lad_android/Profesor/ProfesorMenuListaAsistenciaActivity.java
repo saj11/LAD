@@ -30,8 +30,8 @@ public class ProfesorMenuListaAsistenciaActivity extends AppCompatActivity {
         mBtnHistorial = (Button)findViewById(R.id.ProfesorMenuAsisHistorialBtn);
         mImgViewQR = (ImageView)findViewById(R.id.ProfesorMenuAsisImageViewQR);
         bundle = getIntent().getExtras();
-        mTextCurso.setText(bundle.getString("IDCurso")+" - "+bundle.getString("NombreCurso"));
-        mTextGrupo.setText("Grupo: "+bundle.getString("Numero"));
+        //mTextCurso.setText(bundle.getString("IDCurso")+" - "+bundle.getString("NombreCurso"));
+        //mTextGrupo.setText("Grupo: "+bundle.getString("Numero"));
         mImgViewQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

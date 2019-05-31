@@ -22,6 +22,7 @@ import com.example.lad_android.models.DatosListaAsistenciaEstudiante;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ProfesorHistorialCursoActivity extends AppCompatActivity {
         List<String> lista = databaseAccess.getListaAsisntenciaProfesorCurso(bundle.getString("IDCurso"),bundle.getString("Numero"));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,lista);
         databaseAccess.close();
-        mListaAsistencia.setAdapter(adapter);
+        //mListaAsistencia.setAdapter(adapter);
 
         mCalendarV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -89,6 +90,11 @@ public class ProfesorHistorialCursoActivity extends AppCompatActivity {
                             MyCustomAdapterGrupo myCustomAdapterGrupo = new MyCustomAdapterGrupo(listaEstudiante,ProfesorHistorialCursoActivity.this);
                             mListaAsistencia.setAdapter(myCustomAdapterGrupo);
                             Toast.makeText(ProfesorHistorialCursoActivity.this, "Lo encontre id: "+id,Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            List<DatosListaAsistenciaEstudiante> lista = new ArrayList<DatosListaAsistenciaEstudiante>();
+                            MyCustomAdapterGrupo myCustomAdapterGrupo = new MyCustomAdapterGrupo(lista, ProfesorHistorialCursoActivity.this);
+                            mListaAsistencia.setAdapter(myCustomAdapterGrupo);
                         }
 
                     }catch (Exception e){
